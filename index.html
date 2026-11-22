@@ -151,7 +151,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
   border: 1px solid var(--line);
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  width: 280px;
+  width: 290px;
   padding: 14px;
   display: none;
   z-index: 100;
@@ -668,7 +668,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
     <!-- Info Box for Sync Mode -->
     <div id="syncInfoBox" style="display:none;background:var(--teal-pale);border:1px solid color-mix(in srgb, var(--teal) 30%, transparent);color:var(--teal);padding:10px 12px;border-radius:12px;font-size:11px;line-height:1.6;margin-bottom:10px;text-align:start">
       🔗 <b data-t="syncInfoHead">ما هو ربط الجهاز؟</b><br>
-      <span data-t="syncInfoBody">يتيح لك فتح نفس حسابك وملفاتك على جهازك الثاني (مثل الأيباد) بأمان تام، حيث يمنع أي شخص غريب من الوصول لحسابك حتى لو عرف اسمك والرمز السري.</span>
+      <span data-t="syncInfoBody">اكتب اسم حسابك، رمزك السري (PIN)، ومفتاح الربط (Sync Key) الموجود في ملف مفتاح الربط بالجهاز الأول ليتم ربط البيانات تلقائياً بين الجهازين.</span>
     </div>
 
     <div class="field" style="text-align:start;margin:10px 0" id="nameFieldContainer">
@@ -678,7 +678,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
 
     <div class="field" style="text-align:start;margin:10px 0;display:none" id="syncFieldContainer">
       <label data-t="lblSyncKey">مفتاح الربط السري لجهازك الآخر</label>
-      <input id="authSyncKeyInput" placeholder="الصق مفتاح الربط الخاص بك هنا">
+      <input id="authSyncKeyInput" placeholder="KHAZ-XXXX-XXXX">
     </div>
 
     <div class="pin-dots" id="pinDots">
@@ -823,17 +823,17 @@ const I18N = {
     dropTitle: 'أفلت الملف هنا لحفظه في خَزنتي',
     dropDesc: 'سيتم فتح نافذة الإضافة وتجهيز الملف تلقائياً',
     authWelcome: 'بوابة خَزنتي الآمنة',
-    authSub: 'سجّل باسمك والرمز السري أو اربط جهازك الآخر',
+    authSub: 'سجّل باسمك والرمز السري أو ربط جهازك الآخر',
     tabLogin: 'تسجيل الدخول',
     tabRegister: 'حساب جديد',
     tabSync: 'ربط جهاز ⇄',
     syncInfoHead: 'ما هو ربط الجهاز؟',
-    syncInfoBody: 'يتيح لك فتح نفس حسابك وملفاتك على جهازك الثاني (مثل الأيباد) بأمان تام، حيث يمنع أي شخص غريب من الوصول لحسابك حتى لو عرف اسمك والرمز السري.',
+    syncInfoBody: 'اكتب اسم حسابك، رمزك السري (PIN)، ومفتاح الربط (Sync Key) الموجود في ملف مفتاح الربط بالجهاز الأول ليتم ربط البيانات تلقائياً بين الجهازين.',
     lblUserName: 'اسم الحساب أو اللقب',
     userPh: 'اكتب اسم الحساب هنا',
-    lblSyncKey: 'مفتاح الربط السري (انسخه من جهازك الأول)',
+    lblSyncKey: 'مفتاح الربط السري (انسخه من ملف مفتاح الربط)',
     multiDeviceHint: 'لا يمكن لأحد فتح حسابك إلا بمعرفة اسمك، رمزك السري، ومفتاح الربط الخاص بك.',
-    errWrongPin: 'الرمز السري أو مفتاح الربط غير صحيح',
+    errWrongPin: 'الرمز السري أو اسم الحساب أو مفتاح الربط غير صحيح',
     errAccountExists: 'هذا الاسم مستخدم مسبقاً، يرجى اختيار اسم آخر أو الانتقال لـ تسجيل الدخول.',
     eyebrowHome: 'مساحتك الخاصة',
     eyebrowDocs: 'إدارة المستندات',
@@ -893,7 +893,7 @@ const I18N = {
     lockOptionLabel: 'قفل هذا الملف برمز سري (يطلب الرمز عند المعاينة أو التنزيل أو التعديل)',
     guideHead: 'الإرشادات وطريقة استخدام خَزنتي',
     g1Title: '١. نظام الحسابات وربط الأجهزة (أمان مضاعف)',
-    g1Desc: 'لكل حساب اسم ورمز سري ومفتاح ربط خاص (Sync Key). "ربط الجهاز" هو ميزة أمان تتيح لك فتح نفس حسابك وملفاتك على جهازك الثاني (مثل الأيباد) مع منع أي شخص غريب من الوصول لحسابك حتى لو عرف اسمك والرمز السري.',
+    g1Desc: 'لكل حساب اسم ورمز سري ومفتاح ربط خاص (Sync Key). في جهازك الثاني، اختر "ربط جهاز" واكتب اسم حسابك، رمزك السري، ومفتاح الربط (الموجود في ملف Sync_Key داخل الخزنة) لفتح نفس الحساب.',
     g2Title: '٢. قفل الملفات الفردية (حماية إضافية)',
     g2Desc: 'عند رفع أي ملف أو إنشاء ملاحظة، يمكنك تفعيل خيار «قفل هذا الملف» لحمايته برمز إضافي.',
     g3Title: '٣. السحب والإفلات والتصنيفات الذكية',
@@ -937,12 +937,12 @@ const I18N = {
     tabRegister: 'New Account',
     tabSync: 'Sync Device ⇄',
     syncInfoHead: 'What is Device Sync?',
-    syncInfoBody: 'Allows you to securely open your account on your second device (like an iPad) while preventing anyone else from accessing it even if they know your name and PIN.',
+    syncInfoBody: 'Enter your account name, PIN, and Sync Key from your primary device to securely load your account here.',
     lblUserName: 'Account Name or Nickname',
     userPh: 'Type account name here',
-    lblSyncKey: 'Secret Sync Key (from your primary device)',
+    lblSyncKey: 'Secret Sync Key',
     multiDeviceHint: 'No one can open your account without your name, 4-digit PIN, and Secret Sync Key.',
-    errWrongPin: 'Incorrect PIN or Sync Key',
+    errWrongPin: 'Incorrect PIN, Account Name, or Sync Key',
     errAccountExists: 'This account name already exists. Please sign in or use Sync Device.',
     eyebrowHome: 'Your private space',
     eyebrowDocs: 'Document management',
@@ -1002,9 +1002,9 @@ const I18N = {
     lockOptionLabel: 'Lock this file with PIN (requires PIN to preview, download, or edit)',
     guideHead: 'Instructions & How to Use Khaznati',
     g1Title: '1. Multi-Device Sync & Accounts',
-    g1Desc: 'Sync Device allows you to securely open your account on your second device (like an iPad) while preventing anyone else from accessing it even if they know your name and PIN.',
+    g1Desc: 'Sync Device allows you to securely open your account on your second device.',
     g2Title: '2. Individual File Locking',
-    g2Desc: 'When adding any file or note, check "Lock this file with PIN". Locked items require your PIN to preview.',
+    g2Desc: 'When adding any file or note, check "Lock this file with PIN".',
     g3Title: '3. Drag & Drop and Smart Tags',
     g3Desc: 'Drag and drop files onto the page to save them instantly.',
     g4Title: '4. Folders & Expiry Reminders',
@@ -1169,24 +1169,25 @@ async function handleAuthSubmit() {
     await render();
     toast(lang === 'ar' ? `تم إنشاء حساب ${rawName} بنجاح` : `Account ${rawName} created`);
   } else if (authMode === 'sync') {
+    // وضع ربط الجهاز: إذا لم يكن الحساب مخزناً محلياً بعد، نقوم بإنشائه تلقائياً واعتماد الرمز ومفتاح الربط المُدخلين
     if (!existing) {
-      errEl.textContent = t('errWrongPin');
-      errEl.style.display = 'block';
-      setTimeout(() => { pinEntry = ''; updateDots(); }, 350);
-      return;
+      let acc = { username: keyName, displayName: rawName, pin: pinEntry, syncKey: syncKeyVal, created: Date.now() };
+      await put('accounts', acc);
+      activeAccount = acc;
+    } else {
+      if (existing.pin !== pinEntry || existing.syncKey !== syncKeyVal) {
+        errEl.textContent = t('errWrongPin');
+        errEl.style.display = 'block';
+        setTimeout(() => { pinEntry = ''; updateDots(); }, 350);
+        return;
+      }
+      activeAccount = existing;
     }
-    if (existing.pin !== pinEntry || existing.syncKey !== syncKeyVal) {
-      errEl.textContent = t('errWrongPin');
-      errEl.style.display = 'block';
-      setTimeout(() => { pinEntry = ''; updateDots(); }, 350);
-      return;
-    }
-    activeAccount = existing;
     loginTime = Date.now();
     updateHeaderDropdown();
     await put('settings', { key: 'lastUser', value: keyName });
     $('#lockScreen').classList.remove('show');
-    $('#activeUserLabel').textContent = existing.displayName;
+    $('#activeUserLabel').textContent = activeAccount.displayName;
     pinEntry = '';
     await render();
     toast(lang === 'ar' ? 'تم ربط الجهاز بنجاح' : 'Device synced successfully');

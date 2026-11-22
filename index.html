@@ -27,22 +27,6 @@
   --r: 20px;
 }
 
-body.dark {
-  --bg: #0f172a;
-  --surface: #1e293b;
-  --surface-soft: #162032;
-  --ink: #f1f5f9;
-  --muted: #94a3b8;
-  --line: #334155;
-  --teal: #14b8a6;
-  --teal-dark: #0d9488;
-  --teal-pale: rgba(20, 184, 166, 0.14);
-  --gold: #fbbf24;
-  --gold-pale: rgba(251, 191, 36, 0.12);
-  --danger-pale: rgba(225, 29, 72, 0.15);
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-}
-
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
@@ -50,17 +34,11 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
-  transition: background 0.25s, color 0.25s;
 }
 html[dir="ltr"] body { font-family: 'DM Sans', 'IBM Plex Sans Arabic', sans-serif; }
-button, input, textarea, select { font: inherit; }
-button { cursor: pointer; }
-button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
-  outline: 3px solid rgba(13, 148, 136, 0.35);
-  outline-offset: 2px;
-}
+button, input, textarea, select { font: inherit; cursor: pointer; }
+input, textarea, select { cursor: text; }
 
-/* Layout Shell */
 .app {
   max-width: 1240px;
   margin: auto;
@@ -77,7 +55,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
   border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
-  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  background: rgba(245, 248, 247, 0.92);
   backdrop-filter: blur(14px);
   z-index: 15;
 }
@@ -322,6 +300,7 @@ html[dir="ltr"] .search span { left: 14px; right: auto; }
   transition: 0.18s;
 }
 .folder:hover { border-color: var(--teal); transform: translateY(-2px); }
+.folder.drag-over { border: 2px dashed var(--teal); background: var(--teal-pale); }
 .folder-icon {
   width: 40px; height: 40px;
   display: grid; place-items: center;
@@ -390,7 +369,8 @@ html[dir="ltr"] .search span { left: 14px; right: auto; }
   pointer-events: none;
 }
 .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
-.tag { background: var(--teal-pale); color: var(--teal); border-radius: 10px; padding: 3px 8px; font-size: 10px; font-weight: 700; }
+.tag { background: var(--teal-pale); color: var(--teal); border-radius: 10px; padding: 3px 8px; font-size: 10px; font-weight: 700; cursor: pointer; }
+.tag:hover { background: var(--teal); color: #fff; }
 
 .doc-actions {
   display: flex; gap: 6px; flex-wrap: wrap;
@@ -427,26 +407,35 @@ html[dir="ltr"] .search span { left: 14px; right: auto; }
 .toolbar select { border: 1px solid var(--line); background: var(--surface); border-radius: 11px; padding: 8px 12px; font-size: 12px; color: var(--ink); }
 .status { font-size: 11px; font-weight: 700; color: var(--teal); padding: 6px 12px; background: var(--teal-pale); border-radius: 20px; }
 
+/* Smart Tags Filter Bar */
+.tags-filter-bar { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px; }
+.tag-chip {
+  background: var(--surface); border: 1px solid var(--line);
+  color: var(--muted); border-radius: 16px; padding: 5px 12px;
+  font-size: 11px; font-weight: 600; white-space: nowrap; cursor: pointer;
+}
+.tag-chip.active { background: var(--teal); border-color: var(--teal); color: #fff; }
+
 /* Modals */
 .backdrop {
   position: fixed; inset: 0;
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(15, 23, 42, 0.4);
   backdrop-filter: blur(4px);
   z-index: 40;
   display: none; align-items: center; justify-content: center;
-  padding: 16px;
+  padding: 12px;
 }
 .backdrop.open { display: flex; }
 .modal {
   width: min(560px, 100%);
-  max-height: 88vh;
+  max-height: 85vh;
   overflow: auto;
   background: var(--surface);
   color: var(--ink);
   border: 1px solid var(--line);
   border-radius: 24px;
   padding: 22px;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
 }
 .modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .modal-head h2 { font-size: 18px; margin: 0; font-weight: 800; }
@@ -489,18 +478,20 @@ html[dir="ltr"] .search span { left: 14px; right: auto; }
   position: fixed; inset: 0; z-index: 99;
   background: var(--bg);
   display: none; align-items: center; justify-content: center;
-  padding: 20px;
+  padding: 16px;
   overflow-y: auto;
 }
 .lock-screen.show { display: flex; }
 .lock-box {
-  width: min(100%, 380px);
+  width: 100%;
+  max-width: 380px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 28px;
-  padding: 26px 24px;
+  padding: 24px 20px;
   text-align: center;
   box-shadow: var(--shadow);
+  margin: auto;
 }
 .auth-tabs {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -555,11 +546,16 @@ html[dir="ltr"] .search span { left: 14px; right: auto; }
 @media (max-width: 850px) {
   .layout { grid-template-columns: 1fr; }
   .sidebar { display: none; }
-  .app { padding: 0 16px 90px; }
+  .app { padding: 0 12px 90px; }
+  .doc-grid { grid-template-columns: 1fr; }
+  .lock-screen { padding: 10px; align-items: center; }
+  .lock-box { max-width: 100%; border-radius: 20px; padding: 20px 15px; }
+  .keypad { max-width: 100%; }
+  .key-btn { height: 52px; }
   .mobile-nav {
     display: flex; position: fixed; z-index: 20;
     bottom: 0; left: 0; right: 0;
-    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
     border-top: 1px solid var(--line);
     padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
@@ -576,9 +572,6 @@ html[dir="ltr"] .search span { left: 14px; right: auto; }
 @media (max-width: 580px) {
   .stats { grid-template-columns: 1fr; }
   .folders { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .doc-grid { grid-template-columns: 1fr; }
-  .hero-mark { display: none; }
-  .status-pill { display: none; }
 }
 </style>
 </head>
@@ -599,11 +592,11 @@ html[dir="ltr"] .search span { left: 14px; right: auto; }
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <button class="smallbtn" id="lockLangBtn">EN</button>
       <div class="logo" style="width:48px;height:48px;font-size:22px">⌑</div>
-      <button class="smallbtn" id="lockThemeBtn">☾</button>
+      <div style="width:36px"></div>
     </div>
 
-    <h2 style="margin:6px 0 4px;font-size:20px" id="authHeading" data-t="authWelcome">بوابة خَزنتي الآمنة</h2>
-    <p class="hint" style="margin:0" id="authSub" data-t="authSub">سجّل باسمك والرمز السري للدخول إلى خزنتك الخاصة</p>
+    <h2 style="margin:6px 0 4px;font-size:20px" data-t="authWelcome">بوابة خَزنتي الآمنة</h2>
+    <p class="hint" style="margin:0" data-t="authSub">سجّل باسمك والرمز السري للدخول إلى خزنتك الخاصة</p>
 
     <div class="auth-tabs" id="authTabs">
       <button class="auth-tab active" data-authmode="login" data-t="tabLogin">تسجيل الدخول</button>
@@ -645,7 +638,6 @@ html[dir="ltr"] .search span { left: 14px; right: auto; }
       <span class="status-pill"><i class="dot"></i><span data-t="savedLocally">محفوظ محلياً</span></span>
       <button class="iconbtn lock-highlight" id="lockNowBtn" title="قفل الخزنة">🔒 <span data-t="btnLock">قفل</span></button>
       <button class="iconbtn" id="guideTopBtn" title="الإرشادات">ⓘ</button>
-      <button class="iconbtn" id="themeBtn" title="تبديل المظهر">☾</button>
       <button class="iconbtn" id="lang">EN</button>
     </div>
   </header>
@@ -712,9 +704,8 @@ html[dir="ltr"] .search span { left: 14px; right: auto; }
 <script>
 const $ = s => document.querySelector(s);
 let db, docs = [], folders = [], view = 'home', lang = 'ar', toastTimer;
-let pinEntry = '', authMode = 'login', activeAccount = null;
+let pinEntry = '', authMode = 'login', activeAccount = null, activeTagFilter = null;
 
-/* قاموس الترجمة الكامل عربي <-> إنجليزي */
 const I18N = {
   ar: {
     brandName: 'خَزنتي',
@@ -815,11 +806,11 @@ const I18N = {
     g1Desc: 'لكل مستخدم خزنته الخاصة بناءً على الاسم والرمز السري. لا يمكن لحسابين التداخل أبداً، ويمكنك استخدام نفس الاسم والرمز لفتح حسابك أو استعادة نسختك الاحتياطية على أي جهاز.',
     g2Title: '٢. قفل الملفات الفردية (حماية إضافية)',
     g2Desc: 'عند رفع أي ملف أو إنشاء ملاحظة، يمكنك تفعيل خيار «قفل هذا الملف». عند تفعيله، يتم إخفاء محتوى الملاحظة ولا يُسمح بالمعاينة أو التنزيل أو التعديل إلا بعد إدخال الرمز السري.',
-    g3Title: '٣. الإضافة السريعة والسحب والإفلات',
-    g3Desc: 'اسحب أي ملف من جهازك وأفلته في أي مكان بالصفحة لحفظه فوراً، أو استخدم زر القلم (✎) لحفظ ملاحظات نصية سريعة بدون ملفات.',
-    g4Title: '٤. التنظيم بالمجلدات وتنبيهات الانتهاء',
+    g3Title: '٣. السحب والإفلات والتصنيفات الذكية',
+    g3Desc: 'اسحب أي ملف من جهازك وأفلته في أي مكان بالصفحة لحفظه فوراً. كما يمكنك سحب وإفلات أي ملف فوق المجلدات لتنظيمه، أو استخدام الوسوم لفلترة الملفات.',
+    g4Title: '٤. المجلدات وتنبيهات الانتهاء',
     g4Desc: 'أنشئ مجلدات ملونة، وحدد تاريخ انتهاء للوثائق الرسمية ليظهر لك شريط تنبيه تلقائي قبل انتهائها بـ 30 يوماً.',
-    g5Title: '٥. القفل الفوري والنسخ الاحتياطي',
+    g5Title: '٥. القفل الفوري والنسخ الاحتياطي وتفريغ السلة',
     g5Desc: 'اضغط زر «قفل» في الأعلى لقفل الشاشة فوراً. ولنقل بياناتك لجهاز آخر، صدّر نسخة احتياطية JSON واستعدها في نفس حسابك على الجهاز الجديد.'
   },
   en: {
@@ -921,12 +912,12 @@ const I18N = {
     g1Desc: 'Each user has a completely separate vault tied to their Name and PIN. Two users can never merge or see each other’s files. Use the same Name & PIN with your backup file on any device.',
     g2Title: '2. Individual File Locking',
     g2Desc: 'When adding or editing any file or note, you can check "Lock this file with PIN". Locked items hide their notes and require PIN confirmation before previewing, downloading, or editing.',
-    g3Title: '3. Quick Add & Drag-and-Drop',
-    g3Desc: 'Drag and drop any file anywhere on the page to save it immediately, or click the pen icon (✎) to create standalone quick text notes.',
+    g3Title: '3. Drag & Drop and Smart Tags',
+    g3Desc: 'Drag and drop any file anywhere on the page to save it. You can also drag files directly onto folders to organize them, or click tags to filter items instantly.',
     g4Title: '4. Folders & Expiry Reminders',
     g4Desc: 'Create custom colored folders and set expiry dates on official IDs or passports to receive automatic alerts 30 days in advance.',
-    g5Title: '5. Instant Lock & Backup',
-    g5Desc: 'Click the "Lock" button at the top anytime to lock your screen. Export a JSON backup regularly to move or restore your account data across devices.'
+    g5Title: '5. Instant Lock, Backup & Empty Trash',
+    g5Desc: 'Click the "Lock" button at the top anytime to lock your screen. Export a JSON backup regularly, and easily clear your trash when needed.'
   }
 };
 
@@ -955,16 +946,15 @@ function toast(msg) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-/* IndexedDB */
 function openDB() {
   return new Promise((ok, no) => {
-    let r = indexedDB.open('KhaznatiAccountsDB', 1);
+    let r = indexedDB.open('KhaznatiAccountsDB', 2);
     r.onupgradeneeded = () => {
       let d = r.result;
-      d.createObjectStore('accounts', { keyPath: 'username' });
-      d.createObjectStore('docs', { keyPath: 'id' });
-      d.createObjectStore('folders', { keyPath: 'id' });
-      d.createObjectStore('settings', { keyPath: 'key' });
+      if (!d.objectStoreNames.contains('accounts')) d.createObjectStore('accounts', { keyPath: 'username' });
+      if (!d.objectStoreNames.contains('docs')) d.createObjectStore('docs', { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('folders')) d.createObjectStore('folders', { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('settings')) d.createObjectStore('settings', { keyPath: 'key' });
     };
     r.onsuccess = () => ok(r.result);
     r.onerror = () => no(r.error);
@@ -986,7 +976,6 @@ const fmt = n => !n ? t('textNoteType') : n < 1024 ? n + ' B' : n < 1048576 ? (n
 const dateStr = n => new Date(n).toLocaleDateString(lang === 'ar' ? 'ar' : 'en', { year: 'numeric', month: 'short', day: 'numeric' });
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-/* Account & Auth System (Isolated Users) */
 function setAuthMode(mode) {
   authMode = mode;
   document.querySelectorAll('.auth-tab').forEach(b => b.classList.toggle('active', b.dataset.authmode === mode));
@@ -1050,7 +1039,6 @@ async function handleAuthSubmit() {
     activeAccount = acc;
     await put('settings', { key: 'lastUser', value: keyName });
 
-    // Seed welcome note for new user
     let blob = new Blob([lang === 'ar'
       ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nهذه مساحتك المعزولة والخاصة. يمكنك قفل أي ملف حساس برمزك السري.`
       : `Welcome ${rawName} to Khaznati!\n\nThis is your private isolated vault. You can lock any sensitive file with your PIN.`], { type: 'text/plain;charset=utf-8' });
@@ -1091,7 +1079,6 @@ async function handleAuthSubmit() {
   }
 }
 
-/* File-level PIN verification helper */
 function verifyFileAccess(doc, onSuccess) {
   if (!doc.locked) {
     onSuccess();
@@ -1122,9 +1109,9 @@ function verifyFileAccess(doc, onSuccess) {
   $('#fileConfirmPin').onkeydown = e => { if (e.key === 'Enter') check(); };
 }
 
-/* Navigation & Rendering */
 function setView(v) {
   view = v;
+  activeTagFilter = null;
   document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === v));
   render();
 }
@@ -1146,7 +1133,7 @@ function folderName(id) {
 }
 
 function docCard(d) {
-  let tagsHtml = (d.tags || []).length ? `<div class="tags">${d.tags.map(tg => `<span class="tag">#${esc(tg)}</span>`).join('')}</div>` : '';
+  let tagsHtml = (d.tags || []).length ? `<div class="tags">${d.tags.map(tg => `<span class="tag" onclick="filterByTag('${esc(tg)}')">#${esc(tg)}</span>`).join('')}</div>` : '';
   let expiryHtml = d.expiry ? `<span class="chip" style="color:var(--gold);border-color:var(--gold)">◷ ${esc(d.expiry)}</span>` : '';
   let lockTag = d.locked ? `<span class="lock-badge">🔒 ${t('lockedBadge')}</span>` : '';
   let noteBlock = d.note
@@ -1154,7 +1141,7 @@ function docCard(d) {
     : '';
 
   return `
-  <article class="doc">
+  <article class="doc" draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '${d.id}')">
     <div>
       <div class="doc-head">
         <div class="file-icon ${d.locked ? 'locked-type' : d.isNoteOnly ? 'note-type' : ''}">${fileGlyph(d)}</div>
@@ -1183,12 +1170,16 @@ function empty(title, desc, btn, label) {
   return `<div class="empty"><div class="symbol">⌑</div><h3>${title}</h3><p>${desc}</p>${btn ? `<button class="primary" id="emptyAction">${label}</button>` : ''}</div>`;
 }
 
+window.filterByTag = function(tag) {
+  activeTagFilter = tag;
+  render();
+};
+
 async function render() {
   if (!activeAccount) return;
   let allDocs = await all('docs');
   let allFolders = await all('folders');
 
-  // Strict account isolation filter
   docs = allDocs.filter(d => d.owner === activeAccount.username);
   folders = allFolders.filter(f => f.owner === activeAccount.username);
 
@@ -1203,7 +1194,6 @@ async function render() {
   $('#countFav').textContent = fav.length;
   $('#countTrash').textContent = trash.length;
 
-  // Expiry Reminders (within 30 days)
   let soon = active.filter(d => {
     if (!d.expiry) return false;
     let diff = (new Date(d.expiry) - new Date()) / 86400000;
@@ -1229,6 +1219,14 @@ async function render() {
   $('#pageDesc').textContent = hd[1];
   $('#eyebrow').textContent = view === 'home' ? t('eyebrowHome') : t('eyebrowDocs');
 
+  // Collect all unique tags for smart filter bar
+  let allTags = [...new Set(active.flatMap(d => d.tags || []))];
+  let tagsBarHtml = allTags.length ? `
+    <div class="tags-filter-bar">
+      <span class="tag-chip ${!activeTagFilter ? 'active' : ''}" onclick="filterByTag(null)">الكل (${active.length})</span>
+      ${allTags.map(tg => `<span class="tag-chip ${activeTagFilter === tg ? 'active' : ''}" onclick="filterByTag('${esc(tg)}')">#${esc(tg)}</span>`).join('')}
+    </div>` : '';
+
   let c = '';
   if (view === 'home') {
     let recent = active.slice().sort((a, b) => (b.updated || b.added) - (a.updated || a.added)).slice(0, 4);
@@ -1248,20 +1246,21 @@ async function render() {
     <section class="section">
       <div class="section-title"><h2>${t('secFolders')}</h2><button class="textbtn" id="allFolders">${t('viewAll')}</button></div>
       ${folders.length ? `<div class="folders">${folders.slice(0, 6).map(f => `
-        <button class="folder" data-folder="${f.id}">
+        <button class="folder" data-folder="${f.id}" ondragover="event.preventDefault()" ondrop="dropToFolder(event, '${f.id}')">
           <span class="folder-icon" style="--f-col:${f.color || '#0d9488'};--f-bg:${(f.color || '#0d9488')}1a">${esc(f.icon || '▱')}</span>
           <span style="min-width:0"><b>${esc(f.name)}</b><small>${active.filter(d => d.folder === f.id).length} ${t('itemCount')}</small></span>
         </button>`).join('')}</div>` : empty(t('emptyFolderTitle'), t('emptyFolderDesc'), true, t('btnCreateFolder'))}
     </section>
     <section class="section">
       <div class="section-title"><h2>${t('secRecent')}</h2><button class="textbtn" id="allFiles">${t('viewAllFiles')}</button></div>
+      ${tagsBarHtml}
       ${recent.length ? `<div class="doc-grid">${recent.map(docCard).join('')}</div>` : empty(t('emptyVaultTitle'), t('emptyVaultDesc'), true, t('btnAddFirst'))}
     </section>`;
   } else if (view === 'folders') {
     c = `
     <div class="toolbar"><span class="status">${folders.length} ${t('folderCount')}</span><button class="primary" id="newFolder">＋ ${t('btnCreateFolder')}</button></div>
     ${folders.length ? `<div class="folders">${folders.map(f => `
-      <div class="folder">
+      <div class="folder" ondragover="event.preventDefault()" ondrop="dropToFolder(event, '${f.id}')">
         <span class="folder-icon" style="--f-col:${f.color || '#0d9488'};--f-bg:${(f.color || '#0d9488')}1a">${esc(f.icon || '▱')}</span>
         <span style="flex:1;min-width:0"><b>${esc(f.name)}</b><small>${active.filter(d => d.folder === f.id).length} ${t('itemCount')}</small></span>
         <button class="smallbtn" data-folder="${f.id}">${t('btnOpen')}</button>
@@ -1276,13 +1275,24 @@ async function render() {
       let q = $('#search').value.toLowerCase();
       list = active.filter(d => (d.name + ' ' + (!d.locked ? (d.note || '') : '') + ' ' + (d.tags || []).join(' ')).toLowerCase().includes(q));
     }
+
+    if (activeTagFilter && view !== 'trash') {
+      list = list.filter(d => (d.tags || []).includes(activeTagFilter));
+    }
+
     let sortVal = $('#sort')?.value || 'new';
     list = list.slice().sort((a, b) => sortVal === 'name' ? a.name.localeCompare(b.name) : sortVal === 'old' ? (a.added - b.added) : (b.added - a.added));
+    
+    let trashActions = trash.length ? `<button class="secondary" id="emptyTrashBtn" style="color:var(--danger)">تفريغ السلة نهائياً</button>` : '';
     c = `
     <div class="toolbar">
       <span class="status">${list.length} ${t('itemCount')}</span>
-      ${view !== 'trash' ? `<select id="sort"><option value="new" ${sortVal==='new'?'selected':''}>${t('sortNew')}</option><option value="old" ${sortVal==='old'?'selected':''}>${t('sortOld')}</option><option value="name" ${sortVal==='name'?'selected':''}>${t('sortName')}</option></select>` : ''}
+      <div style="display:flex;gap:8px;align-items:center">
+        ${view === 'trash' ? trashActions : ''}
+        ${view !== 'trash' ? `<select id="sort"><option value="new" ${sortVal==='new'?'selected':''}>${t('sortNew')}</option><option value="old" ${sortVal==='old'?'selected':''}>${t('sortOld')}</option><option value="name" ${sortVal==='name'?'selected':''}>${t('sortName')}</option></select>` : ''}
+      </div>
     </div>
+    ${view !== 'trash' ? tagsBarHtml : ''}
     ${list.length ? `<div class="doc-grid">${list.map(d => view === 'trash' ? `
       <article class="doc">
         <h3>${esc(d.name)}</h3>
@@ -1302,7 +1312,29 @@ async function render() {
   $('#allFiles')?.addEventListener('click', () => setView('files'));
   $('#newFolder')?.addEventListener('click', () => newFolder());
   $('#sort')?.addEventListener('change', render);
+  $('#emptyTrashBtn')?.addEventListener('click', async () => {
+    if (confirm('هل أنت متأكد من حذف كل محتويات سلة المهملات نهائياً؟')) {
+      for (let d of trash) await del('docs', d.id);
+      render();
+      toast('تم تفريغ سلة المهملات');
+    }
+  });
 }
+
+window.dropToFolder = async function(e, folderId) {
+  e.preventDefault();
+  let docId = e.dataTransfer.getData('text/plain');
+  if (!docId) return;
+  let d = docs.find(x => x.id === docId);
+  if (d) {
+    d.folder = folderId;
+    d.inbox = false;
+    d.updated = Date.now();
+    await put('docs', d);
+    render();
+    toast(lang === 'ar' ? 'تم نقل المستند إلى المجلد' : 'Document moved to folder');
+  }
+};
 
 /* Modals */
 function showModal(html) {
@@ -1504,7 +1536,6 @@ function preview(id) {
   verifyFileAccess(d, () => previewDirect(d));
 }
 
-/* Change PIN for active account */
 function openPinModal() {
   let isAr = lang === 'ar';
   showModal(`
@@ -1522,7 +1553,6 @@ function openPinModal() {
   };
 }
 
-/* Backup & Restore (Scoped to active account) */
 async function exportBackup() {
   let isAr = lang === 'ar';
   let out = [];
@@ -1550,7 +1580,7 @@ function importBackup() {
       let p = JSON.parse(await i.files[0].text());
       for (let d of (p.docs || [])) {
         if (d.blobData) { d.blob = await fetch(d.blobData).then(r => r.blob()); delete d.blobData; }
-        d.owner = activeAccount.username; // Bind strictly to current account
+        d.owner = activeAccount.username;
         await put('docs', d);
       }
       for (let f of (p.folders || [])) {
@@ -1563,7 +1593,6 @@ function importBackup() {
   i.click();
 }
 
-/* Guide Modal */
 function guide() {
   showModal(`
     <div class="modal-head"><h2>${t('guideHead')}</h2><button class="x" id="close">×</button></div>
@@ -1575,7 +1604,6 @@ function guide() {
   $('#close').onclick = closeModal;
 }
 
-/* Events & Initialization */
 $('#addFile').onclick = () => addFile();
 $('#mainAdd').onclick = () => addFile();
 $('#quickNoteBtn').onclick = addQuickNote;
@@ -1600,15 +1628,6 @@ $('#backup').onclick = () => {
   $('#exp').onclick = () => { closeModal(); exportBackup(); };
   $('#imp').onclick = () => { closeModal(); importBackup(); };
 };
-
-async function toggleTheme() {
-  let isDark = document.body.classList.toggle('dark');
-  $('#themeBtn').textContent = isDark ? '☀' : '☾';
-  $('#lockThemeBtn').textContent = isDark ? '☀' : '☾';
-  await put('settings', { key: 'dark', value: isDark });
-}
-$('#themeBtn').onclick = toggleTheme;
-$('#lockThemeBtn').onclick = toggleTheme;
 
 function toggleLanguage() {
   lang = lang === 'ar' ? 'en' : 'ar';
@@ -1667,11 +1686,6 @@ window.addEventListener('drop', e => {
 
 (async () => {
   db = await openDB();
-  if (await getSet('dark')) {
-    document.body.classList.add('dark');
-    $('#themeBtn').textContent = '☀';
-    $('#lockThemeBtn').textContent = '☀';
-  }
   applyStaticTranslations();
 
   let allAccs = await all('accounts');

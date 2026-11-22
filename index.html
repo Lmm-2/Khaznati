@@ -1061,7 +1061,8 @@ async function handleAuthSubmit() {
     await put('settings', { key: 'lastUser', value: keyName });
 
     let blob = new Blob([lang === 'ar'
-      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nهذه مساحتك المعزولة والخاصة. يمكنك قفل أي ملف حساس برمزك السري.` : `Welcome ${rawName} to Khaznati!\n\nThis is your private isolated vault. You can lock any sensitive file with your PIN.`], { type: 'text/plain;charset=utf-8' });
+      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nهذه مساحتك المعزولة والخاصة. يمكنك قفل أي ملف حساس برمزك السري.`
+      : `Welcome ${rawName} to Khaznati!\n\nThis is your private isolated vault. You can lock any sensitive file with your PIN.`], { type: 'text/plain;charset=utf-8' });
     await put('docs', {
       id: uid(), owner: keyName,
       name: lang === 'ar' ? 'رسالة ترحيب.txt' : 'Welcome.txt',
@@ -1167,17 +1168,20 @@ function docCard(d) {
         <div class="file-icon ${d.locked ? 'locked-type' : d.isNoteOnly ? 'note-type' : ''}">${fileGlyph(d)}</div>
         <button class="star ${d.favorite ? 'on' : ''}" data-star="${d.id}">${d.favorite ? '★' : '☆'}</button>
       </div>
-      <h3>${esc(d.name)}${lockTag}</h3>
+      <h3>${esc(d.name)} ${lockTag}</h3>
       <div class="meta">
         <span>${fmt(d.size)}</span>
         <span>•</span>
         <span>${dateStr(d.updated || d.added)}</span>
-        <span class="chip">▱ ${esc(folderName(d.folder))}</span>${expiryHtml}
+        <span class="chip">▱ ${esc(folderName(d.folder))}</span>
+        ${expiryHtml}
       </div>
-      ${noteBlock}${tagsHtml}
+      ${noteBlock}
+      ${tagsHtml}
     </div>
     <div class="doc-actions">
-      <button class="smallbtn em" data-open="${d.id}">${t('btnDetails')}</button>${d.blob ? `<button class="smallbtn" data-preview="${d.id}">${t('btnPreview')}</button>` : ''}
+      <button class="smallbtn em" data-open="${d.id}">${t('btnDetails')}</button>
+      ${d.blob ? `<button class="smallbtn" data-preview="${d.id}">${t('btnPreview')}</button>` : ''}
       ${d.blob ? `<button class="smallbtn" data-download="${d.id}">${t('btnDownload')}</button>` : ''}
     </div>
   </article>`;
@@ -1239,7 +1243,8 @@ async function render() {
   let allTags = [...new Set(active.flatMap(d => d.tags || []))];
   let tagsBarHtml = allTags.length ? `
     <div class="tags-filter-bar">
-      <span class="tag-chip ${!activeTagFilter ? 'active' : ''}" onclick="filterByTag(null)">الكل (${active.length})</span>${allTags.map(tg => `<span class="tag-chip ${activeTagFilter === tg ? 'active' : ''}" onclick="filterByTag('${esc(tg)}')">#${esc(tg)}</span>`).join('')}
+      <span class="tag-chip ${!activeTagFilter ? 'active' : ''}" onclick="filterByTag(null)">الكل (${active.length})</span>
+      ${allTags.map(tg => `<span class="tag-chip ${activeTagFilter === tg ? 'active' : ''}" onclick="filterByTag('${esc(tg)}')">#${esc(tg)}</span>`).join('')}
     </div>` : '';
 
   let c = '';
@@ -1259,22 +1264,25 @@ async function render() {
       <div class="stat gold"><div><div class="num">${active.filter(d => d.note?.trim()).length}</div><small>${t('statNotes')}</small></div><div class="bubble">✎</div></div>
     </div>
     <section class="section">
-      <div class="section-title"><h2>${t('secFolders')}</h2><button class="textbtn" id="allFolders">${t('viewAll')}</button></div>${folders.length ? `<div class="folders">${folders.slice(0, 6).map(f => `
+      <div class="section-title"><h2>${t('secFolders')}</h2><button class="textbtn" id="allFolders">${t('viewAll')}</button></div>
+      ${folders.length ? `<div class="folders">${folders.slice(0, 6).map(f => `
         <button class="folder" data-folder="${f.id}" ondragover="event.preventDefault()" ondrop="dropToFolder(event, '${f.id}')">
-          <span class="folder-icon" style="--f-col:${f.color || '#0d9488'};--f-bg:${(f.color \vert{}\vert{} '#0d9488')}1a">${esc(f.icon || '▱')}</span>
-          <span style="min-width:0"><b>${esc(f.name)}</b><small>${active.filter(d => d.folder === f.id).length}${t('itemCount')}</small></span>
+          <span class="folder-icon" style="--f-col:${f.color || '#0d9488'};--f-bg:${(f.color || '#0d9488')}1a">${esc(f.icon || '▱')}</span>
+          <span style="min-width:0"><b>${esc(f.name)}</b><small>${active.filter(d => d.folder === f.id).length} ${t('itemCount')}</small></span>
         </button>`).join('')}</div>` : empty(t('emptyFolderTitle'), t('emptyFolderDesc'), true, t('btnCreateFolder'))}
     </section>
     <section class="section">
       <div class="section-title"><h2>${t('secRecent')}</h2><button class="textbtn" id="allFiles">${t('viewAllFiles')}</button></div>
-      ${tagsBarHtml}${recent.length ? `<div class="doc-grid">${recent.map(docCard).join('')}</div>` : empty(t('emptyVaultTitle'), t('emptyVaultDesc'), true, t('btnAddFirst'))}
+      ${tagsBarHtml}
+      ${recent.length ? `<div class="doc-grid">${recent.map(docCard).join('')}</div>` : empty(t('emptyVaultTitle'), t('emptyVaultDesc'), true, t('btnAddFirst'))}
     </section>`;
   } else if (view === 'folders') {
     c = `
-    <div class="toolbar"><span class="status">${folders.length}${t('folderCount')}</span><button class="primary" id="newFolder">＋ ${t('btnCreateFolder')}</button></div>${folders.length ? `<div class="folders">${folders.map(f => `
+    <div class="toolbar"><span class="status">${folders.length} ${t('folderCount')}</span><button class="primary" id="newFolder">＋ ${t('btnCreateFolder')}</button></div>
+    ${folders.length ? `<div class="folders">${folders.map(f => `
       <div class="folder" ondragover="event.preventDefault()" ondrop="dropToFolder(event, '${f.id}')">
-        <span class="folder-icon" style="--f-col:${f.color || '#0d9488'};--f-bg:${(f.color \vert{}\vert{} '#0d9488')}1a">${esc(f.icon || '▱')}</span>
-        <span style="flex:1;min-width:0"><b>${esc(f.name)}</b><small>${active.filter(d => d.folder === f.id).length}${t('itemCount')}</small></span>
+        <span class="folder-icon" style="--f-col:${f.color || '#0d9488'};--f-bg:${(f.color || '#0d9488')}1a">${esc(f.icon || '▱')}</span>
+        <span style="flex:1;min-width:0"><b>${esc(f.name)}</b><small>${active.filter(d => d.folder === f.id).length} ${t('itemCount')}</small></span>
         <button class="smallbtn" data-folder="${f.id}">${t('btnOpen')}</button>
         <button class="smallbtn" data-editfolder="${f.id}">⋯</button>
       </div>`).join('')}</div>` : empty(t('emptyFolderTitle'), t('emptyFolderDesc'), true, t('btnCreateFolder'))}`;
@@ -1298,7 +1306,7 @@ async function render() {
     let trashActions = trash.length ? `<button class="secondary" id="emptyTrashBtn" style="color:var(--danger)">تفريغ السلة نهائياً</button>` : '';
     c = `
     <div class="toolbar">
-      <span class="status">${list.length}${t('itemCount')}</span>
+      <span class="status">${list.length} ${t('itemCount')}</span>
       <div style="display:flex;gap:8px;align-items:center">
         ${view === 'trash' ? trashActions : ''}
         ${view !== 'trash' ? `<select id="sort"><option value="new" ${sortVal==='new'?'selected':''}>${t('sortNew')}</option><option value="old" ${sortVal==='old'?'selected':''}>${t('sortOld')}</option><option value="name" ${sortVal==='name'?'selected':''}>${t('sortName')}</option></select>` : ''}
@@ -1307,4 +1315,411 @@ async function render() {
     ${view !== 'trash' ? tagsBarHtml : ''}
     ${list.length ? `<div class="doc-grid">${list.map(d => view === 'trash' ? `
       <article class="doc">
-        <h3>${esc(d
+        <h3>${esc(d.name)}</h3>
+        <div class="meta">${dateStr(d.deletedAt || d.updated)}</div>
+        <div class="doc-actions">
+          <button class="smallbtn em" data-restore="${d.id}">${t('btnRestore')}</button>
+          <button class="smallbtn" data-purge="${d.id}">${t('btnPurge')}</button>
+        </div>
+      </article>` : docCard(d)).join('')}</div>`
+    : empty(view === 'trash' ? t('emptyTrashTitle') : t('emptyListTitle'), t('emptyListDesc'), view !== 'trash', t('btnAddFile'))}`;
+  }
+
+  $('#content').innerHTML = c;
+  applyStaticTranslations();
+  $('#emptyAction')?.addEventListener('click', () => view === 'folders' ? newFolder() : addFile());
+  $('#allFolders')?.addEventListener('click', () => setView('folders'));
+  $('#allFiles')?.addEventListener('click', () => setView('files'));
+  $('#newFolder')?.addEventListener('click', () => newFolder());
+  $('#sort')?.addEventListener('change', render);
+  $('#emptyTrashBtn')?.addEventListener('click', async () => {
+    if (confirm('هل أنت متأكد من حذف كل محتويات سلة المهملات نهائياً؟')) {
+      for (let d of trash) await del('docs', d.id);
+      render();
+      toast('تم تفريغ سلة المهملات');
+    }
+  });
+}
+
+window.dropToFolder = async function(e, folderId) {
+  e.preventDefault();
+  let docId = e.dataTransfer.getData('text/plain');
+  if (!docId) return;
+  let d = docs.find(x => x.id === docId);
+  if (d) {
+    d.folder = folderId;
+    d.inbox = false;
+    d.updated = Date.now();
+    await put('docs', d);
+    render();
+    toast(lang === 'ar' ? 'تم نقل المستند إلى المجلد' : 'Document moved to folder');
+  }
+};
+
+/* Modals */
+function showModal(html) {
+  $('#modal').innerHTML = html;
+  $('#modalBg').classList.add('open');
+}
+function closeModal() {
+  $('#modalBg').classList.remove('open');
+  $('#modal').innerHTML = '';
+}
+$('#modalBg').addEventListener('click', e => { if (e.target === $('#modalBg')) closeModal(); });
+
+function newFolder(existing) {
+  let f = existing || {};
+  let isAr = lang === 'ar';
+  showModal(`
+    <div class="modal-head"><h2>${f.id ? (isAr ? 'تعديل المجلد' : 'Edit Folder') : (isAr ? 'إنشاء مجلد جديد' : 'Create New Folder')}</h2><button class="x" id="close">×</button></div>
+    <div class="field"><label>${isAr ? 'اسم المجلد' : 'Folder Name'}</label><input id="folderName" maxlength="60" placeholder="${isAr ? 'مثلاً: وثائق السفر' : 'e.g., Travel Docs'}" value="${esc(f.name || '')}"></div>
+    <div class="row">
+      <div class="field"><label>${isAr ? 'الأيقونة' : 'Icon'}</label><select id="folderIcon"><option>▱</option><option>▣</option><option>★</option><option>✎</option><option>⌂</option><option>♡</option></select></div>
+      <div class="field"><label>${isAr ? 'اللون' : 'Color'}</label><input type="color" id="folderColor" value="${f.color || '#0d9488'}" style="height:43px;padding:4px"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="primary" id="saveFolder">${isAr ? 'حفظ المجلد' : 'Save Folder'}</button>
+      ${f.id ? `<button class="secondary" id="deleteFolder">${isAr ? 'حذف المجلد' : 'Delete Folder'}</button>` : ''}
+    </div>`);
+  if (f.icon) $('#folderIcon').value = f.icon;
+  $('#close').onclick = closeModal;
+  $('#saveFolder').onclick = async () => {
+    let name = $('#folderName').value.trim();
+    if (!name) { toast(isAr ? 'اكتب اسم المجلد أولاً' : 'Enter folder name first'); return; }
+    await put('folders', { id: f.id || uid(), owner: activeAccount.username, name, icon: $('#folderIcon').value, color: $('#folderColor').value });
+    closeModal(); render(); toast(isAr ? 'تم حفظ المجلد' : 'Folder saved');
+  };
+  $('#deleteFolder')?.addEventListener('click', async () => {
+    for (let d of docs) if (d.folder === f.id) { d.folder = null; await put('docs', d); }
+    await del('folders', f.id);
+    closeModal(); render(); toast(isAr ? 'تم حذف المجلد' : 'Folder deleted');
+  });
+}
+
+function addFile(preselectedFile = null) {
+  let isAr = lang === 'ar';
+  showModal(`
+    <div class="modal-head"><h2>${isAr ? 'إضافة ملف جديد' : 'Add New File'}</h2><button class="x" id="close">×</button></div>
+    <div class="field"><label>${isAr ? 'اختر الملف من جهازك' : 'Choose file from device'}</label><input id="filePick" type="file"></div>
+    <div class="field"><label>${isAr ? 'اسم المستند' : 'Document Name'}</label><input id="docName" maxlength="140" placeholder="${isAr ? 'اكتب اسماً واضحاً للمستند' : 'Enter a clear name'}" value="${esc(preselectedFile?.name || '')}"></div>
+    <div class="row">
+      <div class="field"><label>${isAr ? 'المجلد' : 'Folder'}</label><select id="docFolder"><option value="">${isAr ? 'صندوق الوارد / بدون مجلد' : 'Inbox / Unfiled'}</option>${folders.map(f => `<option value="${f.id}">${esc(f.name)}</option>`).join('')}</select></div>
+      <div class="field"><label>${isAr ? 'تاريخ الانتهاء (اختياري)' : 'Expiry Date (optional)'}</label><input type="date" id="docExpiry"></div>
+    </div>
+    <div class="field"><label>${isAr ? 'الوسوم (افصل بينها بفاصلة)' : 'Tags (comma separated)'}</label><input id="docTags" placeholder="${isAr ? 'هوية، سفر، جامعة' : 'ID, Travel, Work'}"></div>
+    <div class="field"><label>${isAr ? 'ملاحظات' : 'Notes'}</label><textarea id="docNote" placeholder="${isAr ? 'أضف تفاصيل تريد تذكّرها لاحقاً...' : 'Add notes to remember later...'}"></textarea></div>
+    <div class="field">
+      <label class="check-box">
+        <input type="checkbox" id="docLockCheck">
+        <span>🔒 ${t('lockOptionLabel')}</span>
+      </label>
+    </div>
+    <div class="modal-actions"><button class="primary" id="saveDoc">${isAr ? 'حفظ المستند' : 'Save Document'}</button></div>`);
+  $('#close').onclick = closeModal;
+  $('#filePick').onchange = () => {
+    let f = $('#filePick').files[0];
+    if (f && !$('#docName').value.trim()) $('#docName').value = f.name;
+  };
+  $('#saveDoc').onclick = async () => {
+    let file = $('#filePick').files[0] || preselectedFile;
+    if (!file) { toast(isAr ? 'اختر ملفاً أولاً' : 'Please select a file'); return; }
+    let name = $('#docName').value.trim() || file.name;
+    let folder = $('#docFolder').value || null;
+    let tags = $('#docTags').value.split(',').map(x => x.trim()).filter(Boolean);
+    await put('docs', {
+      id: uid(), owner: activeAccount.username,
+      name, folder, tags,
+      note: $('#docNote').value,
+      expiry: $('#docExpiry').value || null,
+      locked: $('#docLockCheck').checked,
+      blob: file, size: file.size, type: file.type,
+      added: Date.now(), updated: Date.now(),
+      favorite: false, deleted: false, inbox: !folder
+    });
+    closeModal(); render(); toast(isAr ? 'تم حفظ المستند بنجاح' : 'Document saved');
+  };
+}
+
+function addQuickNote() {
+  let isAr = lang === 'ar';
+  showModal(`
+    <div class="modal-head"><h2>${isAr ? 'إضافة ملاحظة سريعة' : 'Add Quick Note'}</h2><button class="x" id="close">×</button></div>
+    <div class="field"><label>${isAr ? 'عنوان الملاحظة *' : 'Note Title *'}</label><input id="noteTitle" placeholder="${isAr ? 'مثلاً: رقم الحساب البنكي / كلمة مرور' : 'e.g., Bank IBAN / Password'}"></div>
+    <div class="field"><label>${isAr ? 'المجلد' : 'Folder'}</label><select id="noteFolder"><option value="">${isAr ? 'صندوق الوارد / بدون مجلد' : 'Inbox / Unfiled'}</option>${folders.map(f => `<option value="${f.id}">${esc(f.name)}</option>`).join('')}</select></div>
+    <div class="field"><label>${isAr ? 'محتوى الملاحظة *' : 'Note Content *'}</label><textarea id="noteBody" placeholder="${isAr ? 'اكتب ملاحظتك هنا...' : 'Write your note here...'}"></textarea></div>
+    <div class="field"><label>${isAr ? 'وسوم (اختياري)' : 'Tags (optional)'}</label><input id="noteTags" placeholder="${isAr ? 'مهم، سريع' : 'important, quick'}"></div>
+    <div class="field">
+      <label class="check-box">
+        <input type="checkbox" id="noteLockCheck">
+        <span>🔒 ${t('lockOptionLabel')}</span>
+      </label>
+    </div>
+    <div class="modal-actions"><button class="primary" id="saveQuickNote">${isAr ? 'حفظ الملاحظة' : 'Save Note'}</button></div>`);
+  $('#close').onclick = closeModal;
+  $('#saveQuickNote').onclick = async () => {
+    let name = $('#noteTitle').value.trim();
+    let note = $('#noteBody').value.trim();
+    if (!name || !note) { toast(isAr ? 'أدخل العنوان ومحتوى الملاحظة' : 'Enter title and content'); return; }
+    let folder = $('#noteFolder').value || null;
+    let tags = $('#noteTags').value.split(',').map(x => x.trim()).filter(Boolean);
+    await put('docs', {
+      id: uid(), owner: activeAccount.username,
+      name, folder, tags, note,
+      locked: $('#noteLockCheck').checked,
+      isNoteOnly: true, size: 0,
+      added: Date.now(), updated: Date.now(),
+      favorite: false, deleted: false, inbox: !folder
+    });
+    closeModal(); render(); toast(isAr ? 'تم حفظ الملاحظة في خزنتك' : 'Note saved');
+  };
+}
+
+function openDoc(id) {
+  let d = docs.find(x => x.id === id);
+  if (!d) return;
+  verifyFileAccess(d, () => {
+    let isAr = lang === 'ar';
+    showModal(`
+      <div class="modal-head"><h2>${esc(d.name)}</h2><button class="x" id="close">×</button></div>
+      <div class="meta" style="margin-bottom:12px"><span>${fmt(d.size)}</span><span>•</span><span>${dateStr(d.updated || d.added)}</span><span class="chip">▱ ${esc(folderName(d.folder))}</span></div>
+      <div class="field"><label>${isAr ? 'اسم العنصر' : 'Item Name'}</label><input id="editName" value="${esc(d.name)}"></div>
+      <div class="row">
+        <div class="field"><label>${isAr ? 'المجلد' : 'Folder'}</label><select id="editFolder"><option value="">${isAr ? 'صندوق الوارد / بدون مجلد' : 'Inbox / Unfiled'}</option>${folders.map(f => `<option value="${f.id}" ${f.id===d.folder?'selected':''}>${esc(f.name)}</option>`).join('')}</select></div>
+        <div class="field"><label>${isAr ? 'تاريخ الانتهاء' : 'Expiry Date'}</label><input type="date" id="editExpiry" value="${d.expiry || ''}"></div>
+      </div>
+      <div class="field"><label>${isAr ? 'الوسوم' : 'Tags'}</label><input id="editTags" value="${esc((d.tags || []).join(', '))}"></div>
+      <div class="field"><label>${isAr ? 'الملاحظات' : 'Notes'}</label><textarea id="quickNote">${esc(d.note || '')}</textarea></div>
+      <div class="field">
+        <label class="check-box">
+          <input type="checkbox" id="editLockCheck" ${d.locked ? 'checked' : ''}>
+          <span>🔒 ${t('lockOptionLabel')}</span>
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button class="primary" id="saveNote">${isAr ? 'حفظ التعديلات' : 'Save Changes'}</button>
+        ${d.blob ? `<button class="secondary" id="previewBtn">${t('btnPreview')}</button><button class="secondary" id="downloadBtn">${t('btnDownload')}</button>` : ''}
+        <button class="secondary" id="removeBtn" style="color:var(--danger)">${isAr ? 'نقل للمحذوفات' : 'Move to Trash'}</button>
+      </div>`);
+    $('#close').onclick = closeModal;
+    $('#saveNote').onclick = async () => {
+      d.name = $('#editName').value.trim() || d.name;
+      d.folder = $('#editFolder').value || null;
+      d.inbox = !d.folder;
+      d.expiry = $('#editExpiry').value || null;
+      d.tags = $('#editTags').value.split(',').map(x => x.trim()).filter(Boolean);
+      d.note = $('#quickNote').value;
+      d.locked = $('#editLockCheck').checked;
+      d.updated = Date.now();
+      await put('docs', d);
+      closeModal(); render(); toast(isAr ? 'تم حفظ التعديلات' : 'Changes saved');
+    };
+    $('#previewBtn')?.addEventListener('click', () => previewDirect(d));
+    $('#downloadBtn')?.addEventListener('click', () => downloadDirect(d));
+    $('#removeBtn').onclick = async () => {
+      d.deleted = true; d.deletedAt = Date.now();
+      await put('docs', d);
+      closeModal(); render(); toast(isAr ? 'نُقل إلى المحذوفات' : 'Moved to trash');
+    };
+  });
+}
+
+function downloadDirect(d) {
+  if (!d?.blob) return;
+  let u = URL.createObjectURL(d.blob), a = document.createElement('a');
+  a.href = u; a.download = d.name; a.click();
+  setTimeout(() => URL.revokeObjectURL(u), 1500);
+}
+
+function download(id) {
+  let d = docs.find(x => x.id === id);
+  if (!d?.blob) return;
+  verifyFileAccess(d, () => downloadDirect(d));
+}
+
+function previewDirect(d) {
+  if (!d?.blob) return;
+  let isAr = lang === 'ar';
+  let u = URL.createObjectURL(d.blob), type = d.type || '';
+  let body = type.startsWith('image/') ? `<img class="preview" src="${u}">`
+    : type === 'application/pdf' ? `<iframe class="preview-frame" src="${u}"></iframe>`
+    : type.startsWith('text/') ? `<pre style="white-space:pre-wrap;max-height:55vh;overflow:auto;background:var(--surface-soft);padding:15px;border-radius:12px">${isAr ? 'جارٍ تحميل النص...' : 'Loading text...'}</pre>`
+    : `<div class="empty"><div class="symbol">▤</div><h3>${isAr ? 'لا تتوفر معاينة لهذا النوع' : 'Preview unavailable for this file type'}</h3><p>${isAr ? 'يمكنك تنزيل الملف وفتحه بالتطبيق المناسب.' : 'Download the file to open it in an external app.'}</p></div>`;
+  showModal(`<div class="modal-head"><h2>${t('btnPreview')}: ${esc(d.name)}</h2><button class="x" id="close">×</button></div>${body}<div class="modal-actions"><button class="primary" id="dl">${t('btnDownload')}</button></div>`);
+  $('#close').onclick = () => { closeModal(); URL.revokeObjectURL(u); };
+  $('#dl').onclick = () => downloadDirect(d);
+  if (type.startsWith('text/')) d.blob.text().then(txt => { let pre = $('#modal pre'); if (pre) pre.textContent = txt; });
+}
+
+function preview(id) {
+  let d = docs.find(x => x.id === id);
+  if (!d?.blob) return;
+  verifyFileAccess(d, () => previewDirect(d));
+}
+
+function openPinModal() {
+  let isAr = lang === 'ar';
+  showModal(`
+    <div class="modal-head"><h2>${isAr ? 'تغيير الرمز السري للحساب' : 'Change Account PIN'}</h2><button class="x" id="close">×</button></div>
+    <p class="hint">${isAr ? 'سيتم تحديث الرمز السري الخاص بحسابك (' + esc(activeAccount.displayName) + ').' : 'Update the 4-digit PIN for (' + esc(activeAccount.displayName) + ').'}</p>
+    <div class="field"><label>${isAr ? 'الرمز السري الجديد (4 أرقام)' : 'New 4-digit PIN'}</label><input id="newPinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••"></div>
+    <div class="modal-actions"><button class="primary" id="savePinBtn">${isAr ? 'حفظ الرمز الجديد' : 'Save New PIN'}</button></div>`);
+  $('#close').onclick = closeModal;
+  $('#savePinBtn').onclick = async () => {
+    let val = $('#newPinInput').value.trim();
+    if (!/^\d{4}$/.test(val)) { toast(isAr ? 'يجب أن يتكون الرمز من 4 أرقام' : 'PIN must be 4 digits'); return; }
+    activeAccount.pin = val;
+    await put('accounts', activeAccount);
+    closeModal(); toast(isAr ? 'تم تحديث الرمز السري بنجاح' : 'PIN updated successfully');
+  };
+}
+
+async function exportBackup() {
+  let isAr = lang === 'ar';
+  let out = [];
+  for (let d of docs) {
+    let x = { ...d };
+    if (d.blob) {
+      x.blobData = await new Promise(ok => { let r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(d.blob); });
+      delete x.blob;
+    }
+    out.push(x);
+  }
+  let blob = new Blob([JSON.stringify({ format: 'khaznati-account-backup', owner: activeAccount.username, docs: out, folders })], { type: 'application/json' });
+  let u = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = u; a.download = `khaznati-${activeAccount.username}.json`; a.click();
+  setTimeout(() => URL.revokeObjectURL(u), 1500);
+  toast(isAr ? 'تم تنزيل النسخة الاحتياطية لحسابك' : 'Account backup downloaded');
+}
+
+function importBackup() {
+  let isAr = lang === 'ar';
+  let i = document.createElement('input');
+  i.type = 'file'; i.accept = '.json,application/json';
+  i.onchange = async () => {
+    try {
+      let p = JSON.parse(await i.files[0].text());
+      for (let d of (p.docs || [])) {
+        if (d.blobData) { d.blob = await fetch(d.blobData).then(r => r.blob()); delete d.blobData; }
+        d.owner = activeAccount.username;
+        await put('docs', d);
+      }
+      for (let f of (p.folders || [])) {
+        f.owner = activeAccount.username;
+        await put('folders', f);
+      }
+      render(); toast(isAr ? 'تم استيراد البيانات إلى حسابك' : 'Backup imported to your account');
+    } catch { toast(isAr ? 'ملف النسخة الاحتياطية غير صالح' : 'Invalid backup file'); }
+  };
+  i.click();
+}
+
+function guide() {
+  showModal(`
+    <div class="modal-head"><h2>${t('guideHead')}</h2><button class="x" id="close">×</button></div>
+    <div class="guide-step"><b>${t('g1Title')}</b><p>${t('g1Desc')}</p></div>
+    <div class="guide-step"><b>${t('g2Title')}</b><p>${t('g2Desc')}</p></div>
+    <div class="guide-step"><b>${t('g3Title')}</b><p>${t('g3Desc')}</p></div>
+    <div class="guide-step"><b>${t('g4Title')}</b><p>${t('g4Desc')}</p></div>
+    <div class="guide-step"><b>${t('g5Title')}</b><p>${t('g5Desc')}</p></div>`);
+  $('#close').onclick = closeModal;
+}
+
+$('#addFile').onclick = () => addFile();
+$('#mainAdd').onclick = () => addFile();
+$('#quickNoteBtn').onclick = addQuickNote;
+$('#mainQuickNote').onclick = addQuickNote;
+$('#pinMenuBtn').onclick = openPinModal;
+$('#lockNowBtn').onclick = lockVault;
+$('#switchAccBtn').onclick = lockVault;
+$('#guide').onclick = guide;
+$('#guideTopBtn').onclick = guide;
+$('#mobGuideBtn').onclick = guide;
+
+$('#backup').onclick = () => {
+  let isAr = lang === 'ar';
+  showModal(`
+    <div class="modal-head"><h2>${t('navBackup')}</h2><button class="x" id="close">×</button></div>
+    <p class="hint">${isAr ? 'نزّل نسخة احتياطية كاملة لحسابك أو استعد نسخة سابقة لنقلها بين أجهزتك.' : 'Download a full backup of your account or restore a previous one across devices.'}</p>
+    <div class="modal-actions">
+      <button class="primary" id="exp">${isAr ? 'تنزيل نسخة احتياطية' : 'Download Backup'}</button>
+      <button class="secondary" id="imp">${isAr ? 'استيراد نسخة' : 'Import Backup'}</button>
+    </div>`);
+  $('#close').onclick = closeModal;
+  $('#exp').onclick = () => { closeModal(); exportBackup(); };
+  $('#imp').onclick = () => { closeModal(); importBackup(); };
+};
+
+function toggleLanguage() {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  applyStaticTranslations();
+  if (activeAccount) render();
+}
+$('#lang').onclick = toggleLanguage;
+$('#lockLangBtn').onclick = toggleLanguage;
+
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+$('#search').addEventListener('input', () => setView($('#search').value.trim() ? 'search' : 'home'));
+
+document.body.addEventListener('click', async e => {
+  let b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.open) openDoc(b.dataset.open);
+  if (b.dataset.preview) preview(b.dataset.preview);
+  if (b.dataset.download) download(b.dataset.download);
+  if (b.dataset.star) {
+    let d = docs.find(x => x.id === b.dataset.star);
+    d.favorite = !d.favorite;
+    await put('docs', d); render();
+  }
+  if (b.dataset.folder) {
+    let id = b.dataset.folder;
+    let q = docs.filter(d => !d.deleted && d.folder === id);
+    $('#content').innerHTML = `<div class="toolbar"><span class="status">${q.length} ${t('itemCount')}</span><button class="secondary" id="backFolders">${t('btnBackFolders')}</button></div>${q.length ? `<div class="doc-grid">${q.map(docCard).join('')}</div>` : empty(t('emptyListTitle'), t('emptyListDesc'))}`;
+    $('#backFolders').onclick = () => setView('folders');
+  }
+  if (b.dataset.editfolder) newFolder(folders.find(x => x.id === b.dataset.editfolder));
+  if (b.dataset.restore) {
+    let d = docs.find(x => x.id === b.dataset.restore);
+    d.deleted = false; d.inbox = !d.folder;
+    await put('docs', d); render(); toast(lang === 'ar' ? 'تمت الاستعادة' : 'Restored');
+  }
+  if (b.dataset.purge) {
+    await del('docs', b.dataset.purge); render(); toast(lang === 'ar' ? 'تم الحذف نهائياً' : 'Deleted permanently');
+  }
+});
+
+/* Drag & Drop support */
+window.addEventListener('dragover', e => {
+  if (!activeAccount || $('#lockScreen').classList.contains('show')) return;
+  e.preventDefault();
+  $('#dropOverlay').classList.add('active');
+});
+window.addEventListener('dragleave', e => { if (!e.relatedTarget) $('#dropOverlay').classList.remove('active'); });
+window.addEventListener('drop', e => {
+  if (!activeAccount || $('#lockScreen').classList.contains('show')) return;
+  e.preventDefault();
+  $('#dropOverlay').classList.remove('active');
+  if (e.dataTransfer.files?.[0]) addFile(e.dataTransfer.files[0]);
+});
+
+(async () => {
+  db = await openDB();
+  applyStaticTranslations();
+
+  let allAccs = await all('accounts');
+  let lastUser = await getSet('lastUser');
+  if (allAccs.length === 0) {
+    setAuthMode('register');
+  } else {
+    setAuthMode('login');
+    if (lastUser) {
+      let found = allAccs.find(a => a.username === lastUser);
+      if (found) $('#authUserInput').value = found.displayName;
+    }
+  }
+})();
+</script>
+</body>
+</html>

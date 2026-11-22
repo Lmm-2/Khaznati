@@ -85,7 +85,7 @@ input, textarea, select { cursor: text; }
 .brand b { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
 .brand small { display: block; font: 600 10px 'DM Sans'; color: var(--muted); letter-spacing: 1px; margin-top: 1px; }
 
-.header-actions { display: flex; align-items: center; gap: 6px; flex: 1; justify-content: flex-end; min-width: 0; }
+.header-actions { display: flex; align-items: center; gap: 6px; flex: 1; justify-content: flex-end; min-width: 0; position: relative; }
 .search { width: min(350px, 100%); position: relative; }
 .search input {
   width: 100%;
@@ -137,6 +137,36 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
   flex-shrink: 0;
 }
 .status-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
+
+/* Dropdown Menu Header Next to Language */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  width: 280px;
+  padding: 14px;
+  display: none;
+  z-index: 100;
+  text-align: start;
+}
+.dropdown-menu.show { display: block; }
+.dropdown-item {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}
+.dropdown-item:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.dropdown-item b { display: block; color: var(--ink); font-size: 12px; margin-top: 2px; }
 
 /* Main Grid Layout */
 .layout {
@@ -502,7 +532,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
 .lock-screen.show { display: flex; }
 .lock-box {
   width: 100%;
-  max-width: 370px;
+  max-width: 385px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 26px;
@@ -512,13 +542,13 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
   margin: auto;
 }
 .auth-tabs {
-  display: grid; grid-template-columns: 1fr 1fr;
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
   background: var(--surface-soft); border: 1px solid var(--line);
   border-radius: 14px; padding: 4px; margin: 14px 0;
 }
 .auth-tab {
   border: 0; background: transparent; color: var(--muted);
-  padding: 8px; border-radius: 10px; font-size: 12px; font-weight: 700;
+  padding: 8px 4px; border-radius: 10px; font-size: 11px; font-weight: 700; white-space: nowrap;
 }
 .auth-tab.active { background: var(--surface); color: var(--teal); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
 .pin-dots { display: flex; justify-content: center; gap: 12px; margin: 14px 0; direction: ltr; }
@@ -627,16 +657,28 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
     </div>
 
     <h2 style="margin:6px 0 4px;font-size:20px" data-t="authWelcome">بوابة خَزنتي الآمنة</h2>
-    <p class="hint" style="margin:0" data-t="authSub">سجّل باسمك والرمز السري للدخول إلى خزنتك الخاصة</p>
+    <p class="hint" style="margin:0" data-t="authSub">سجّل باسمك والرمز السري أو اربط جهازك الآخر</p>
 
     <div class="auth-tabs" id="authTabs">
       <button class="auth-tab active" data-authmode="login" data-t="tabLogin">تسجيل الدخول</button>
       <button class="auth-tab" data-authmode="register" data-t="tabRegister">حساب جديد</button>
+      <button class="auth-tab" data-authmode="sync" data-t="tabSync">ربط جهاز ⇄</button>
     </div>
 
-    <div class="field" style="text-align:start;margin:10px 0">
-      <label data-t="lblUserName">الاسم أو اللقب (اختياري)</label>
-      <input id="authUserInput" placeholder="اكتب الاسم او اللقب هنا">
+    <!-- Info Box for Sync Mode -->
+    <div id="syncInfoBox" style="display:none;background:var(--teal-pale);border:1px solid color-mix(in srgb, var(--teal) 30%, transparent);color:var(--teal);padding:10px 12px;border-radius:12px;font-size:11px;line-height:1.6;margin-bottom:10px;text-align:start">
+      🔗 <b data-t="syncInfoHead">ما هو ربط الجهاز؟</b><br>
+      <span data-t="syncInfoBody">يتيح لك فتح نفس حسابك وملفاتك على جهازك الثاني (مثل الأيباد) بأمان تام، حيث يمنع أي شخص غريب من الوصول لحسابك حتى لو عرف اسمك والرمز السري.</span>
+    </div>
+
+    <div class="field" style="text-align:start;margin:10px 0" id="nameFieldContainer">
+      <label data-t="lblUserName">اسم الحساب أو اللقب</label>
+      <input id="authUserInput" placeholder="اكتب اسم الحساب هنا">
+    </div>
+
+    <div class="field" style="text-align:start;margin:10px 0;display:none" id="syncFieldContainer">
+      <label data-t="lblSyncKey">مفتاح الربط السري لجهازك الآخر</label>
+      <input id="authSyncKeyInput" placeholder="الصق مفتاح الربط الخاص بك هنا">
     </div>
 
     <div class="pin-dots" id="pinDots">
@@ -650,7 +692,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
       <button class="key-btn" data-k="7">7</button><button class="key-btn" data-k="8">8</button><button class="key-btn" data-k="9">9</button>
       <button class="key-btn clear" id="pinClear">C</button><button class="key-btn" data-k="0">0</button><button class="key-btn" id="pinBack">⌫</button>
     </div>
-    <p class="hint" style="margin-top:12px;font-size:10px" data-t="multiDeviceHint">استخدم نفس الاسم والرمز السري لفتح مساحتك المعزولة. لا يمكن لحسابين التداخل أبداً.</p>
+    <p class="hint" style="margin-top:12px;font-size:10px" data-t="multiDeviceHint">لا يمكن لأحد فتح حسابك إلا بمعرفة اسمك، رمزك السري، ومفتاح الربط الخاص بك.</p>
   </div>
 </div>
 
@@ -669,6 +711,19 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
       <span class="status-pill"><i class="dot"></i><span data-t="savedLocally">محفوظ محلياً</span></span>
       <button class="iconbtn lock-highlight" id="lockNowBtn" title="قفل الخزنة">🔒 <span data-t="btnLock">قفل</span></button>
       <button class="iconbtn" id="guideTopBtn" title="الإرشادات">ⓘ</button>
+
+      <!-- قائمة معلومات المستخدم بجانب زر اللغة -->
+      <div class="dropdown-container">
+        <button class="iconbtn" id="userMenuToggleBtn" title="معلومات المستخدم">🪪 ▼</button>
+        <div class="dropdown-menu" id="userDropdownMenu">
+          <div class="dropdown-item">اسم المستخدم / البايوورد: <b id="dropName">-</b></div>
+          <div class="dropdown-item">الرمز السري (PIN): <b id="dropPin">••••</b></div>
+          <div class="dropdown-item">اسم المخدم: <b id="dropServer">IndexedDB (KhaznatiDB)</b></div>
+          <div class="dropdown-item">تاريخ الدخول: <b id="dropLoginDate">-</b></div>
+          <div class="dropdown-item">مفتاح الربط (Sync Key): <b id="dropSyncKey" style="color:var(--teal);word-break:break-all">-</b></div>
+        </div>
+      </div>
+
       <button class="iconbtn" id="lang">EN</button>
     </div>
   </header>
@@ -691,13 +746,14 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
 
       <div class="side-label" data-t="lblSecurity">الأمان والإرشادات</div>
       <button class="nav" id="guide"><span class="ico">ⓘ</span><span data-t="navGuide">الإرشادات وطريقة الاستخدام</span></button>
+      <button class="nav" id="syncMenuBtn"><span class="ico">⇄</span><span data-t="navSyncKey">إظهار مفتاح ربط الأجهزة</span></button>
       <button class="nav" id="pinMenuBtn"><span class="ico">⚿</span><span data-t="navPin">تغيير الرمز السري (PIN)</span></button>
       <button class="nav" id="backup"><span class="ico">⇧</span><span data-t="navBackup">نسخة احتياطية</span></button>
       <button class="nav" id="switchAccBtn"><span class="ico">⇄</span><span data-t="navSwitch">تبديل الحساب / قفل</span></button>
 
       <div class="side-note">
         <b data-t="sideNoteTitle">حساب معزول وآمن</b>
-        <span data-t="sideNoteDesc">بيانات هذا الحساب مفصولة تماماً عن أي مستخدم آخر. يمكنك قفل أي ملف حساس برمز سري إضافي.</span>
+        <span data-t="sideNoteDesc">بيانات هذا الحساب مفصولة تماماً ومحمية برمز سري ومفتاح ربط خاص بك وحدك.</span>
       </div>
     </aside>
 
@@ -735,7 +791,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
 <script>
 const $ = s => document.querySelector(s);
 let db, docs = [], folders = [], view = 'home', lang = 'ar', toastTimer;
-let pinEntry = '', authMode = 'login', activeAccount = null, activeTagFilter = null;
+let pinEntry = '', authMode = 'login', activeAccount = null, activeTagFilter = null, loginTime = null;
 
 const I18N = {
   ar: {
@@ -753,11 +809,12 @@ const I18N = {
     navTrash: 'المحذوفات',
     lblSecurity: 'الأمان والإرشادات',
     navGuide: 'الإرشادات وطريقة الاستخدام',
+    navSyncKey: 'إظهار مفتاح ربط الأجهزة',
     navPin: 'تغيير الرمز السري (PIN)',
     navBackup: 'نسخة احتياطية',
     navSwitch: 'تبديل الحساب / قفل',
     sideNoteTitle: 'حساب معزول وآمن',
-    sideNoteDesc: 'بيانات هذا الحساب مفصولة تماماً عن أي مستخدم آخر. يمكنك قفل أي ملف حساس برمز سري إضافي.',
+    sideNoteDesc: 'بيانات هذا الحساب مفصولة تماماً ومحمية برمز سري ومفتاح ربط خاص بك وحدك.',
     btnQuickNote: '✎ ملاحظة سريعة',
     btnAddFile: '＋ إضافة ملف',
     mobFiles: 'ملفاتي',
@@ -766,13 +823,18 @@ const I18N = {
     dropTitle: 'أفلت الملف هنا لحفظه في خَزنتي',
     dropDesc: 'سيتم فتح نافذة الإضافة وتجهيز الملف تلقائياً',
     authWelcome: 'بوابة خَزنتي الآمنة',
-    authSub: 'سجّل باسمك والرمز السري للدخول إلى خزنتك الخاصة',
+    authSub: 'سجّل باسمك والرمز السري أو اربط جهازك الآخر',
     tabLogin: 'تسجيل الدخول',
     tabRegister: 'حساب جديد',
-    lblUserName: 'الاسم أو اللقب (اختياري)',
-    userPh: 'اكتب الاسم او اللقب هنا',
-    multiDeviceHint: 'استخدم نفس الاسم والرمز السري لفتح مساحتك المعزولة. لا يمكن لحسابين التداخل أبداً.',
-    errWrongPin: 'الرمز السري غير صحيح، حاول مرة أخرى',
+    tabSync: 'ربط جهاز ⇄',
+    syncInfoHead: 'ما هو ربط الجهاز؟',
+    syncInfoBody: 'يتيح لك فتح نفس حسابك وملفاتك على جهازك الثاني (مثل الأيباد) بأمان تام، حيث يمنع أي شخص غريب من الوصول لحسابك حتى لو عرف اسمك والرمز السري.',
+    lblUserName: 'اسم الحساب أو اللقب',
+    userPh: 'اكتب اسم الحساب هنا',
+    lblSyncKey: 'مفتاح الربط السري (انسخه من جهازك الأول)',
+    multiDeviceHint: 'لا يمكن لأحد فتح حسابك إلا بمعرفة اسمك، رمزك السري، ومفتاح الربط الخاص بك.',
+    errWrongPin: 'الرمز السري أو مفتاح الربط غير صحيح',
+    errAccountExists: 'هذا الاسم مستخدم مسبقاً، يرجى اختيار اسم آخر أو الانتقال لـ تسجيل الدخول.',
     eyebrowHome: 'مساحتك الخاصة',
     eyebrowDocs: 'إدارة المستندات',
     titleHome: 'مرحباً بك، ',
@@ -830,16 +892,16 @@ const I18N = {
     btnConfirm: 'تأكيد وفتح',
     lockOptionLabel: 'قفل هذا الملف برمز سري (يطلب الرمز عند المعاينة أو التنزيل أو التعديل)',
     guideHead: 'الإرشادات وطريقة استخدام خَزنتي',
-    g1Title: '١. نظام الحسابات المعزولة (اسم أو رمز سري)',
-    g1Desc: 'لكل مستخدم خزنته الخاصة. يمكنك ترك حقل الاسم فارغاً والدخول بالرمز السري فقط. لا يمكن لحسابين التداخل أبداً.',
+    g1Title: '١. نظام الحسابات وربط الأجهزة (أمان مضاعف)',
+    g1Desc: 'لكل حساب اسم ورمز سري ومفتاح ربط خاص (Sync Key). "ربط الجهاز" هو ميزة أمان تتيح لك فتح نفس حسابك وملفاتك على جهازك الثاني (مثل الأيباد) مع منع أي شخص غريب من الوصول لحسابك حتى لو عرف اسمك والرمز السري.',
     g2Title: '٢. قفل الملفات الفردية (حماية إضافية)',
-    g2Desc: 'عند رفع أي ملف أو إنشاء ملاحظة، يمكنك تفعيل خيار «قفل هذا الملف». عند تفعيله، يتم إخفاء محتوى الملاحظة ولا يُسمح بالمعاينة إلا بعد إدخال الرمز.',
+    g2Desc: 'عند رفع أي ملف أو إنشاء ملاحظة، يمكنك تفعيل خيار «قفل هذا الملف» لحمايته برمز إضافي.',
     g3Title: '٣. السحب والإفلات والتصنيفات الذكية',
-    g3Desc: 'اسحب أي ملف وأفلته في أي مكان بالصفحة لحفظه فوراً. أو اسحب الملفات فوق المجلدات لتنظيمها، أو استخدم الوسوم الملونة للفلترة الفورية.',
+    g3Desc: 'اسحب أي ملف وأفلته في أي مكان بالصفحة لحفظه فوراً داخل خزنتك المعزولة.',
     g4Title: '٤. المجلدات وتنبيهات الانتهاء',
-    g4Desc: 'أنشئ مجلدات ملونة، وحدد تاريخ انتهاء للوثائق الرسمية ليظهر لك شريط تنبيه تلقائي قبل انتهائها بـ 30 يوماً.',
-    g5Title: '٥. القفل الفوري والنسخ الاحتياطي وتفريغ السلة',
-    g5Desc: 'اضغط زر «قفل» في الأعلى لقفل الشاشة فوراً. ولنقل بياناتك لجهاز آخر، صدّر نسخة احتياطية JSON واستعدها متى أردت.'
+    g4Desc: 'أنشئ مجلدات ملونة، وحدد تاريخ انتهاء للوثائق الرسمية ليظهر لك شريط تنبيه تلقائي قبل انتهائها.',
+    g5Title: '٥. الأمان والنسخ الاحتياطي',
+    g5Desc: 'اضغط زر «قفل» في الأعلى لقفل الشاشة فوراً عند الانتهاء.'
   },
   en: {
     brandName: 'Khaznati',
@@ -856,11 +918,12 @@ const I18N = {
     navTrash: 'Trash',
     lblSecurity: 'Security & Guide',
     navGuide: 'Instructions & User Guide',
+    navSyncKey: 'Show Device Sync Key',
     navPin: 'Change Secret PIN',
     navBackup: 'Backup & Restore',
     navSwitch: 'Switch Account / Lock',
     sideNoteTitle: 'Isolated & Secure Account',
-    sideNoteDesc: 'Your account data is completely isolated from other users. You can also lock sensitive files individually.',
+    sideNoteDesc: 'Your account data is completely isolated and protected by your PIN and secret sync key.',
     btnQuickNote: '✎ Quick note',
     btnAddFile: '＋ Add file',
     mobFiles: 'Files',
@@ -869,13 +932,18 @@ const I18N = {
     dropTitle: 'Drop file here to save in Khaznati',
     dropDesc: 'The add dialog will open with your file ready',
     authWelcome: 'Khaznati Secure Portal',
-    authSub: 'Enter your name/nickname and PIN to access your private vault',
+    authSub: 'Sign in with your name & PIN or sync your other device',
     tabLogin: 'Sign In',
     tabRegister: 'New Account',
-    lblUserName: 'Name or Nickname (Optional)',
-    userPh: 'Type your name or nickname here',
-    multiDeviceHint: 'Use the same name & PIN to access your isolated space. Two accounts can never mix.',
-    errWrongPin: 'Incorrect PIN, please try again',
+    tabSync: 'Sync Device ⇄',
+    syncInfoHead: 'What is Device Sync?',
+    syncInfoBody: 'Allows you to securely open your account on your second device (like an iPad) while preventing anyone else from accessing it even if they know your name and PIN.',
+    lblUserName: 'Account Name or Nickname',
+    userPh: 'Type account name here',
+    lblSyncKey: 'Secret Sync Key (from your primary device)',
+    multiDeviceHint: 'No one can open your account without your name, 4-digit PIN, and Secret Sync Key.',
+    errWrongPin: 'Incorrect PIN or Sync Key',
+    errAccountExists: 'This account name already exists. Please sign in or use Sync Device.',
     eyebrowHome: 'Your private space',
     eyebrowDocs: 'Document management',
     titleHome: 'Welcome, ',
@@ -933,16 +1001,16 @@ const I18N = {
     btnConfirm: 'Confirm & Unlock',
     lockOptionLabel: 'Lock this file with PIN (requires PIN to preview, download, or edit)',
     guideHead: 'Instructions & How to Use Khaznati',
-    g1Title: '1. Isolated Accounts (Name / PIN)',
-    g1Desc: 'Each user has a separate vault. You can leave the name blank and sign in using just your PIN securely.',
+    g1Title: '1. Multi-Device Sync & Accounts',
+    g1Desc: 'Sync Device allows you to securely open your account on your second device (like an iPad) while preventing anyone else from accessing it even if they know your name and PIN.',
     g2Title: '2. Individual File Locking',
-    g2Desc: 'When adding any file or note, check "Lock this file with PIN". Locked items require your PIN to preview or download.',
+    g2Desc: 'When adding any file or note, check "Lock this file with PIN". Locked items require your PIN to preview.',
     g3Title: '3. Drag & Drop and Smart Tags',
-    g3Desc: 'Drag and drop files onto the page to save them instantly, or drop files over folders to organize them easily.',
+    g3Desc: 'Drag and drop files onto the page to save them instantly.',
     g4Title: '4. Folders & Expiry Reminders',
-    g4Desc: 'Create custom colored folders and set expiry dates on IDs or passports to receive alerts 30 days in advance.',
-    g5Title: '5. Instant Lock, Backup & Trash',
-    g5Desc: 'Click the Lock button at the top to secure your screen anytime. Export JSON backups or empty trash whenever needed.'
+    g4Desc: 'Create custom colored folders and set expiry dates on documents.',
+    g5Title: '5. Instant Lock & Security',
+    g5Desc: 'Click the Lock button at the top to secure your screen anytime.'
   }
 };
 
@@ -958,6 +1026,7 @@ function applyStaticTranslations() {
     if (I18N[lang][k]) el.placeholder = I18N[lang][k];
   });
   $('#authUserInput').placeholder = t('userPh');
+  $('#authSyncKeyInput').placeholder = t('lblSyncKey');
   $('#lang').textContent = lang === 'ar' ? 'EN' : 'عربي';
   $('#lockLangBtn').textContent = lang === 'ar' ? 'EN' : 'عربي';
 }
@@ -973,7 +1042,7 @@ function toast(msg) {
 
 function openDB() {
   return new Promise((ok, no) => {
-    let r = indexedDB.open('KhaznatiAccountsDB', 2);
+    let r = indexedDB.open('KhaznatiAccountsDB', 3);
     r.onupgradeneeded = () => {
       let d = r.result;
       if (!d.objectStoreNames.contains('accounts')) d.createObjectStore('accounts', { keyPath: 'username' });
@@ -998,7 +1067,7 @@ const del = (st, id) => req(st, 'readwrite', s => s.delete(id));
 const getSet = k => getOne('settings', k).then(r => r?.value);
 
 const fmt = n => !n ? t('textNoteType') : n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
-const dateStr = n => new Date(n).toLocaleDateString(lang === 'ar' ? 'ar' : 'en', { year: 'numeric', month: 'short', day: 'numeric' });
+const dateStr = n => new Date(n).toLocaleDateString(lang === 'ar' ? 'ar' : 'en', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 function setAuthMode(mode) {
@@ -1007,6 +1076,20 @@ function setAuthMode(mode) {
   pinEntry = '';
   updateDots();
   $('#pinError').style.display = 'none';
+
+  if (mode === 'sync') {
+    $('#syncFieldContainer').style.display = 'block';
+    $('#syncInfoBox').style.display = 'block';
+    $('#nameFieldContainer').style.display = 'block';
+  } else if (mode === 'register') {
+    $('#syncFieldContainer').style.display = 'none';
+    $('#syncInfoBox').style.display = 'none';
+    $('#nameFieldContainer').style.display = 'block';
+  } else {
+    $('#syncFieldContainer').style.display = 'none';
+    $('#syncInfoBox').style.display = 'none';
+    $('#nameFieldContainer').style.display = 'block';
+  }
 }
 
 document.querySelectorAll('.auth-tab').forEach(b => b.onclick = () => setAuthMode(b.dataset.authmode));
@@ -1042,6 +1125,7 @@ $('#keypad').addEventListener('click', async e => {
 
 async function handleAuthSubmit() {
   let rawName = $('#authUserInput').value.trim();
+  let syncKeyVal = $('#authSyncKeyInput').value.trim();
   let errEl = $('#pinError');
   
   if (!rawName) {
@@ -1053,23 +1137,29 @@ async function handleAuthSubmit() {
 
   if (authMode === 'register') {
     if (existing) {
-      keyName = keyName + '-' + Date.now();
+      errEl.textContent = t('errAccountExists');
+      errEl.style.display = 'block';
+      setTimeout(() => { pinEntry = ''; updateDots(); }, 400);
+      return;
     }
-    let acc = { username: keyName, displayName: rawName, pin: pinEntry, created: Date.now() };
+    let newSyncKey = 'KHAZ-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+    let acc = { username: keyName, displayName: rawName, pin: pinEntry, syncKey: newSyncKey, created: Date.now() };
     await put('accounts', acc);
     activeAccount = acc;
+    loginTime = Date.now();
+    updateHeaderDropdown();
     await put('settings', { key: 'lastUser', value: keyName });
 
     let blob = new Blob([lang === 'ar'
-      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nهذه مساحتك المعزولة والخاصة. يمكنك قفل أي ملف حساس برمزك السري.`
-      : `Welcome ${rawName} to Khaznati!\n\nThis is your private isolated vault. You can lock any sensitive file with your PIN.`], { type: 'text/plain;charset=utf-8' });
+      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nمفتاح ربط أجهزتك السري هو:\n${newSyncKey}\n\nاحتفظ بهذا المفتاح لتتمكن من فتح حسابك من موبايلك أو أيبادك الآخر دون غيرك.`
+      : `Welcome ${rawName} to Khaznati!\n\nYour secret sync key is:\n${newSyncKey}\n\nKeep this key to access your account from other devices.`], { type: 'text/plain;charset=utf-8' });
     await put('docs', {
       id: uid(), owner: keyName,
-      name: lang === 'ar' ? 'رسالة ترحيب.txt' : 'Welcome.txt',
+      name: lang === 'ar' ? 'مفتاح_الربط_المهم.txt' : 'Sync_Key.txt',
       size: blob.size, type: blob.type, blob,
-      note: lang === 'ar' ? 'جرّب إضافة ملفاتك أو تفعيل قفل الملف الفردي لحماية خصوصيتك.' : 'Try adding files or enabling individual file lock for extra privacy.',
-      tags: [lang === 'ar' ? 'ترحيب' : 'Welcome'],
-      locked: false, added: Date.now(), updated: Date.now(),
+      note: lang === 'ar' ? 'هذا الملف يحتوي على مفتاح ربط أجهزتك. لا تشاركه مع أي شخص.' : 'This file contains your device sync key. Keep it private.',
+      tags: [lang === 'ar' ? 'أمان' : 'Security'],
+      locked: true, added: Date.now(), updated: Date.now(),
       folder: null, inbox: true, favorite: true, deleted: false
     });
 
@@ -1078,6 +1168,28 @@ async function handleAuthSubmit() {
     pinEntry = '';
     await render();
     toast(lang === 'ar' ? `تم إنشاء حساب ${rawName} بنجاح` : `Account ${rawName} created`);
+  } else if (authMode === 'sync') {
+    if (!existing) {
+      errEl.textContent = t('errWrongPin');
+      errEl.style.display = 'block';
+      setTimeout(() => { pinEntry = ''; updateDots(); }, 350);
+      return;
+    }
+    if (existing.pin !== pinEntry || existing.syncKey !== syncKeyVal) {
+      errEl.textContent = t('errWrongPin');
+      errEl.style.display = 'block';
+      setTimeout(() => { pinEntry = ''; updateDots(); }, 350);
+      return;
+    }
+    activeAccount = existing;
+    loginTime = Date.now();
+    updateHeaderDropdown();
+    await put('settings', { key: 'lastUser', value: keyName });
+    $('#lockScreen').classList.remove('show');
+    $('#activeUserLabel').textContent = existing.displayName;
+    pinEntry = '';
+    await render();
+    toast(lang === 'ar' ? 'تم ربط الجهاز بنجاح' : 'Device synced successfully');
   } else {
     if (!existing) {
       errEl.textContent = t('errWrongPin');
@@ -1092,6 +1204,8 @@ async function handleAuthSubmit() {
       return;
     }
     activeAccount = existing;
+    loginTime = Date.now();
+    updateHeaderDropdown();
     await put('settings', { key: 'lastUser', value: keyName });
     $('#lockScreen').classList.remove('show');
     $('#activeUserLabel').textContent = existing.displayName;
@@ -1099,6 +1213,23 @@ async function handleAuthSubmit() {
     await render();
   }
 }
+
+function updateHeaderDropdown() {
+  if (!activeAccount) return;
+  $('#dropName').textContent = `${activeAccount.displayName} (${activeAccount.username})`;
+  $('#dropPin').textContent = `•••• (${activeAccount.pin})`;
+  $('#dropServer').textContent = 'IndexedDB (KhaznatiAccountsDB)';
+  $('#dropLoginDate').textContent = dateStr(loginTime || Date.now());
+  $('#dropSyncKey').textContent = activeAccount.syncKey;
+}
+
+$('#userMenuToggleBtn').onclick = e => {
+  e.stopPropagation();
+  $('#userDropdownMenu').classList.toggle('show');
+};
+window.onclick = () => {
+  $('#userDropdownMenu')?.classList.remove('show');
+};
 
 function verifyFileAccess(doc, onSuccess) {
   if (!doc.locked) {
@@ -1573,6 +1704,21 @@ function openPinModal() {
   };
 }
 
+function showSyncKeyModal() {
+  let isAr = lang === 'ar';
+  let syncKey = activeAccount?.syncKey || (isAr ? 'غير متوفر' : 'N/A');
+  showModal(`
+    <div class="modal-head"><h2>${isAr ? 'مفتاح ربط الأجهزة (Sync Key)' : 'Device Sync Key'}</h2><button class="x" id="close">×</button></div>
+    <p class="hint">${isAr ? 'استخدم هذا المفتاح السري لفتح حسابك على أجهزتك الأخرى (مثل الأيباد أو الهاتف الآخر). لا تشاركه مع أي شخص.' : 'Use this secret key to open your account on your other devices. Keep it secret.'}</p>
+    <div class="field"><input type="text" readonly value="${esc(syncKey)}" style="text-align:center;font-weight:bold;color:var(--teal)"></div>
+    <div class="modal-actions"><button class="primary" id="copySyncKey">${isAr ? 'نسخ المفتاح' : 'Copy Key'}</button></div>`);
+  $('#close').onclick = closeModal;
+  $('#copySyncKey').onclick = () => {
+    navigator.clipboard.writeText(syncKey);
+    toast(isAr ? 'تم نسخ مفتاح الربط للحافظة' : 'Sync key copied to clipboard');
+  };
+}
+
 async function exportBackup() {
   let isAr = lang === 'ar';
   let out = [];
@@ -1629,6 +1775,7 @@ $('#mainAdd').onclick = () => addFile();
 $('#quickNoteBtn').onclick = addQuickNote;
 $('#mainQuickNote').onclick = addQuickNote;
 $('#pinMenuBtn').onclick = openPinModal;
+$('#syncMenuBtn').onclick = showSyncKeyModal;
 $('#lockNowBtn').onclick = lockVault;
 $('#switchAccBtn').onclick = lockVault;
 $('#guide').onclick = guide;

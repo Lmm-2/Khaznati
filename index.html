@@ -1,194 +1,1691 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f7f8fa"><meta name="description" content="خَزنتي — مساحة شخصية لتنظيم المستندات والملفات محلياً على جهازك."><meta name="application-name" content="خَزنتي"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><title>خَزنتي | Khaznati</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f8f7">
+<title>خَزنتي | Khaznati - مساحتك الشخصية المنظمة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f8fa;--surface:#fff;--ink:#202b3a;--muted:#8b96a7;--line:#e9edf2;--teal:#07998e;--teal-dark:#07877e;--teal-pale:#e8f8f5;--gold:#e9b94e;--gold-pale:#fff8e8;--blue-pale:#eef4ff;--shadow:0 8px 28px rgba(40,55,75,.055);--radius:22px}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Arabic','Cairo',sans-serif;min-height:100vh}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #07998e38;outline-offset:2px}
-.shell{width:min(100%,1100px);margin:auto;min-height:100vh;padding:0 22px 90px}.topbar{position:sticky;top:0;z-index:5;background:rgba(247,248,250,.93);backdrop-filter:blur(14px);padding:17px 0 12px;border-bottom:1px solid #edf0f3}.toprow{display:flex;align-items:center;gap:12px}.searchwrap{position:relative;flex:1;min-width:0}.searchwrap input{width:100%;height:47px;border:1px solid #e3e8ee;background:#fff;border-radius:15px;padding:0 42px 0 14px;color:var(--ink);font-size:13px;box-shadow:0 3px 12px #27384b06}.searchicon{position:absolute;right:15px;top:12px;color:#a4afbc;font-size:19px}.menu-btn,.round-btn{width:47px;height:47px;border-radius:15px;border:1px solid #e4e9ef;background:#fff;color:#344256;display:grid;place-items:center;font-size:21px;flex-shrink:0}.underbar{display:flex;align-items:center;justify-content:flex-start;gap:9px;padding-top:11px}.pill{height:33px;border-radius:20px;padding:0 13px;border:1px solid #c8eee7;background:#f1fffc;color:#07998e;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:7px}.pill.lang{background:#fff;border-color:#e7ebf0;color:#344256}.dot{width:7px;height:7px;background:#12b99f;border-radius:50%}
-main{padding-top:19px}.intro{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 2px 16px}.intro h1{font-size:clamp(20px,3vw,27px);margin:0;font-weight:800;letter-spacing:-.5px}.intro p{margin:4px 0 0;color:var(--muted);font-size:12px}.tiny-date{font:11px 'DM Sans';color:#a0aaba;white-space:nowrap}
-.welcome{border:1px solid #e5f3ef;background:linear-gradient(110deg,#f0fbf8,#fffdf7);border-radius:20px;padding:17px 19px;margin-bottom:15px;position:relative;overflow:hidden}.welcome:after{content:"✧";position:absolute;left:18px;top:5px;font-size:62px;color:#e9dcae;opacity:.45}.welcome .eyebrow{font-size:10px;color:#0a9a8e;font-weight:700;margin-bottom:5px}.welcome h2{font-size:17px;margin:0 0 4px}.welcome p{font-size:12px;color:#7f8b99;margin:0;line-height:1.8;max-width:85%}
-.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0 17px}.stat{border-radius:19px;background:#fff;border:1px solid #edf0f4;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;min-height:76px;box-shadow:var(--shadow)}.stat .num{font:700 25px 'DM Sans';color:var(--teal)}.stat.gold .num{color:#d89a25}.stat .caption{font-size:11px;color:#7d8998;margin-top:3px}.stat .bubble{width:37px;height:37px;border-radius:13px;background:var(--teal-pale);display:grid;place-items:center;color:var(--teal);font-size:18px}.stat.gold .bubble{background:var(--gold-pale);color:#d99a24}
-.section{margin:21px 0}.section-head{display:flex;align-items:center;justify-content:space-between;margin:0 3px 11px;gap:8px}.section-head h3{font-size:15px;margin:0;font-weight:800}.section-head button{background:none;color:var(--teal);font-size:11px;border:0;font-weight:700}
-.folder-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.folder-card{display:flex;align-items:center;gap:10px;min-width:0;background:#fff;border:1px solid #e9edf2;border-radius:16px;padding:12px;text-align:right;box-shadow:var(--shadow);transition:.18s}.folder-card:hover,.doc-card:hover{border-color:#b8e5dc;transform:translateY(-1px)}.folder-ico{width:37px;height:37px;flex-shrink:0;border-radius:12px;background:#effaf7;color:#07998e;display:grid;place-items:center;font-size:19px}.folder-card strong{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.folder-card small{font-size:10px;color:#9aa4b1;display:block;margin-top:3px}
-.list-tools{display:flex;align-items:center;justify-content:space-between;gap:9px;margin:0 2px 12px}.count-chip{border:1px solid #e8edf2;border-radius:18px;background:#fff;padding:6px 12px;font-size:10px;color:#7c8796}.rename-btn{border:1px solid #e8edf2;border-radius:18px;background:#fff;padding:7px 12px;font-size:11px;color:#526073}
-.doc-list{display:grid;grid-template-columns:1fr;gap:13px}.doc-card{background:#fff;border:1px solid #e7ecf1;border-radius:22px;padding:16px 16px 13px;box-shadow:var(--shadow);transition:.18s;min-width:0}.doc-top{display:flex;align-items:center;justify-content:space-between}.star-btn{border:0;background:transparent;color:#c5ccd5;font-size:20px;padding:0 2px}.star-btn.on{color:#e5a31e}.type-icon{width:43px;height:43px;border-radius:15px;background:#fff8e9;color:#d9941c;display:grid;place-items:center;font-size:20px;border:1px solid #fff0cc}.type-icon.green{background:#eafaf4;color:#079b77;border-color:#d8f5e9}.type-icon.blue{background:#eff5ff;color:#5e8fd2;border-color:#e0eaff}.doc-title{font-size:16px;font-weight:800;margin:12px 0 6px;line-height:1.5;overflow-wrap:anywhere}.doc-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:#98a2b0;font:10px 'DM Sans'}.folder-chip{display:inline-flex;align-items:center;gap:5px;background:#f5f7f9;border:1px solid #e8edf2;border-radius:14px;padding:4px 8px;color:#647184;font:11px 'IBM Plex Sans Arabic','DM Sans',sans-serif}.folder-chip b{color:var(--teal);font-weight:500}.note-box{margin-top:13px;border:1px solid #f6df9a;background:#fffdf6;border-radius:17px;padding:11px 13px;color:#62606a;font-size:12px;line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}.doc-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #f0f2f5;margin-top:12px;padding-top:10px;flex-wrap:wrap}.doc-actions{display:flex;gap:6px;align-items:center}.mini-action{border:1px solid #e8edf2;background:#fff;color:#647184;border-radius:11px;padding:6px 9px;font-size:10px}.mini-action.preview{color:#078f84;background:#f0fbf8;border-color:#d8f2ec}.tag-row{display:flex;gap:5px;flex-wrap:wrap}.tag{background:#edfbf8;border:1px solid #d6f4ed;color:#078f84;border-radius:15px;padding:4px 8px;font-size:9px}.doc-date{font:10px 'DM Sans';color:#a4adba;white-space:nowrap}.empty{border:1px dashed #dce4eb;border-radius:20px;background:#fff;text-align:center;padding:35px 18px;color:#8793a1}.empty .symbol{font-size:35px;color:#0c9d91;margin-bottom:9px}.empty strong{display:block;color:#4b596b;font-size:13px;margin-bottom:5px}.empty p{font-size:11px;margin:0;line-height:1.7}
-.fab{position:fixed;z-index:4;bottom:calc(18px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:62px;height:62px;border-radius:50%;border:1px solid #e7ebf1;background:#fff;box-shadow:0 5px 16px #29394a22;display:grid;place-items:center;color:#0a9d91;font-size:25px}.fab span{background:conic-gradient(from 40deg,#f4c64e,#0aa997,#5387d8,#b58bd8,#f4c64e);color:transparent;background-clip:text;-webkit-background-clip:text;font-size:30px}
-.drawer-backdrop,.modal-backdrop{position:fixed;inset:0;background:#1c293a55;z-index:20;opacity:0;visibility:hidden;transition:.2s}.drawer-backdrop.open,.modal-backdrop.open{opacity:1;visibility:visible}.drawer{position:absolute;top:0;bottom:0;right:0;width:min(390px,88vw);background:#f8f9fb;border-radius:23px 0 0 23px;padding:18px 17px calc(20px + env(safe-area-inset-bottom));overflow:auto;transform:translateX(105%);transition:.25s;box-shadow:-15px 0 45px #1c293a18}.drawer-backdrop.open .drawer{transform:translateX(0)}.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:5px 2px 17px;border-bottom:1px solid #e9edf2}.brand{display:flex;align-items:center;gap:10px}.brand-mark{width:45px;height:45px;border-radius:14px;background:#0ba293;color:#fff;display:grid;place-items:center;font-size:21px;box-shadow:0 5px 13px #0ba29335}.brand-name{font-weight:800;font-size:16px}.brand-name small{display:block;color:#8c97a5;font:10px 'DM Sans';margin-top:2px}.close-btn{border:0;background:transparent;color:#97a1ae;font-size:22px}.drawer-add{width:100%;margin:17px 0 18px;background:#0a9b91;color:#fff;border-radius:15px;padding:14px;font-weight:800;box-shadow:0 6px 15px #07998e30}.drawer-label{font-size:10px;color:#a1aab6;margin:14px 8px 7px}.drawer-item{width:100%;display:flex;align-items:center;justify-content:space-between;border:1px solid transparent;background:transparent;border-radius:13px;padding:11px 12px;color:#566275;font-size:12px;text-align:right}.drawer-item.active,.drawer-item:hover{background:#e9faf6;border-color:#c8f0e8;color:#078e83}.drawer-item .left{display:flex;align-items:center;gap:10px}.drawer-item .di{width:20px;color:#07998e;font-size:16px;text-align:center}.badge-count{background:#f0f3f7;border-radius:12px;padding:3px 8px;font:10px 'DM Sans';color:#8a95a4}.drawer-bottom{display:grid;gap:9px;margin-top:18px}.drawer-card{background:#fff;border:1px solid #e8edf2;border-radius:15px;padding:12px;display:flex;align-items:center;justify-content:space-between;text-align:right;color:#536174}.drawer-card strong{display:block;font-size:12px}.drawer-card small{display:block;font-size:10px;color:#99a3af;margin-top:3px}.drawer-card .di{font-size:19px;color:#d99b2d}
-.modal-backdrop{display:grid;place-items:center;padding:16px}.modal{width:min(520px,100%);max-height:min(88vh,850px);overflow:auto;background:#fff;border-radius:23px;padding:20px;box-shadow:0 20px 65px #18293c30;transform:translateY(12px);transition:.2s}.modal-backdrop.open .modal{transform:translateY(0)}.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.modal-head h3{margin:0;font-size:17px}.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:11px;color:#697688;font-weight:700}.field input,.field textarea,.field select{width:100%;border:1px solid #e4eaf0;border-radius:13px;background:#f9fafc;padding:12px;color:#364255;outline:none;font-size:12px}.field textarea{min-height:100px;resize:vertical;line-height:1.8}.upload-zone{border:1.5px dashed #b9ddd5;background:#f4fcfa;border-radius:18px;padding:20px;text-align:center;cursor:pointer}.upload-zone .cloud{font-size:27px;color:#07998e}.upload-zone strong{display:block;font-size:13px;margin:6px 0}.upload-zone small{color:#8d99a6;font-size:10px}.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:12px;padding:11px 16px;font-size:12px;font-weight:700}.btn.primary{background:#07998e;color:white}.btn.soft{background:#edf8f5;color:#078f84}.btn.danger{background:#fff0f0;color:#c05e5e}.btn.full{width:100%}.hint{font-size:10px;color:#9aa4b1;line-height:1.8;margin-top:10px}.feature-grid{display:grid;grid-template-columns:1fr;gap:10px}.feature-card{background:#fff;border:1px solid #e8edf2;border-radius:16px;padding:13px}.feature-card .fc-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.feature-card b{font-size:12px}.feature-card p{font-size:10px;line-height:1.8;color:#7f8b99;margin:7px 0}.feature-status{font-size:9px;border-radius:12px;padding:4px 8px;background:#eaf8f4;color:#078f84;white-space:nowrap}.feature-status.pending{background:#fff7e7;color:#a8751b}.feature-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.guide-list{display:grid;gap:10px}.guide-item{background:#f8fafb;border:1px solid #edf0f4;border-radius:15px;padding:12px}.guide-item b{font-size:12px}.guide-item p{font-size:11px;color:#7f8b99;line-height:1.8;margin:5px 0 0}.toast{position:fixed;bottom:95px;left:50%;transform:translateX(-50%);background:#263a4b;color:white;padding:10px 17px;border-radius:13px;font-size:11px;z-index:40;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap}.toast.show{opacity:1}
-@media(min-width:720px){.shell{padding-left:34px;padding-right:34px}.topbar{padding-top:22px}.toprow{gap:14px}.searchwrap input{height:52px;font-size:14px}.menu-btn,.round-btn{width:52px;height:52px}.underbar{padding-top:13px}.intro{margin-top:16px}.welcome{padding:23px 25px}.welcome h2{font-size:20px}.welcome p{font-size:13px}.stats{grid-template-columns:repeat(2,minmax(0,210px));justify-content:start}.stat{padding:16px 18px}.folder-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.doc-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.doc-card{padding:18px}.doc-title{font-size:17px}.fab{display:none}}
-@media(min-width:1050px){.shell{padding-left:42px;padding-right:42px}.folder-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.doc-list{grid-template-columns:repeat(2,minmax(0,1fr))}.welcome{padding:26px 30px}.doc-card{padding:20px}}
-@media(max-width:380px){.shell{padding-left:12px;padding-right:12px}.searchwrap input{font-size:11px}.menu-btn,.round-btn{width:42px;height:44px}.pill{padding:0 10px;font-size:10px}.intro h1{font-size:19px}.folder-card{padding:10px}.folder-card strong{font-size:11px}.doc-title{font-size:14px}.doc-card{padding:13px}.note-box{font-size:11px}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-.feature-card{background:#fff;border:1px solid #e8edf2;border-radius:16px;padding:13px;margin:10px 0}.fc-top{display:flex;justify-content:space-between;gap:8px;align-items:center}.feature-status{font-size:9px;border-radius:12px;padding:4px 8px;background:#eaf8f4;color:#078f84;white-space:nowrap}.feature-status.pending{background:#fff6e6;color:#b47c1c}.feature-card p{font-size:11px;line-height:1.8;color:#7b8795;margin:8px 0}.feature-actions{display:flex;gap:7px;flex-wrap:wrap}.inbox-banner{background:#f0f8ff;border:1px solid #dcecff;border-radius:15px;padding:12px 14px;margin:10px 0;color:#526d8b;font-size:11px}.folder-ico{background:var(--folder-bg,#effaf7)!important;color:var(--folder-color,#07998e)!important}.lock-screen{position:fixed;inset:0;z-index:99;background:#f7f8fa;display:none;align-items:center;justify-content:center;padding:24px}.lock-screen.show{display:flex}.lock-box{width:min(100%,360px);background:white;border:1px solid #e8edf2;border-radius:24px;padding:26px;text-align:center;box-shadow:var(--shadow)}.lock-box input{width:100%;padding:13px;border:1px solid #e5eaf0;border-radius:12px;text-align:center;margin:14px 0}.activity-row{padding:11px;border-bottom:1px solid #eef1f4;font-size:11px;color:#687587}.activity-row b{color:#344256;display:block;margin-bottom:4px}
-</style></head>
+:root {
+  --bg: #f5f8f7;
+  --surface: #ffffff;
+  --surface-soft: #f9fbfb;
+  --ink: #202b3a;
+  --muted: #7c8999;
+  --line: #e6ecea;
+  --teal: #0d9488;
+  --teal-dark: #0f766e;
+  --teal-pale: #e6f7f5;
+  --gold: #d99b26;
+  --gold-pale: #fff8e7;
+  --danger: #e11d48;
+  --danger-pale: #fff1f2;
+  --shadow: 0 10px 30px rgba(32, 43, 58, 0.045);
+  --r: 20px;
+}
+
+body.dark {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --surface-soft: #162032;
+  --ink: #f1f5f9;
+  --muted: #94a3b8;
+  --line: #334155;
+  --teal: #14b8a6;
+  --teal-dark: #0d9488;
+  --teal-pale: rgba(20, 184, 166, 0.14);
+  --gold: #fbbf24;
+  --gold-pale: rgba(251, 191, 36, 0.12);
+  --danger-pale: rgba(225, 29, 72, 0.15);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  transition: background 0.25s, color 0.25s;
+}
+html[dir="ltr"] body { font-family: 'DM Sans', 'IBM Plex Sans Arabic', sans-serif; }
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 3px solid rgba(13, 148, 136, 0.35);
+  outline-offset: 2px;
+}
+
+/* Layout Shell */
+.app {
+  max-width: 1240px;
+  margin: auto;
+  padding: 0 22px 80px;
+}
+
+/* Sticky Header */
+.header {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: blur(14px);
+  z-index: 15;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 170px;
+}
+.logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, var(--teal), #059669);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  box-shadow: 0 6px 16px rgba(13, 148, 136, 0.25);
+}
+.brand b { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; }
+.brand small { display: block; font: 600 10px 'DM Sans'; color: var(--muted); letter-spacing: 1.2px; margin-top: 1px; }
+
+.header-actions { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: flex-end; }
+.search { width: min(350px, 100%); position: relative; }
+.search input {
+  width: 100%;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 0 40px 0 14px;
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+.search input:focus { border-color: var(--teal); outline: none; }
+.search span { position: absolute; right: 14px; top: 11px; color: var(--muted); pointer-events: none; }
+html[dir="ltr"] .search input { padding: 0 14px 0 40px; }
+html[dir="ltr"] .search span { left: 14px; right: auto; }
+
+.iconbtn {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 13px;
+  height: 44px;
+  padding: 0 13px;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: 0.15s;
+  white-space: nowrap;
+}
+.iconbtn:hover { border-color: var(--teal); color: var(--teal); }
+.iconbtn.lock-highlight { background: var(--teal-pale); border-color: color-mix(in srgb, var(--teal) 30%, transparent); color: var(--teal); }
+.status-pill {
+  height: 36px;
+  border-radius: 20px;
+  padding: 0 12px;
+  background: var(--teal-pale);
+  color: var(--teal);
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.status-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
+
+/* Main Grid Layout */
+.layout {
+  display: grid;
+  grid-template-columns: 245px minmax(0, 1fr);
+  gap: 28px;
+  padding-top: 24px;
+}
+
+/* Sidebar */
+.sidebar { position: sticky; top: 96px; align-self: start; }
+.cta-group { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-bottom: 16px; }
+.side-cta {
+  border: 0;
+  border-radius: 15px;
+  background: var(--teal);
+  color: #fff;
+  padding: 13px 14px;
+  font-weight: 700;
+  font-size: 13px;
+  box-shadow: 0 8px 18px rgba(13, 148, 136, 0.22);
+  transition: transform 0.15s, background 0.15s;
+}
+.side-cta:hover { background: var(--teal-dark); transform: translateY(-1px); }
+.note-cta {
+  border: 1px solid var(--line);
+  background: var(--gold-pale);
+  color: var(--gold);
+  border-radius: 15px;
+  width: 46px;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+}
+
+.side-label { font-size: 10px; font-weight: 700; color: var(--muted); margin: 18px 10px 7px; letter-spacing: 0.5px; }
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--muted);
+  text-align: start;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 2px 0;
+  transition: 0.15s;
+}
+.nav:hover { background: var(--surface); color: var(--ink); }
+.nav .ico { width: 20px; text-align: center; color: var(--teal); font-size: 16px; }
+.nav.active { background: var(--teal-pale); border-color: color-mix(in srgb, var(--teal) 25%, transparent); color: var(--teal); font-weight: 700; }
+.nav .count { margin-inline-start: auto; font: 600 11px 'DM Sans'; background: var(--surface); padding: 2px 8px; border-radius: 10px; color: var(--muted); }
+.nav.active .count { background: var(--teal); color: #fff; }
+
+.side-note {
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 11px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.side-note b { color: var(--ink); display: block; margin-bottom: 4px; }
+
+/* Main Area */
+.main { min-width: 0; }
+.page-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin: 4px 0 20px; flex-wrap: wrap; }
+.eyebrow { color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: 0.4px; }
+.page-head h1 { font-size: 26px; margin: 3px 0 4px; font-weight: 800; }
+.page-head p { font-size: 13px; color: var(--muted); margin: 0; }
+
+.primary {
+  border: 0;
+  border-radius: 13px;
+  background: var(--teal);
+  color: #fff;
+  padding: 11px 18px;
+  font-weight: 700;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: 0.15s;
+}
+.primary:hover { background: var(--teal-dark); }
+.secondary {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.secondary:hover { border-color: var(--teal); }
+
+/* Hero & Expiry Alert */
+.expiry-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--gold-pale);
+  border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent);
+  color: var(--ink);
+  padding: 12px 16px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 26px;
+  border-radius: 22px;
+  background: linear-gradient(120deg, var(--teal-pale), var(--gold-pale));
+  border: 1px solid var(--line);
+  margin-bottom: 18px;
+}
+.hero h2 { font-size: 20px; margin: 0 0 6px; font-weight: 800; }
+.hero p { font-size: 13px; color: var(--muted); line-height: 1.8; margin: 0; max-width: 580px; }
+.hero-mark { font: 700 44px 'Playfair Display'; color: var(--gold); opacity: 0.75; padding: 0 12px; }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+.stat {
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.stat .num { font: 700 26px 'DM Sans'; color: var(--teal); }
+.stat.gold .num { color: var(--gold); }
+.stat small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+.stat .bubble {
+  width: 40px; height: 40px; border-radius: 13px;
+  background: var(--teal-pale); color: var(--teal);
+  display: grid; place-items: center; font-size: 18px;
+}
+.stat.gold .bubble { background: var(--gold-pale); color: var(--gold); }
+
+/* Folders & Documents */
+.section { margin: 24px 0; }
+.section-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.section-title h2 { font-size: 16px; margin: 0; font-weight: 800; }
+.textbtn { border: 0; background: transparent; color: var(--teal); font-size: 12px; font-weight: 700; }
+
+.folders { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.folder {
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: var(--surface);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: start;
+  min-width: 0;
+  transition: 0.18s;
+}
+.folder:hover { border-color: var(--teal); transform: translateY(-2px); }
+.folder-icon {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: 13px;
+  background: var(--f-bg, var(--teal-pale));
+  color: var(--f-col, var(--teal));
+  font-size: 19px; flex-shrink: 0;
+}
+.folder b { display: block; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.folder small { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; }
+
+.doc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.doc {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 17px;
+  min-width: 0;
+  box-shadow: var(--shadow);
+  transition: 0.18s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.doc:hover { border-color: var(--teal); transform: translateY(-2px); }
+.doc-head { display: flex; justify-content: space-between; align-items: center; }
+.file-icon {
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  background: var(--teal-pale);
+  color: var(--teal);
+  display: grid; place-items: center;
+  font-weight: 800; font-size: 15px;
+}
+.file-icon.note-type { background: var(--gold-pale); color: var(--gold); font-size: 20px; }
+.file-icon.locked-type { background: var(--danger-pale); color: var(--danger); font-size: 18px; }
+.star { border: 0; background: none; color: #cbd5e1; font-size: 22px; transition: transform 0.15s; }
+.star:hover { transform: scale(1.15); }
+.star.on { color: var(--gold); }
+
+.doc h3 { font-size: 15px; margin: 12px 0 6px; font-weight: 700; overflow-wrap: anywhere; display: flex; align-items: center; gap: 6px; }
+.lock-badge { background: var(--danger-pale); color: var(--danger); font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 700; }
+.meta { font: 500 11px 'DM Sans', 'IBM Plex Sans Arabic'; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.chip {
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  padding: 3px 9px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+.note {
+  margin-top: 11px;
+  padding: 10px 12px;
+  border-radius: 13px;
+  background: var(--gold-pale);
+  border: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.note.blurred {
+  filter: blur(4px);
+  user-select: none;
+  pointer-events: none;
+}
+.tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
+.tag { background: var(--teal-pale); color: var(--teal); border-radius: 10px; padding: 3px 8px; font-size: 10px; font-weight: 700; }
+
+.doc-actions {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-top: 14px; padding-top: 11px;
+  border-top: 1px solid var(--line);
+}
+.smallbtn {
+  border: 1px solid var(--line);
+  background: var(--surface-soft);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 7px 11px;
+  font-size: 11px;
+  font-weight: 600;
+  transition: 0.15s;
+}
+.smallbtn:hover { border-color: var(--teal); color: var(--teal); }
+.smallbtn.em { background: var(--teal-pale); border-color: transparent; color: var(--teal); font-weight: 700; }
+
+/* Empty State & Toolbars */
+.empty {
+  background: var(--surface);
+  border: 1.5px dashed var(--line);
+  border-radius: 20px;
+  padding: 42px 20px;
+  text-align: center;
+  color: var(--muted);
+}
+.empty .symbol { font-size: 36px; color: var(--teal); }
+.empty h3 { color: var(--ink); font-size: 16px; margin: 10px 0 6px; }
+.empty p { font-size: 12px; line-height: 1.8; margin: 0 auto 16px; max-width: 400px; }
+
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.toolbar select { border: 1px solid var(--line); background: var(--surface); border-radius: 11px; padding: 8px 12px; font-size: 12px; color: var(--ink); }
+.status { font-size: 11px; font-weight: 700; color: var(--teal); padding: 6px 12px; background: var(--teal-pale); border-radius: 20px; }
+
+/* Modals */
+.backdrop {
+  position: fixed; inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 40;
+  display: none; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.backdrop.open { display: flex; }
+.modal {
+  width: min(560px, 100%);
+  max-height: 88vh;
+  overflow: auto;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+}
+.modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.modal-head h2 { font-size: 18px; margin: 0; font-weight: 800; }
+.x { border: 0; background: var(--surface-soft); width: 34px; height: 34px; border-radius: 10px; color: var(--muted); font-size: 20px; display: grid; place-items: center; }
+
+.field { margin: 13px 0; }
+.field label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+.field input, .field textarea, .field select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 13px;
+  font-size: 13px;
+  background: var(--surface-soft);
+  color: var(--ink);
+}
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--teal); outline: none; background: var(--surface); }
+.field textarea { min-height: 95px; resize: vertical; line-height: 1.8; }
+.row { display: flex; gap: 10px; }
+.row > * { flex: 1; min-width: 0; }
+.modal-actions { display: flex; justify-content: flex-start; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+.hint { font-size: 11px; color: var(--muted); line-height: 1.75; }
+
+.check-box {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface-soft); border: 1px solid var(--line);
+  padding: 11px 13px; border-radius: 12px; cursor: pointer;
+}
+.check-box input { width: 18px; height: 18px; accent-color: var(--teal); cursor: pointer; }
+
+.preview { width: 100%; max-height: 55vh; object-fit: contain; background: var(--surface-soft); border-radius: 14px; }
+.preview-frame { width: 100%; height: 55vh; border: 0; border-radius: 14px; }
+.guide-step { padding: 13px 0; border-bottom: 1px solid var(--line); }
+.guide-step:last-child { border-bottom: 0; }
+.guide-step b { font-size: 13px; color: var(--teal); }
+.guide-step p { font-size: 12px; line-height: 1.8; color: var(--muted); margin: 5px 0 0; }
+
+/* Account & PIN Lock Screen with Keypad */
+.lock-screen {
+  position: fixed; inset: 0; z-index: 99;
+  background: var(--bg);
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+.lock-screen.show { display: flex; }
+.lock-box {
+  width: min(100%, 380px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: 26px 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.auth-tabs {
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: var(--surface-soft); border: 1px solid var(--line);
+  border-radius: 14px; padding: 4px; margin: 14px 0;
+}
+.auth-tab {
+  border: 0; background: transparent; color: var(--muted);
+  padding: 8px; border-radius: 10px; font-size: 12px; font-weight: 700;
+}
+.auth-tab.active { background: var(--surface); color: var(--teal); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.pin-dots { display: flex; justify-content: center; gap: 12px; margin: 14px 0; direction: ltr; }
+.pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--line); transition: 0.15s; }
+.pin-dot.filled { background: var(--teal); border-color: var(--teal); transform: scale(1.15); }
+.keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; max-width: 240px; margin: 14px auto 0; direction: ltr; }
+.key-btn {
+  height: 48px; border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface-soft);
+  color: var(--ink);
+  font: 700 18px 'DM Sans';
+  transition: 0.1s;
+}
+.key-btn:active { transform: scale(0.94); background: var(--teal-pale); }
+.key-btn.clear { background: var(--gold-pale); color: var(--gold); font-size: 14px; }
+
+/* Drag & Drop Overlay */
+.drop-overlay {
+  position: fixed; inset: 14px; z-index: 80;
+  border: 3px dashed var(--teal);
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--teal-pale) 88%, transparent);
+  backdrop-filter: blur(6px);
+  display: none; place-items: center; text-align: center;
+  pointer-events: none;
+}
+.drop-overlay.active { display: grid; }
+
+/* Mobile Nav & Toast */
+.mobile-nav { display: none; }
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translate(-50%, 20px);
+  background: #1e293b; color: #fff;
+  padding: 11px 18px; border-radius: 14px;
+  font-size: 12px; font-weight: 600;
+  opacity: 0; pointer-events: none; transition: 0.2s; z-index: 120;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 850px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .app { padding: 0 16px 90px; }
+  .mobile-nav {
+    display: flex; position: fixed; z-index: 20;
+    bottom: 0; left: 0; right: 0;
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line);
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+    justify-content: space-around;
+  }
+  .mobile-nav button {
+    border: 0; background: none; color: var(--muted);
+    font-size: 10px; font-weight: 600;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .mobile-nav button span:first-child { font-size: 18px; }
+  .mobile-nav button.active { color: var(--teal); font-weight: 800; }
+}
+@media (max-width: 580px) {
+  .stats { grid-template-columns: 1fr; }
+  .folders { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .doc-grid { grid-template-columns: 1fr; }
+  .hero-mark { display: none; }
+  .status-pill { display: none; }
+}
+</style>
+</head>
 <body>
-<div class="shell">
-<header class="topbar">
- <div class="toprow">
-  <div class="searchwrap"><span class="searchicon">⌕</span><input id="search" placeholder="ابحث باسم المستند، الملاحظات أو الوسوم..."></div>
-  <button class="menu-btn" id="openDrawer" aria-label="القائمة">☰</button>
- </div>
- <div class="underbar"><button class="pill lang" id="langBtn">English <span>◎</span></button><span class="pill"><i class="dot"></i><span id="autosave">تم الحفظ تلقائياً</span></span></div>
-</header>
-<main>
- <div class="intro"><div><h1 id="pageTitle">خزنتك الشخصية</h1><p id="pageSubtitle">ملفاتك المهمة، محفوظة ومنظمة في مكان واحد.</p></div><span class="tiny-date" id="today"></span></div>
- <section class="welcome" id="welcome"><div class="eyebrow">✦ KHAZNATI SPACE</div><h2>أهلاً بك في خَزنتي</h2><p>مساحتك الشخصية لحفظ المستندات المهمة، وتنظيمها، وإضافة ملاحظات تساعدك على الرجوع إليها وقت الحاجة.</p><div class="inbox-banner" role="note">تنبيه الخصوصية: تُحفظ الملفات على هذا المتصفح وهذا الجهاز فقط. لا يوجد تسجيل دخول أو تخزين سحابي أو تشفير حقيقي في هذه النسخة. احتفظي بنسخة احتياطية دورية، ولا ترفعي مستندات شديدة الحساسية قبل توفير خادم آمن.</div></section>
- <section class="stats"><div class="stat"><div><div class="num" id="docCount">0</div><div class="caption" data-ar="مستند محفوظ" data-en="Saved documents">مستند محفوظ</div></div><div class="bubble">▤</div></div><div class="stat gold"><div><div class="num" id="noteCount">0</div><div class="caption" data-ar="ملاحظة ذكية" data-en="Smart notes">ملاحظة ذكية</div></div><div class="bubble">▧</div></div></section>
- <section class="section" id="folderSection"><div class="section-head"><h3 data-ar="مجلداتك الخاصة" data-en="Your folders">مجلداتك الخاصة</h3><button id="addFolderTop">＋ <span data-ar="مجلد جديد" data-en="New folder">مجلد جديد</span></button></div><div class="folder-grid" id="folderGrid"></div></section>
- <section class="section"><div class="section-head"><h3 id="listHeading">أحدث المستندات</h3><button id="clearFilter" style="display:none" data-ar="عرض الكل" data-en="Show all">عرض الكل</button></div><div class="list-tools"><span class="count-chip" id="itemCount">0 مستند</span><button class="rename-btn" id="renameFolder" style="display:none">✎ تعديل اسم المجلد</button></div><div class="doc-list" id="docList"></div></section>
-</main>
+
+<!-- Drag & Drop Overlay -->
+<div class="drop-overlay" id="dropOverlay">
+  <div>
+    <div style="font-size:48px;color:var(--teal)">☁</div>
+    <h2 style="margin:8px 0 4px" data-t="dropTitle">أفلت الملف هنا لحفظه في خَزنتي</h2>
+    <p class="hint" data-t="dropDesc">سيتم فتح نافذة الإضافة وتجهيز الملف تلقائياً</p>
+  </div>
 </div>
-<button class="fab" id="fab" aria-label="إضافة مستند"><span>✦</span></button>
-<div class="drawer-backdrop" id="drawerBackdrop"><aside class="drawer">
- <div class="drawer-head"><div class="brand"><div class="brand-mark">⌑</div><div class="brand-name">Khaznati | خَزنتي<small>خزنتك الشخصية مدى الحياة</small></div></div><button class="close-btn" id="closeDrawer">×</button></div>
- <button class="drawer-add" id="drawerAdd">＋ <span data-ar="إضافة مستند جديد" data-en="Add new document">إضافة مستند جديد</span></button>
- <div class="drawer-label" data-ar="نظرة عامة" data-en="OVERVIEW">نظرة عامة</div>
- <button class="drawer-item active" data-view="all"><span class="left"><span class="di">▱</span><span data-ar="جميع المستندات" data-en="All documents">جميع المستندات</span></span><span class="badge-count" id="allBadge">0</span></button>
- <button class="drawer-item" data-view="inbox"><span class="left"><span class="di">↧</span><span data-ar="صندوق الوارد" data-en="Inbox">صندوق الوارد</span></span><span class="badge-count" id="inboxBadge">0</span></button>
- <button class="drawer-item" data-view="favorites"><span class="left"><span class="di">☆</span><span data-ar="المفضلة" data-en="Favorites">المفضلة</span></span><span class="badge-count" id="favBadge">0</span></button>
- <button class="drawer-item" id="advancedFeatures"><span class="left"><span class="di">✧</span><span data-ar="المزايا المتقدمة" data-en="Advanced features">المزايا المتقدمة</span></span><span class="badge-count">6</span></button>
- <button class="drawer-item" data-view="trash"><span class="left"><span class="di">♧</span><span data-ar="سلة المحذوفات" data-en="Trash">سلة المحذوفات</span></span><span class="badge-count" id="trashBadge">0</span></button>
- <div class="drawer-label" data-ar="مجلداتي الخاصة" data-en="MY FOLDERS">مجلداتي الخاصة</div><div id="drawerFolders"></div>
- <div class="drawer-bottom">
-  <button class="drawer-card" id="openGuide"><span><strong data-ar="خانة الإرشادات" data-en="User guide">خانة الإرشادات</strong><small data-ar="شرح شامل لكيفية الاستخدام" data-en="Learn how to use Khaznati">شرح شامل لكيفية الاستخدام</small></span><span class="di">▧</span></button>
-  <button class="drawer-card" id="pinSettings"><span><strong data-ar="القفل السري (PIN)" data-en="Secret PIN lock">القفل السري (PIN)</strong><small id="pinState">OFF</small></span><span class="di" style="color:#07998e">♙</span></button>
- </div>
-</aside></div>
-<div class="modal-backdrop" id="modalBackdrop"><section class="modal" id="modal"></section></div><div class="toast" id="toast"></div>
-<input type="file" id="fileInput" hidden>
-<div class="lock-screen" id="lockScreen"><div class="lock-box"><div style="font-size:32px;color:#07998e">⌑</div><h2>خَزنتي مقفلة</h2><p class="hint">أدخل رمز PIN للمتابعة</p><input id="unlockPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••"><button class="btn primary full" id="unlockBtn">فتح الخزنة</button></div></div>
+
+<!-- Account Login / Register / Lock Screen -->
+<div class="lock-screen show" id="lockScreen">
+  <div class="lock-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <button class="smallbtn" id="lockLangBtn">EN</button>
+      <div class="logo" style="width:48px;height:48px;font-size:22px">⌑</div>
+      <button class="smallbtn" id="lockThemeBtn">☾</button>
+    </div>
+
+    <h2 style="margin:6px 0 4px;font-size:20px" id="authHeading" data-t="authWelcome">بوابة خَزنتي الآمنة</h2>
+    <p class="hint" style="margin:0" id="authSub" data-t="authSub">سجّل باسمك والرمز السري للدخول إلى خزنتك الخاصة</p>
+
+    <div class="auth-tabs" id="authTabs">
+      <button class="auth-tab active" data-authmode="login" data-t="tabLogin">تسجيل الدخول</button>
+      <button class="auth-tab" data-authmode="register" data-t="tabRegister">حساب جديد</button>
+    </div>
+
+    <div class="field" style="text-align:start;margin:10px 0">
+      <label data-t="lblUserName">الاسم أو اللقب</label>
+      <input id="authUserInput" placeholder="مثلاً: سارة / أبو محمد">
+    </div>
+
+    <div class="pin-dots" id="pinDots">
+      <span class="pin-dot"></span><span class="pin-dot"></span><span class="pin-dot"></span><span class="pin-dot"></span>
+    </div>
+    <p id="pinError" style="color:var(--danger);font-size:12px;font-weight:700;display:none;margin:0 0 6px"></p>
+
+    <div class="keypad" id="keypad">
+      <button class="key-btn" data-k="1">1</button><button class="key-btn" data-k="2">2</button><button class="key-btn" data-k="3">3</button>
+      <button class="key-btn" data-k="4">4</button><button class="key-btn" data-k="5">5</button><button class="key-btn" data-k="6">6</button>
+      <button class="key-btn" data-k="7">7</button><button class="key-btn" data-k="8">8</button><button class="key-btn" data-k="9">9</button>
+      <button class="key-btn clear" id="pinClear">C</button><button class="key-btn" data-k="0">0</button><button class="key-btn" id="pinBack">⌫</button>
+    </div>
+    <p class="hint" style="margin-top:12px;font-size:10px" data-t="multiDeviceHint">استخدم نفس الاسم والرمز السري لفتح مساحتك المعزولة. لا يمكن لحسابين التداخل أبداً.</p>
+  </div>
+</div>
+
+<div class="app">
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <div class="logo">⌑</div>
+      <div><b data-t="brandName">خَزنتي</b><small id="activeUserLabel">KHAZNATI</small></div>
+    </div>
+    <div class="header-actions">
+      <div class="search">
+        <span>⌕</span>
+        <input id="search" data-ph="searchPh" placeholder="ابحث عن ملف، ملاحظة، أو وسم...">
+      </div>
+      <span class="status-pill"><i class="dot"></i><span data-t="savedLocally">محفوظ محلياً</span></span>
+      <button class="iconbtn lock-highlight" id="lockNowBtn" title="قفل الخزنة">🔒 <span data-t="btnLock">قفل</span></button>
+      <button class="iconbtn" id="guideTopBtn" title="الإرشادات">ⓘ</button>
+      <button class="iconbtn" id="themeBtn" title="تبديل المظهر">☾</button>
+      <button class="iconbtn" id="lang">EN</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="cta-group">
+        <button class="side-cta" id="addFile" data-t="addNewFile">＋ إضافة ملف جديد</button>
+        <button class="note-cta" id="quickNoteBtn" title="ملاحظة سريعة">✎</button>
+      </div>
+
+      <div class="side-label" data-t="lblWorkspace">مساحة العمل</div>
+      <button class="nav active" data-view="home"><span class="ico">⌂</span><span data-t="navHome">الرئيسية</span></button>
+      <button class="nav" data-view="files"><span class="ico">▤</span><span data-t="navFiles">كل الملفات</span> <span class="count" id="countFiles">0</span></button>
+      <button class="nav" data-view="folders"><span class="ico">▱</span><span data-t="navFolders">المجلدات</span> <span class="count" id="countFolders">0</span></button>
+      <button class="nav" data-view="inbox"><span class="ico">↧</span><span data-t="navInbox">صندوق الوارد</span> <span class="count" id="countInbox">0</span></button>
+      <button class="nav" data-view="favorites"><span class="ico">☆</span><span data-t="navFav">المفضلة</span> <span class="count" id="countFav">0</span></button>
+      <button class="nav" data-view="trash"><span class="ico">⌫</span><span data-t="navTrash">المحذوفات</span> <span class="count" id="countTrash">0</span></button>
+
+      <div class="side-label" data-t="lblSecurity">الأمان والإرشادات</div>
+      <button class="nav" id="guide"><span class="ico">ⓘ</span><span data-t="navGuide">الإرشادات وطريقة الاستخدام</span></button>
+      <button class="nav" id="pinMenuBtn"><span class="ico">⚿</span><span data-t="navPin">تغيير الرمز السري (PIN)</span></button>
+      <button class="nav" id="backup"><span class="ico">⇧</span><span data-t="navBackup">نسخة احتياطية</span></button>
+      <button class="nav" id="switchAccBtn"><span class="ico">⇄</span><span data-t="navSwitch">تبديل الحساب / قفل</span></button>
+
+      <div class="side-note">
+        <b data-t="sideNoteTitle">حساب معزول وآمن</b>
+        <span data-t="sideNoteDesc">بيانات هذا الحساب مفصولة تماماً عن أي مستخدم آخر. يمكنك قفل أي ملف حساس برمز سري إضافي.</span>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main">
+      <div id="expiryBanner"></div>
+      <div class="page-head">
+        <div>
+          <div class="eyebrow" id="eyebrow">مساحتك الخاصة</div>
+          <h1 id="pageTitle">مرحباً بك في خَزنتي</h1>
+          <p id="pageDesc">كل ملفاتك وملاحظاتك المهمة في مكان واحد، مرتبة وسهلة الوصول.</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="secondary" id="mainQuickNote" data-t="btnQuickNote">✎ ملاحظة سريعة</button>
+          <button class="primary" id="mainAdd" data-t="btnAddFile">＋ إضافة ملف</button>
+        </div>
+      </div>
+      <div id="content"></div>
+    </main>
+  </div>
+</div>
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+  <button class="active" data-view="home"><span>⌂</span><span data-t="navHome">الرئيسية</span></button>
+  <button data-view="files"><span>▤</span><span data-t="mobFiles">ملفاتي</span></button>
+  <button data-view="folders"><span>▱</span><span data-t="mobFolders">مجلداتي</span></button>
+  <button data-view="favorites"><span>☆</span><span data-t="navFav">المفضلة</span></button>
+  <button id="mobGuideBtn"><span>ⓘ</span><span data-t="mobGuide">الإرشادات</span></button>
+</nav>
+
+<div class="backdrop" id="modalBg"><section class="modal" id="modal"></section></div>
+<div class="toast" id="toast"></div>
+
 <script>
-const $=s=>document.querySelector(s);let lang='ar',view='all',folderId=null,db,docs=[],folders=[],pinHash=null,activeObjectUrl=null;
-const T=(a,e)=>lang==='ar'?a:e;
-const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function toast(s){$('#toast').textContent=s;$('#toast').classList.add('show');setTimeout(()=>$('#toast').classList.remove('show'),2200)}
-function openDB(){return new Promise((ok,no)=>{let r=indexedDB.open('KhaznatiReferenceStyle',1);r.onupgradeneeded=()=>{let d=r.result;d.createObjectStore('docs',{keyPath:'id'});d.createObjectStore('folders',{keyPath:'id'});d.createObjectStore('settings',{keyPath:'key'});};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
-function store(s,mode='readonly'){return db.transaction(s,mode).objectStore(s)}
-function getAll(s){return new Promise((ok,no)=>{let r=store(s).getAll();r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
-function save(s,v){return new Promise((ok,no)=>{let r=store(s,'readwrite').put(v);r.onsuccess=()=>ok();r.onerror=()=>no(r.error)})}
-function remove(s,id){return new Promise((ok,no)=>{let r=store(s,'readwrite').delete(id);r.onsuccess=()=>ok();r.onerror=()=>no(r.error)})}
-function setting(key){return new Promise(ok=>{let r=store('settings').get(key);r.onsuccess=()=>ok(r.result?.value);r.onerror=()=>ok(null)})}
-async function logActivity(action,name){let a=await setting('activityLog')||[];a.unshift({action,name,at:Date.now()});await save('settings',{key:'activityLog',value:a.slice(0,100)})}
-function bytes(n){if(!n)return '';let u=['B','KB','MB','GB'];let i=Math.min(3,Math.floor(Math.log(n)/Math.log(1024)));return (n/1024**i).toFixed(i?1:0)+' '+u[i]}
-function iconFor(d){let ext=(d.name.split('.').pop()||'').toLowerCase();if(['png','jpg','jpeg','gif','webp'].includes(ext))return ['▧','green'];if(['pdf'].includes(ext))return ['▣',''];if(['doc','docx','txt','rtf'].includes(ext))return ['▤','green'];if(['xls','xlsx','csv'].includes(ext))return ['▦','green'];return ['▧','blue']}
-function folderName(id){return folders.find(f=>f.id===id)?.name||T('بدون مجلد','No folder')}
-function openDrawer(){$('#drawerBackdrop').classList.add('open')}function closeDrawer(){$('#drawerBackdrop').classList.remove('open')}
-function openModal(html){$('#modal').innerHTML=html;$('#modalBackdrop').classList.add('open')}function closeModal(){if(activeObjectUrl){URL.revokeObjectURL(activeObjectUrl);activeObjectUrl=null}$('#modalBackdrop').classList.remove('open')}
-function setView(v,id=null){view=v;folderId=id;closeDrawer();render()}
-function render(){
- const active=docs.filter(d=>!d.deleted),trashed=docs.filter(d=>d.deleted);
- $('#docCount').textContent=active.length;$('#noteCount').textContent=active.filter(d=>d.note?.trim()).length;
- $('#allBadge').textContent=active.length;$('#favBadge').textContent=active.filter(d=>d.favorite).length;$('#trashBadge').textContent=trashed.length;
- $('#drawerFolders').innerHTML=folders.map(f=>`<button class="drawer-item" data-folder="${f.id}"><span class="left"><span class="di">▱</span>${esc(f.name)}</span><span class="badge-count">${active.filter(d=>d.folder===f.id).length}</span></button>`).join('')||`<div style="font-size:10px;color:#a2acb7;padding:8px 12px">${T('لا توجد مجلدات بعد','No folders yet')}</div>`;
- document.querySelectorAll('[data-folder]').forEach(b=>b.onclick=()=>setView('folder',b.dataset.folder));
- document.querySelectorAll('.drawer-item[data-view]').forEach(b=>{b.classList.toggle('active',b.dataset.view===view)});
- let list=active;
- if(view==='favorites')list=active.filter(d=>d.favorite);
- if(view==='inbox')list=active.filter(d=>d.inbox);
- $('#inboxBadge').textContent=active.filter(d=>d.inbox).length;
- if(view==='trash')list=trashed;
- if(view==='folder')list=active.filter(d=>d.folder===folderId);
- if(view==='search')list=active;
- const q=$('#search').value.trim().toLowerCase();if(q)list=list.filter(d=>(d.name+' '+(d.note||'')+' '+(d.tags||[]).join(' ')).toLowerCase().includes(q));
- list.sort((a,b)=>b.updated-a.updated);
- const title=view==='inbox'?T('صندوق الوارد','Inbox'):view==='favorites'?T('المفضلة','Favorites'):view==='trash'?T('سلة المحذوفات','Trash'):view==='folder'?folderName(folderId):T('أحدث المستندات','Recent documents');
- $('#listHeading').textContent=title;$('#itemCount').textContent=`${list.length} ${T('مستند','documents')}`;
- $('#folderSection').style.display=(view==='all'&&!q)?'block':'none';
- $('#welcome').style.display=(view==='all'&&!q)?'block':'none';
- $('#clearFilter').style.display=(view!=='all'||q)?'inline':'none';
- $('#renameFolder').style.display=view==='folder'?'inline':'none';
- $('#pageTitle').textContent=view==='inbox'?T('صندوق الوارد','Inbox'):view==='folder'?folderName(folderId):view==='trash'?T('المحذوفات','Trash'):T('خزنتك الشخصية','Your personal vault');
- $('#pageSubtitle').textContent=view==='inbox'?T('ملفات جديدة بانتظار ترتيبها في مجلداتها.','New files waiting to be organized into folders.'):view==='trash'?T('يمكنك استعادة المستندات أو حذفها نهائياً.','Restore documents or delete them permanently.'):T('ملفاتك المهمة، محفوظة ومنظمة في مكان واحد.','Your important files, saved and organized in one place.');
- $('#folderGrid').innerHTML=folders.map(f=>`<button class="folder-card" data-openfolder="${f.id}"><span class="folder-ico" style="--folder-color:${f.color||'#07998e'};--folder-bg:${f.color||'#07998e'}18">${esc(f.icon||'▱')}</span><span style="min-width:0"><strong>${esc(f.name)}</strong><small>${active.filter(d=>d.folder===f.id).length} ${T('مستند','documents')}</small></span></button>`).join('')||`<div class="empty" style="grid-column:1/-1;padding:20px"><div class="symbol">▱</div><strong>${T('لا توجد مجلدات بعد','No folders yet')}</strong><p>${T('أنشئ مجلداً لتبدأ بتنظيم مستنداتك.','Create a folder to organize your documents.')}</p></div>`;
- document.querySelectorAll('[data-openfolder]').forEach(b=>b.onclick=()=>setView('folder',b.dataset.openfolder));
- $('#docList').innerHTML=(view==='inbox'?`<div class="inbox-banner">↧ ${T('هذا الصندوق مؤقت لتنظيم الملفات الجديدة. افتح تفاصيل أي ملف وانقله إلى مجلد لإخراجه من الوارد.','A temporary place for new files. Open a file and assign it to a folder to move it out of Inbox.')}</div>`:'')+(list.length?list.map(d=>{let [ico,color]=iconFor(d);let tags=(d.tags||[]).map(x=>`<span class="tag">#${esc(x)}</span>`).join('');return `<article class="doc-card" data-doc="${d.id}"><div class="doc-top"><button class="star-btn ${d.favorite?'on':''}" data-star="${d.id}" aria-label="favorite">${d.favorite?'★':'☆'}</button><div class="type-icon ${color}">${ico}</div></div><h3 class="doc-title">${esc(d.name)}</h3><div class="doc-meta"><span>${bytes(d.size)||d.kind||T('مستند','Document')}</span><span class="folder-chip"><b>▱</b>${esc(folderName(d.folder))}</span></div>${d.inbox?`<span class="tag">${T('في الوارد','Inbox')}</span>`:''}${d.note?`<div class="note-box">${esc(d.note)}</div>`:''}${d.expiryDate?`<div class="note-box" style="border-color:#f3dfb4;background:#fffbf1">◷ ${T('تاريخ الانتهاء:','Expires:')} ${esc(d.expiryDate)}</div>`:''}<div class="doc-footer"><div class="tag-row">${tags}${d.isDemo?`<span class="tag">${T('تجريبي','SAMPLE')}</span>`:''}</div><div class="doc-actions">${d.deleted?`<button class="mini-action" data-restore="${d.id}">${T('استعادة','Restore')}</button>`:`<button class="mini-action preview" data-preview="${d.id}">${T('معاينة','Preview')}</button><button class="mini-action" data-download="${d.id}">↓ ${T('تنزيل','Download')}</button>`}<span class="doc-date">${new Date(d.updated).toLocaleDateString(lang==='ar'?'ar':'en')}</span></div></div></article>`}).join(''):`<div class="empty"><div class="symbol">${view==='trash'?'♧':'▤'}</div><strong>${view==='trash'?T('سلة المحذوفات فارغة','Trash is empty'):T('لا توجد مستندات هنا بعد','No documents here yet')}</strong><p>${T('أضف مستنداً جديداً ليظهر هنا ويمكنك إضافة ملاحظات ووسوم له.','Add a document to see it here, then attach notes and tags.')}</p></div>`);
- document.querySelectorAll('[data-doc]').forEach(el=>el.onclick=e=>{if(e.target.closest('[data-star],[data-preview],[data-download],[data-restore]'))return;editDoc(el.dataset.doc)});
- document.querySelectorAll('[data-preview]').forEach(b=>b.onclick=e=>{e.stopPropagation();previewDoc(b.dataset.preview)});
- document.querySelectorAll('[data-download]').forEach(b=>b.onclick=e=>{e.stopPropagation();downloadDoc(b.dataset.download)});
- document.querySelectorAll('[data-restore]').forEach(b=>b.onclick=async e=>{e.stopPropagation();let d=docs.find(x=>x.id===b.dataset.restore);d.deleted=false;d.updated=Date.now();await save('docs',d);await refresh();toast(T('تمت استعادة المستند','Document restored'))});
- document.querySelectorAll('[data-star]').forEach(b=>b.onclick=async e=>{e.stopPropagation();let d=docs.find(x=>x.id===b.dataset.star);d.favorite=!d.favorite;d.updated=Date.now();await save('docs',d);await logActivity(d.favorite?'favorite':'unfavorite',d.name);await refresh()});
- $('#today').textContent=new Date().toLocaleDateString(lang==='ar'?'ar':'en',{day:'numeric',month:'short'});
+const $ = s => document.querySelector(s);
+let db, docs = [], folders = [], view = 'home', lang = 'ar', toastTimer;
+let pinEntry = '', authMode = 'login', activeAccount = null;
+
+/* قاموس الترجمة الكامل عربي <-> إنجليزي */
+const I18N = {
+  ar: {
+    brandName: 'خَزنتي',
+    searchPh: 'ابحث عن ملف، ملاحظة، أو وسم...',
+    savedLocally: 'محفوظ محلياً',
+    btnLock: 'قفل',
+    addNewFile: '＋ إضافة ملف جديد',
+    lblWorkspace: 'مساحة العمل',
+    navHome: 'الرئيسية',
+    navFiles: 'كل الملفات',
+    navFolders: 'المجلدات',
+    navInbox: 'صندوق الوارد',
+    navFav: 'المفضلة',
+    navTrash: 'المحذوفات',
+    lblSecurity: 'الأمان والإرشادات',
+    navGuide: 'الإرشادات وطريقة الاستخدام',
+    navPin: 'تغيير الرمز السري (PIN)',
+    navBackup: 'نسخة احتياطية',
+    navSwitch: 'تبديل الحساب / قفل',
+    sideNoteTitle: 'حساب معزول وآمن',
+    sideNoteDesc: 'بيانات هذا الحساب مفصولة تماماً عن أي مستخدم آخر. يمكنك قفل أي ملف حساس برمز سري إضافي.',
+    btnQuickNote: '✎ ملاحظة سريعة',
+    btnAddFile: '＋ إضافة ملف',
+    mobFiles: 'ملفاتي',
+    mobFolders: 'مجلداتي',
+    mobGuide: 'الإرشادات',
+    dropTitle: 'أفلت الملف هنا لحفظه في خَزنتي',
+    dropDesc: 'سيتم فتح نافذة الإضافة وتجهيز الملف تلقائياً',
+    authWelcome: 'بوابة خَزنتي الآمنة',
+    authSub: 'سجّل باسمك والرمز السري للدخول إلى خزنتك الخاصة',
+    tabLogin: 'تسجيل الدخول',
+    tabRegister: 'حساب جديد',
+    lblUserName: 'الاسم أو اللقب',
+    userPh: 'مثلاً: سارة / أبو محمد',
+    multiDeviceHint: 'استخدم نفس الاسم والرمز السري لفتح مساحتك المعزولة. لا يمكن لحسابين التداخل أبداً.',
+    errEnterName: 'اكتب الاسم أو اللقب أولاً',
+    errUserExists: 'هذا الاسم مسجل مسبقاً! اختر تسجيل الدخول أو اسماً آخر',
+    errUserNotFound: 'الحساب غير موجود! أنشئ حساباً جديداً أولاً',
+    errWrongPin: 'الرمز السري غير صحيح، حاول مرة أخرى',
+    eyebrowHome: 'مساحتك الخاصة',
+    eyebrowDocs: 'إدارة المستندات',
+    titleHome: 'مرحباً بك، ',
+    descHome: 'كل ملفاتك وملاحظاتك المهمة في مكان واحد، مرتبة ومحمية.',
+    titleFiles: 'كل الملفات',
+    descFiles: 'تصفّح ملفاتك وملاحظاتك وابحث عنها أو رتّبها.',
+    titleFolders: 'المجلدات',
+    descFolders: 'أنشئ مجلدات ملونة تناسب طريقة تنظيمك.',
+    titleInbox: 'صندوق الوارد',
+    descInbox: 'ملفات جديدة بانتظار ترتيبها في مجلد مناسب.',
+    titleFav: 'المفضلة',
+    descFav: 'ملفات اخترتها للوصول السريع.',
+    titleTrash: 'المحذوفات',
+    descTrash: 'يمكنك استعادة الملفات أو حذفها نهائياً.',
+    titleSearch: 'نتائج البحث',
+    descSearch: 'العناصر المطابقة لعبارة البحث.',
+    heroTitle: 'مساحة هادئة لكل ما تريد الاحتفاظ به',
+    heroDesc: 'أضف مستنداتك، رتّبها داخل مجلدات، واقفل الملفات الحساسة برمز سري لا يفتحها سواك.',
+    statItems: 'إجمالي العناصر',
+    statFolders: 'المجلدات',
+    statNotes: 'ملاحظة ذكية',
+    secFolders: 'مجلداتك',
+    viewAll: 'عرض الكل ←',
+    secRecent: 'أضيفت مؤخراً',
+    viewAllFiles: 'عرض كل الملفات ←',
+    emptyFolderTitle: 'لم تنشئ مجلدات بعد',
+    emptyFolderDesc: 'أنشئ أول مجلد لتجميع المستندات المتشابهة.',
+    btnCreateFolder: 'إنشاء مجلد',
+    emptyVaultTitle: 'خزنتك ما زالت فارغة',
+    emptyVaultDesc: 'ابدأ بإضافة أول ملف أو ملاحظة سريعة.',
+    btnAddFirst: 'إضافة أول ملف',
+    emptyTrashTitle: 'سلة المحذوفات فارغة',
+    emptyListTitle: 'لا توجد عناصر هنا',
+    emptyListDesc: 'أضف ملفاً جديداً أو ملاحظة لتظهر في هذه القائمة.',
+    sortNew: 'الأحدث أولاً',
+    sortOld: 'الأقدم أولاً',
+    sortName: 'الاسم',
+    itemCount: 'عنصر',
+    folderCount: 'مجلد',
+    unfiled: 'بدون مجلد',
+    textNoteType: 'ملاحظة نصية',
+    lockedBadge: 'محمي بقفل',
+    hiddenNote: '•••• محتوى محمي برمز سري ••••',
+    btnDetails: 'فتح التفاصيل',
+    btnPreview: 'معاينة',
+    btnDownload: 'تنزيل',
+    btnOpen: 'فتح',
+    btnRestore: 'استعادة',
+    btnPurge: 'حذف نهائي',
+    btnBackFolders: 'عودة للمجلدات',
+    expiryAlert: 'تنبيه المواعيد: لديك مستند يقترب موعد انتهائه قريباً',
+    btnReview: 'مراجعة',
+    confirmFileTitle: 'تأكيد الرمز السري للملف',
+    confirmFileDesc: 'هذا الملف محمي بقفل خاص. أدخل الرمز السري (4 أرقام) للمعاينة أو التنزيل أو التعديل:',
+    btnConfirm: 'تأكيد وفتح',
+    lockOptionLabel: 'قفل هذا الملف برمز سري (يطلب الرمز عند المعاينة أو التنزيل أو التعديل)',
+    guideHead: 'الإرشادات وطريقة استخدام خَزنتي',
+    g1Title: '١. نظام الحسابات المعزولة (اسم + رمز سري)',
+    g1Desc: 'لكل مستخدم خزنته الخاصة بناءً على الاسم والرمز السري. لا يمكن لحسابين التداخل أبداً، ويمكنك استخدام نفس الاسم والرمز لفتح حسابك أو استعادة نسختك الاحتياطية على أي جهاز.',
+    g2Title: '٢. قفل الملفات الفردية (حماية إضافية)',
+    g2Desc: 'عند رفع أي ملف أو إنشاء ملاحظة، يمكنك تفعيل خيار «قفل هذا الملف». عند تفعيله، يتم إخفاء محتوى الملاحظة ولا يُسمح بالمعاينة أو التنزيل أو التعديل إلا بعد إدخال الرمز السري.',
+    g3Title: '٣. الإضافة السريعة والسحب والإفلات',
+    g3Desc: 'اسحب أي ملف من جهازك وأفلته في أي مكان بالصفحة لحفظه فوراً، أو استخدم زر القلم (✎) لحفظ ملاحظات نصية سريعة بدون ملفات.',
+    g4Title: '٤. التنظيم بالمجلدات وتنبيهات الانتهاء',
+    g4Desc: 'أنشئ مجلدات ملونة، وحدد تاريخ انتهاء للوثائق الرسمية ليظهر لك شريط تنبيه تلقائي قبل انتهائها بـ 30 يوماً.',
+    g5Title: '٥. القفل الفوري والنسخ الاحتياطي',
+    g5Desc: 'اضغط زر «قفل» في الأعلى لقفل الشاشة فوراً. ولنقل بياناتك لجهاز آخر، صدّر نسخة احتياطية JSON واستعدها في نفس حسابك على الجهاز الجديد.'
+  },
+  en: {
+    brandName: 'Khaznati',
+    searchPh: 'Search files, notes, or tags...',
+    savedLocally: 'Saved locally',
+    btnLock: 'Lock',
+    addNewFile: '＋ Add new file',
+    lblWorkspace: 'Workspace',
+    navHome: 'Home',
+    navFiles: 'All files',
+    navFolders: 'Folders',
+    navInbox: 'Inbox',
+    navFav: 'Favorites',
+    navTrash: 'Trash',
+    lblSecurity: 'Security & Guide',
+    navGuide: 'Instructions & User Guide',
+    navPin: 'Change Secret PIN',
+    navBackup: 'Backup & Restore',
+    navSwitch: 'Switch Account / Lock',
+    sideNoteTitle: 'Isolated & Secure Account',
+    sideNoteDesc: 'Your account data is completely isolated from other users. You can also lock sensitive files individually.',
+    btnQuickNote: '✎ Quick note',
+    btnAddFile: '＋ Add file',
+    mobFiles: 'Files',
+    mobFolders: 'Folders',
+    mobGuide: 'Guide',
+    dropTitle: 'Drop file here to save in Khaznati',
+    dropDesc: 'The add dialog will open with your file ready',
+    authWelcome: 'Khaznati Secure Portal',
+    authSub: 'Enter your name/nickname and PIN to access your private vault',
+    tabLogin: 'Sign In',
+    tabRegister: 'New Account',
+    lblUserName: 'Name or Nickname',
+    userPh: 'e.g., Sarah / Alex',
+    multiDeviceHint: 'Use the same name & PIN to access your isolated space. Two accounts can never mix.',
+    errEnterName: 'Please enter a name or nickname first',
+    errUserExists: 'This name already exists! Switch to Sign In or choose another name',
+    errUserNotFound: 'Account not found! Please create a New Account first',
+    errWrongPin: 'Incorrect PIN, please try again',
+    eyebrowHome: 'Your private space',
+    eyebrowDocs: 'Document management',
+    titleHome: 'Welcome, ',
+    descHome: 'All your important files and notes in one place, organized and protected.',
+    titleFiles: 'All files',
+    descFiles: 'Browse, search, and organize all your files and notes.',
+    titleFolders: 'Folders',
+    descFolders: 'Create color-coded folders that match your workflow.',
+    titleInbox: 'Inbox',
+    descInbox: 'Newly added items waiting to be organized into folders.',
+    titleFav: 'Favorites',
+    descFav: 'Items you starred for quick access.',
+    titleTrash: 'Trash',
+    descTrash: 'Restore deleted items or remove them permanently.',
+    titleSearch: 'Search results',
+    descSearch: 'Items matching your search query.',
+    heroTitle: 'A calm space for everything worth keeping',
+    heroDesc: 'Add your documents, organize them into folders, and lock sensitive files with a PIN only you know.',
+    statItems: 'Total items',
+    statFolders: 'Folders',
+    statNotes: 'Smart notes',
+    secFolders: 'Your folders',
+    viewAll: 'View all →',
+    secRecent: 'Recently added',
+    viewAllFiles: 'View all files →',
+    emptyFolderTitle: 'No folders yet',
+    emptyFolderDesc: 'Create your first folder to group related documents.',
+    btnCreateFolder: 'Create folder',
+    emptyVaultTitle: 'Your vault is still empty',
+    emptyVaultDesc: 'Start by adding your first file or quick note.',
+    btnAddFirst: 'Add first file',
+    emptyTrashTitle: 'Trash is empty',
+    emptyListTitle: 'Nothing here yet',
+    emptyListDesc: 'Add a new file or note to see it listed here.',
+    sortNew: 'Newest first',
+    sortOld: 'Oldest first',
+    sortName: 'Name',
+    itemCount: 'items',
+    folderCount: 'folders',
+    unfiled: 'Unfiled',
+    textNoteType: 'Text note',
+    lockedBadge: 'PIN Locked',
+    hiddenNote: '•••• Content protected by PIN ••••',
+    btnDetails: 'Details',
+    btnPreview: 'Preview',
+    btnDownload: 'Download',
+    btnOpen: 'Open',
+    btnRestore: 'Restore',
+    btnPurge: 'Delete forever',
+    btnBackFolders: 'Back to folders',
+    expiryAlert: 'Expiry Reminder: You have a document expiring soon',
+    btnReview: 'Review',
+    confirmFileTitle: 'Confirm File PIN',
+    confirmFileDesc: 'This file is locked. Enter your 4-digit PIN to preview, download, or edit:',
+    btnConfirm: 'Confirm & Unlock',
+    lockOptionLabel: 'Lock this file with PIN (requires PIN to preview, download, or edit)',
+    guideHead: 'Instructions & How to Use Khaznati',
+    g1Title: '1. Isolated Accounts (Name + Secret PIN)',
+    g1Desc: 'Each user has a completely separate vault tied to their Name and PIN. Two users can never merge or see each other’s files. Use the same Name & PIN with your backup file on any device.',
+    g2Title: '2. Individual File Locking',
+    g2Desc: 'When adding or editing any file or note, you can check "Lock this file with PIN". Locked items hide their notes and require PIN confirmation before previewing, downloading, or editing.',
+    g3Title: '3. Quick Add & Drag-and-Drop',
+    g3Desc: 'Drag and drop any file anywhere on the page to save it immediately, or click the pen icon (✎) to create standalone quick text notes.',
+    g4Title: '4. Folders & Expiry Reminders',
+    g4Desc: 'Create custom colored folders and set expiry dates on official IDs or passports to receive automatic alerts 30 days in advance.',
+    g5Title: '5. Instant Lock & Backup',
+    g5Desc: 'Click the "Lock" button at the top anytime to lock your screen. Export a JSON backup regularly to move or restore your account data across devices.'
+  }
+};
+
+const t = k => I18N[lang][k] || k;
+
+function applyStaticTranslations() {
+  document.querySelectorAll('[data-t]').forEach(el => {
+    let k = el.dataset.t;
+    if (I18N[lang][k]) el.textContent = I18N[lang][k];
+  });
+  document.querySelectorAll('[data-ph]').forEach(el => {
+    let k = el.dataset.ph;
+    if (I18N[lang][k]) el.placeholder = I18N[lang][k];
+  });
+  $('#authUserInput').placeholder = t('userPh');
+  $('#lang').textContent = lang === 'ar' ? 'EN' : 'عربي';
+  $('#lockLangBtn').textContent = lang === 'ar' ? 'EN' : 'عربي';
 }
-async function refresh(){[docs,folders]=await Promise.all([getAll('docs'),getAll('folders')]);render()}
-function downloadDoc(id){
- let d=docs.find(x=>x.id===id);if(!d)return;
- logActivity('download',d.name);
- let blob=d.blob;
- if(!blob){toast(T('لا يوجد ملف مرفق لتنزيله','There is no attached file to download'));return}
- const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=d.name||'document';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+const uid = () => crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random();
+function toast(msg) {
+  let el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
 }
-async function previewDoc(id){
- if(activeObjectUrl){URL.revokeObjectURL(activeObjectUrl);activeObjectUrl=null}
- let d=docs.find(x=>x.id===id);if(!d)return;
- if(await setting('hidePreview')){toast(T('المعاينة مخفية من إعدادات الخصوصية','Preview is hidden in privacy settings'));return}
- logActivity('preview',d.name);
- if(!d.blob){openModal(`<div class="modal-head"><h3>${esc(d.name)}</h3><button class="close-btn" id="xModal">×</button></div><div class="empty"><div class="symbol">▤</div><strong>${T('هذا العنصر لا يحتوي على ملف مرفق','This item has no attached file')}</strong><p>${T('يمكنك تعديل معلوماته أو إرفاق ملف من جديد.','You can edit its details or attach a file.')}</p></div><button class="btn primary full" id="editFromPreview">${T('تعديل المستند','Edit document')}</button>`);$('#xModal').onclick=closeModal;$('#editFromPreview').onclick=()=>editDoc(id);return}
- activeObjectUrl=URL.createObjectURL(d.blob);
- const type=d.type||d.blob.type||'';
- let body='';
- if(type.startsWith('image/'))body=`<div style="background:#f6f8fa;border-radius:15px;padding:10px;text-align:center"><img src="${activeObjectUrl}" alt="${esc(d.name)}" style="max-width:100%;max-height:65vh;object-fit:contain;border-radius:10px"></div>`;
- else if(type==='application/pdf'||d.name.toLowerCase().endsWith('.pdf'))body=`<iframe title="${esc(d.name)}" src="${activeObjectUrl}" style="width:100%;height:min(65vh,650px);border:1px solid #e8edf2;border-radius:14px;background:#f8fafc"></iframe>`;
- else if(type.startsWith('text/')||/\.(txt|md|csv|json|html|xml)$/i.test(d.name)){
-   let text=await d.blob.text();body=`<pre style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:62vh;overflow:auto;background:#f8fafb;border:1px solid #edf0f4;border-radius:14px;padding:15px;font:12px/1.9 'IBM Plex Sans Arabic',monospace;color:#39475a">${esc(text)}</pre>`;
- }else body=`<div class="empty"><div class="symbol">▤</div><strong>${T('المعاينة المباشرة غير متاحة لهذا النوع من الملفات','Preview is not available for this file type')}</strong><p>${T('يمكنك تنزيل الملف وفتحه بالتطبيق المناسب على جهازك.','Download the file and open it with a compatible app.')}</p></div>`;
- openModal(`<div class="modal-head"><h3 style="overflow-wrap:anywhere">${esc(d.name)}</h3><button class="close-btn" id="xModal">×</button></div>${body}<div class="btn-row"><button class="btn primary" id="previewDownload">↓ ${T('تنزيل الملف','Download file')}</button><button class="btn soft" id="previewEdit">${T('تعديل التفاصيل','Edit details')}</button></div>`);
- $('#xModal').onclick=closeModal;$('#previewDownload').onclick=()=>downloadDoc(id);$('#previewEdit').onclick=()=>editDoc(id);
+
+/* IndexedDB */
+function openDB() {
+  return new Promise((ok, no) => {
+    let r = indexedDB.open('KhaznatiAccountsDB', 1);
+    r.onupgradeneeded = () => {
+      let d = r.result;
+      d.createObjectStore('accounts', { keyPath: 'username' });
+      d.createObjectStore('docs', { keyPath: 'id' });
+      d.createObjectStore('folders', { keyPath: 'id' });
+      d.createObjectStore('settings', { keyPath: 'key' });
+    };
+    r.onsuccess = () => ok(r.result);
+    r.onerror = () => no(r.error);
+  });
 }
-function editDoc(id){let d=docs.find(x=>x.id===id);if(!d)return;openModal(`<div class="modal-head"><h3>${T('تفاصيل المستند','Document details')}</h3><button class="close-btn" id="xModal">×</button></div><div class="field"><label>${T('اسم المستند','Document name')}</label><input id="dName" value="${esc(d.name)}"></div><div class="field"><label>${T('المجلد','Folder')}</label><select id="dFolder"><option value="">${T('بدون مجلد','No folder')}</option>${folders.map(f=>`<option value="${f.id}" ${f.id===d.folder?'selected':''}>${esc(f.name)}</option>`).join('')}</select></div><div class="field"><label>${T('ملاحظة مرفقة للمستقبل (اختياري)','A note for later (optional)')}</label><textarea id="dNote" placeholder="${T('اكتب أي تفاصيل تريد تذكرها لاحقاً...','Write details you want to remember later...')}">${esc(d.note||'')}</textarea></div><div class="field"><label>${T('وسوم، افصل بينها بفاصلة','Tags, separated by commas')}</label><input id="dTags" value="${esc((d.tags||[]).join(', '))}" placeholder="هوية، سفر، مهم"></div><div class="field"><label>${T('تاريخ انتهاء المستند (اختياري)','Document expiry date (optional)')}</label><input id="dExpiry" type="date" value="${esc(d.expiryDate||'')}"></div><div class="btn-row"><button class="btn primary" id="saveDoc">${T('حفظ التغييرات','Save changes')}</button><button class="btn soft" id="toggleFav">${d.favorite?T('إزالة من المفضلة','Remove favorite'):T('إضافة للمفضلة','Add to favorites')}</button>${d.deleted?'<button class="btn soft" id="restoreDoc">'+T('استعادة','Restore')+'</button><button class="btn danger" id="permaDoc">'+T('حذف نهائي','Delete permanently')+'</button>':'<button class="btn danger" id="trashDoc">'+T('نقل إلى السلة','Move to trash')+'</button>'}</div><p class="hint">${T('تُحفظ البيانات بعد الضغط على حفظ التغييرات. الملف الأصلي يبقى محفوظاً في مساحة المتصفح في هذه النسخة التجريبية.','Changes are saved when you press Save. The original file remains in this browser storage in this prototype.')}</p>`);
- $('#xModal').onclick=closeModal;$('#saveDoc').onclick=async()=>{d.history=d.history||[];d.history.unshift({at:d.updated||Date.now(),name:d.name,note:d.note||'',tags:[...(d.tags||[])],folder:d.folder||null,expiryDate:d.expiryDate||null});d.history=d.history.slice(0,10);d.name=$('#dName').value.trim()||d.name;d.folder=$('#dFolder').value||null;d.note=$('#dNote').value;d.tags=$('#dTags').value.split(',').map(x=>x.trim()).filter(Boolean);d.expiryDate=$('#dExpiry').value||null;d.inbox=!d.folder;d.updated=Date.now();await save('docs',d);await logActivity('edit',d.name);closeModal();await refresh();toast(T('تم الحفظ تلقائياً','Saved'))};
- $('#toggleFav').onclick=async()=>{d.favorite=!d.favorite;d.updated=Date.now();await save('docs',d);closeModal();refresh()};
- if($('#trashDoc'))$('#trashDoc').onclick=async()=>{d.deleted=true;d.updated=Date.now();await save('docs',d);closeModal();refresh()};
- if($('#restoreDoc'))$('#restoreDoc').onclick=async()=>{d.deleted=false;d.updated=Date.now();await save('docs',d);closeModal();refresh()};
- if($('#permaDoc'))$('#permaDoc').onclick=async()=>{if(confirm(T('حذف المستند نهائياً؟ لا يمكن التراجع عن ذلك.','Permanently delete this document? This cannot be undone.'))){await remove('docs',d.id);closeModal();refresh()}};
+
+const req = (st, m, fn) => new Promise((ok, no) => {
+  let r = fn(db.transaction(st, m).objectStore(st));
+  r.onsuccess = () => ok(r.result);
+  r.onerror = () => no(r.error);
+});
+const all = st => req(st, 'readonly', s => s.getAll());
+const getOne = (st, k) => req(st, 'readonly', s => s.get(k));
+const put = (st, x) => req(st, 'readwrite', s => s.put(x));
+const del = (st, id) => req(st, 'readwrite', s => s.delete(id));
+const getSet = k => getOne('settings', k).then(r => r?.value);
+
+const fmt = n => !n ? t('textNoteType') : n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+const dateStr = n => new Date(n).toLocaleDateString(lang === 'ar' ? 'ar' : 'en', { year: 'numeric', month: 'short', day: 'numeric' });
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* Account & Auth System (Isolated Users) */
+function setAuthMode(mode) {
+  authMode = mode;
+  document.querySelectorAll('.auth-tab').forEach(b => b.classList.toggle('active', b.dataset.authmode === mode));
+  pinEntry = '';
+  updateDots();
+  $('#pinError').style.display = 'none';
 }
-function addDoc(){openModal(`<div class="modal-head"><h3>${T('إضافة مستند جديد','Add a new document')}</h3><button class="close-btn" id="xModal">×</button></div><label class="upload-zone" for="fileInput"><div class="cloud">♧</div><strong>${T('اختر ملفاً من جهازك لرفعه وحفظه','Choose a file from your device')}</strong><small>${T('PDF، مستندات، صور، ملفات نصية وغيرها','PDF, documents, images, text files and more')}</small><div id="chosenName" class="hint"></div></label><div class="field"><label>${T('اسم المستند *','Document name *')}</label><input id="newName" placeholder="${T('مثلاً: بطاقة الهوية الوطنية','e.g. National ID card')}"></div><div class="field"><label>${T('اختر المجلد','Choose folder')}</label><select id="newFolder"><option value="">${T('بدون مجلد','No folder')}</option>${folders.map(f=>`<option value="${f.id}" ${f.id===folderId?'selected':''}>${esc(f.name)}</option>`).join('')}</select></div><div class="field"><label>${T('تصنيف المستند','Document type')}</label><select id="newKind"><option>PDF Document</option><option>Personal Document</option><option>Image</option><option>Certificate</option><option>Other</option></select></div><div class="field"><label>${T('تاريخ انتهاء المستند (اختياري)','Document expiry date (optional)')}</label><input id="newExpiry" type="date"></div><div class="field"><label>${T('ملاحظة مرفقة للمستقبل (اختياري)','A note for later (optional)')}</label><textarea id="newNote" placeholder="${T('أضف أي تذكير أو ملاحظة تود تذكرها لاحقاً...','Add a reminder or note for later...')}"></textarea></div><div class="field"><label>${T('وسوم (اختياري)','Tags (optional)')}</label><input id="newTags" placeholder="Passport, Important"></div><div class="btn-row"><button class="btn primary full" id="saveNew">${T('حفظ المستند','Save document')}</button></div><p class="hint">${T('سيتم حفظ الملف ومعلوماته في مساحة المتصفح على هذا الجهاز.','The file and its details will be saved in this browser on this device.')}</p>`);$('#xModal').onclick=closeModal;$('#fileInput').value='';$('#fileInput').onchange=()=>{$('#chosenName').textContent=[...$('#fileInput').files].map(f=>f.name).join('، ')};
- $('#saveNew').onclick=async()=>{let file=$('#fileInput').files[0];let name=$('#newName').value.trim()||(file?.name);if(!name){toast(T('اختر ملفاً أو اكتب اسماً للمستند','Choose a file or enter a document name'));return}if(file){let duplicate=docs.find(x=>!x.deleted&&x.name.toLowerCase()===file.name.toLowerCase()&&x.size===file.size&&x.type===(file.type||''));if(duplicate&&!confirm(T('يبدو أن هذا الملف موجود مسبقاً. هل تريد إضافة نسخة أخرى؟','This file may already exist. Add another copy anyway?')))return;}let d={id:uid(),name,size:file?.size||0,type:file?.type||'',kind:$('#newKind').value,blob:file||null,note:$('#newNote').value,expiryDate:$('#newExpiry').value||null,tags:$('#newTags').value.split(',').map(x=>x.trim()).filter(Boolean),folder:$('#newFolder').value||null,favorite:false,deleted:false,inbox:!$('#newFolder').value,added:Date.now(),updated:Date.now()};await save('docs',d);await logActivity('upload',d.name);closeModal();if(view==='trash'||view==='favorites'||view==='search'){view='all';folderId=null;$('#search').value=''}await refresh();toast(T('تم حفظ المستند','Document saved'))};
+
+document.querySelectorAll('.auth-tab').forEach(b => b.onclick = () => setAuthMode(b.dataset.authmode));
+
+function lockVault() {
+  pinEntry = '';
+  updateDots();
+  $('#pinError').style.display = 'none';
+  if (activeAccount) {
+    $('#authUserInput').value = activeAccount.displayName;
+    setAuthMode('login');
+  }
+  $('#lockScreen').classList.add('show');
 }
-function newFolder(){openModal(`<div class="modal-head"><h3>${T('إنشاء مجلد جديد','Create a folder')}</h3><button class="close-btn" id="xModal">×</button></div><div class="field"><label>${T('اسم المجلد','Folder name')}</label><input id="folderName" placeholder="${T('مثلاً: الهويات والوثائق الرسمية','e.g. Personal documents')}"></div><div class="field"><label>${T('لون المجلد','Folder color')}</label><input id="folderColor" type="color" value="#07998e"></div><div class="field"><label>${T('أيقونة المجلد','Folder icon')}</label><select id="folderIcon"><option>▱</option><option>★</option><option>▣</option><option>✿</option><option>⌂</option><option>✎</option></select></div><div class="btn-row"><button class="btn primary full" id="createFolder">${T('إنشاء المجلد','Create folder')}</button></div>`);$('#xModal').onclick=closeModal;$('#createFolder').onclick=async()=>{let n=$('#folderName').value.trim();if(!n)return;await save('folders',{id:uid(),name:n,color:$('#folderColor').value,icon:$('#folderIcon').value,added:Date.now()});await logActivity('create folder',n);closeModal();await refresh();toast(T('تم إنشاء المجلد','Folder created'))}}
-async function advancedFeatures(){
- const expiring=docs.filter(d=>!d.deleted&&d.expiryDate).sort((a,b)=>a.expiryDate.localeCompare(b.expiryDate));
- const historyDocs=docs.filter(d=>(d.history||[]).length);
- openModal(`<div class="modal-head"><h3>${T('المزايا المتقدمة في خَزنتي','Khaznati advanced features')}</h3><button class="close-btn" id="xModal">×</button></div><div class="feature-grid">
- <div class="feature-card"><div class="fc-top"><b>↶ ${T('سجل التعديلات','Version history')}</b><span class="feature-status">${T('جزئي','Basic')}</span></div><p>${T('يحفظ الموقع لقطات سابقة من بيانات المستند عند تعديل تفاصيله. حفظ نسخ الملفات نفسها يحتاج تطوير إصدار الملفات.','Keeps previous metadata snapshots when document details change. Full file-version storage needs backend work.')}</p><div class="feature-actions"><button class="mini-action" id="showHistory">${T('عرض السجلات','View history')} (${historyDocs.length})</button></div></div>
- <div class="feature-card"><div class="fc-top"><b>◷ ${T('تذكير المستندات','Expiry reminders')}</b><span class="feature-status">${T('متاح محليًا','Local')}</span></div><p>${T('أضف تاريخ انتهاء من تفاصيل المستند، وستظهر الوثائق ذات المواعيد الأقرب هنا.','Add an expiry date in document details to see upcoming deadlines here.')}</p><div class="feature-actions"><button class="mini-action" id="showExpiry">${T('عرض التواريخ','View dates')} (${expiring.length})</button></div></div>
- <div class="feature-card"><div class="fc-top"><b>♙ ${T('الخزنة المشفّرة','Encrypted vault')}</b><span class="feature-status pending">${T('تحتاج تنفيذًا','Not enabled')}</span></div><p>${T('التشفير الحقيقي يتطلب إدارة مفاتيح آمنة وتشفير الملفات قبل رفعها. رمز PIN الحالي ليس تشفيرًا.','Real encryption requires secure key management and encrypting files before upload. The current PIN is not encryption.')}</p></div>
- <div class="feature-card"><div class="fc-top"><b>↗ ${T('المشاركة الآمنة','Secure sharing')}</b><span class="feature-status pending">${T('تحتاج خادمًا','Cloud required')}</span></div><p>${T('ستكون المشاركة اختيارية وخاصة افتراضيًا، مع روابط مؤقتة وإمكانية إلغائها بعد ربط الخادم.','Sharing will be opt-in and private by default, with expiring and revocable links after backend integration.')}</p></div>
- <div class="feature-card"><div class="fc-top"><b>⌕ ${T('البحث داخل الملفات','Full-text search')}</b><span class="feature-status pending">${T('قيد التطوير','Planned')}</span></div><p>${T('البحث الحالي يشمل الاسم والملاحظات والوسوم. البحث داخل PDF وDOCX يحتاج استخراج النصوص وOCR عند الحاجة.','Current search covers names, notes and tags. PDF/DOCX text extraction and OCR need to be added.')}</p></div>
- <div class="feature-card"><div class="fc-top"><b>☁ ${T('النسخ الاحتياطي','Backups')}</b><span class="feature-status">${T('تصدير محلي','Local export')}</span></div><p>${T('يمكنك تنزيل نسخة احتياطية من ملفاتك وبياناتها من هذا المتصفح. النسخ السحابي التلقائي يحتاج خادمًا.','Download a backup of files and metadata from this browser. Automatic cloud backups require a backend.')}</p><div class="feature-actions"><button class="mini-action preview" id="exportBackup">↓ ${T('تنزيل نسخة احتياطية','Download backup')}</button><button class="mini-action" id="importBackup">↑ ${T('استعادة نسخة','Restore backup')}</button></div></div>
- <div class="feature-card"><div class="fc-top"><b>↧ ${T('صندوق الوارد','Inbox')}</b><span class="feature-status">${T('متاح','Available')}</span></div><p>${T('تُضاف الملفات الجديدة إلى صندوق الوارد حتى تنقلها إلى مجلد مناسب.','New uploads go to Inbox until you organize them into a folder.')}</p><div class="feature-actions"><button class="mini-action preview" id="openInbox">${T('فتح صندوق الوارد','Open Inbox')}</button></div></div>
- <div class="feature-card"><div class="fc-top"><b>⌛ ${T('القفل التلقائي','Auto-lock')}</b><span class="feature-status">${T('محلي','Local')}</span></div><p>${T('قفل الواجهة بعد فترة من عدم النشاط. يتطلب رمز PIN محليًا.','Lock the interface after inactivity. A local PIN is required.')}</p><select id="autoLockTime"><option value="0">${T('إيقاف','Off')}</option><option value="1">1 ${T('دقيقة','minute')}</option><option value="5">5 ${T('دقائق','minutes')}</option><option value="10">10 ${T('دقائق','minutes')}</option><option value="15">15 ${T('دقيقة','minutes')}</option></select><div class="feature-actions"><button class="mini-action" id="saveAutoLock">${T('حفظ الإعداد','Save setting')}</button></div></div>
- <div class="feature-card"><div class="fc-top"><b>◷ ${T('سجل النشاطات','Activity log')}</b><span class="feature-status">${T('محلي','Local')}</span></div><p>${T('يعرض آخر عمليات الرفع والمعاينة والتنزيل والتعديل.','Shows recent uploads, previews, downloads and edits.')}</p><div class="feature-actions"><button class="mini-action" id="showActivity">${T('عرض النشاطات','View activity')}</button></div></div>
- <div class="feature-card"><div class="fc-top"><b>☆ ${T('الملفات المثبتة','Pinned files')}</b><span class="feature-status">${T('متاح','Available')}</span></div><p>${T('استخدم النجمة في بطاقة المستند لإضافته إلى المفضلة والوصول السريع.','Use the star on a document card to pin it to Favorites for quick access.')}</p><div class="feature-actions"><button class="mini-action" id="openFavorites">${T('عرض المثبتة','View pinned')}</button></div></div>
- <div class="feature-card"><div class="fc-top"><b>◉ ${T('إخفاء المعاينة','Hide previews')}</b><span class="feature-status">${T('محلي','Local')}</span></div><p>${T('إيقاف فتح معاينة الملفات من البطاقات لحماية الخصوصية أثناء الاستخدام.','Disable file previews from cards for extra privacy.')}</p><label style="font-size:11px"><input type="checkbox" id="hidePreviewToggle"> ${T('تفعيل إخفاء المعاينة','Enable preview hiding')}</label></div>
- <div class="feature-card"><div class="fc-top"><b>⧉ ${T('اكتشاف الملفات المكررة','Duplicate detection')}</b><span class="feature-status">${T('فحص أولي','Basic')}</span></div><p>${T('يفحص الاسم والحجم والنوع عند الرفع وينبهك إذا وجد ملفًا مشابهًا. المطابقة بالمحتوى تحتاج بصمة تشفيرية إضافية.','Checks name, size and type on upload. Content-level hashing can be added for stronger matching.')}</p></div>
- <div class="feature-card"><div class="fc-top"><b>▣ ${T('الجلسات والتنبيهات واستعادة الحساب','Sessions, alerts & recovery')}</b><span class="feature-status pending">${T('تحتاج خادمًا','Cloud required')}</span></div><p>${T('إدارة الأجهزة والجلسات، إشعارات الدخول من جهاز جديد، واستعادة الحساب لا تعمل فعليًا دون نظام حسابات وخادم مصادقة.','Device sessions, new-device alerts and account recovery require a real authentication backend.')}</p></div>
- </div><p class="hint">${T('تنبيه: هذه النسخة ما زالت تعمل محليًا داخل المتصفح. لم يتم تفعيل التخزين السحابي أو الحسابات أو المشاركة عبر الإنترنت بعد.','Notice: this build still runs locally in your browser. Cloud storage, accounts and online sharing are not connected yet.')}</p>`);
- $('#xModal').onclick=closeModal;
- $('#openInbox').onclick=()=>{closeModal();setView('inbox')};$('#openFavorites').onclick=()=>{closeModal();setView('favorites')};
- $('#hidePreviewToggle').checked=!!(await setting('hidePreview'));$('#hidePreviewToggle').onchange=async()=>{await save('settings',{key:'hidePreview',value:$('#hidePreviewToggle').checked});toast(T('تم تحديث إعداد المعاينة','Preview setting updated'))};
- $('#autoLockTime').value=String(await setting('autoLockMinutes')||0);$('#saveAutoLock').onclick=async()=>{let n=Number($('#autoLockTime').value);if(n&&!await setting('pin')){toast(T('فعّل رمز PIN أولاً من القائمة','Set a PIN first from the menu'));return}await save('settings',{key:'autoLockMinutes',value:n});toast(T('تم حفظ القفل التلقائي','Auto-lock saved'))};
- $('#showActivity').onclick=async()=>{let a=await setting('activityLog')||[];openModal(`<div class="modal-head"><h3>${T('سجل النشاطات','Activity log')}</h3><button class="close-btn" id="xModal">×</button></div>${a.map(x=>`<div class="activity-row"><b>${esc(x.action)} · ${esc(x.name||'')}</b>${new Date(x.at).toLocaleString(lang==='ar'?'ar':'en')}</div>`).join('')||`<p class="hint">${T('لا توجد نشاطات بعد.','No activity yet.')}</p>`}`);$('#xModal').onclick=closeModal};
- $('#showExpiry').onclick=()=>{let rows=expiring.map(d=>`<div class="guide-item"><b>${esc(d.name)}</b><p>${T('تاريخ الانتهاء:','Expiry date:')} ${esc(d.expiryDate)}</p></div>`).join('')||`<p class="hint">${T('لا توجد تواريخ انتهاء مسجلة. أضف تاريخًا من تفاصيل المستند.','No expiry dates yet. Add one from document details.')}</p>`;openModal(`<div class="modal-head"><h3>${T('مواعيد المستندات','Document deadlines')}</h3><button class="close-btn" id="xModal">×</button></div><div class="guide-list">${rows}</div>`);$('#xModal').onclick=closeModal};
- $('#showHistory').onclick=()=>{let rows=historyDocs.flatMap(d=>(d.history||[]).map(h=>`<div class="guide-item"><b>${esc(d.name)}</b><p>${new Date(h.at).toLocaleString(lang==='ar'?'ar':'en')} · ${esc(h.note||T('لا توجد ملاحظة','No note'))}</p></div>`)).join('');openModal(`<div class="modal-head"><h3>${T('سجل التعديلات','Version history')}</h3><button class="close-btn" id="xModal">×</button></div><div class="guide-list">${rows||`<p class="hint">${T('لا توجد تعديلات محفوظة بعد.','No saved changes yet.')}</p>`}</div>`);$('#xModal').onclick=closeModal};
- $('#exportBackup').onclick=async()=>{let all=await getAll('docs'),fs=await getAll('folders');let out=[];for(let d of all){let copy={...d};if(d.blob){copy.blobData=await new Promise((ok,no)=>{let r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>no(r.error);r.readAsDataURL(d.blob)});delete copy.blob}out.push(copy)}let payload={format:'khaznati-backup-v1',createdAt:new Date().toISOString(),docs:out,folders:fs};let blob=new Blob([JSON.stringify(payload)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='khaznati-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url);toast(T('تم تجهيز النسخة الاحتياطية','Backup exported'))};
- $('#importBackup').onclick=()=>{let input=document.createElement('input');input.type='file';input.accept='.json,application/json';input.onchange=async()=>{let f=input.files[0];if(!f)return;try{let payload=JSON.parse(await f.text());if(payload.format!=='khaznati-backup-v1'||!Array.isArray(payload.docs)||!Array.isArray(payload.folders))throw Error('bad');for(let d of payload.docs){if(d.blobData){let r=await fetch(d.blobData);d.blob=await r.blob();delete d.blobData}await save('docs',d)}for(let x of payload.folders)await save('folders',x);await refresh();toast(T('تمت استعادة النسخة الاحتياطية','Backup restored'));closeModal()}catch(e){toast(T('ملف النسخة الاحتياطية غير صالح','Invalid backup file'))}};input.click()};
+
+function updateDots() {
+  document.querySelectorAll('#pinDots .pin-dot').forEach((d, i) => d.classList.toggle('filled', i < pinEntry.length));
 }
-function guide(){openModal(`<div class="modal-head"><h3>${T('خانة الإرشادات','User guide')}</h3><button class="close-btn" id="xModal">×</button></div><div class="guide-list">${[[T('١. إضافة مستند','1. Add a document'),T('اضغط زر إضافة مستند جديد، اختر الملف، ثم اكتب اسمه وحدد المجلد وأضف ملاحظة إن رغبت.','Tap Add new document, choose a file, name it, select a folder and add a note if needed.')],[T('٢. تنظيم المجلدات','2. Organize folders'),T('أنشئ مجلدات حسب احتياجك، ثم اختر المجلد عند إضافة المستند أو تعديله.','Create folders and assign documents when adding or editing them.')],[T('٣. الملاحظات والوسوم','3. Notes and tags'),T('افتح بطاقة المستند لإضافة ملاحظة أو كلمات مفتاحية تساعدك في البحث.','Open a document card to add a note or keywords for search.')],[T('٤. المفضلة وسلة المحذوفات','4. Favorites and trash'),T('استخدم النجمة للوصول السريع، وعند نقل مستند للسلة يمكنك استعادته أو حذفه نهائياً.','Use the star for quick access. Items in Trash can be restored or permanently deleted.')],[T('٥. التخزين والأمان','5. Storage and security'),T('هذه نسخة تجريبية تحفظ الملفات محلياً في المتصفح. لا تحذف بيانات المتصفح إذا أردت الاحتفاظ بها. التخزين السحابي الحقيقي يتطلب خادماً وحساب مستخدم ونسخاً احتياطية.','This prototype stores files locally in your browser. Do not clear browser data if you want to keep them. Real cloud storage requires a server, user accounts and backups.')]].map(x=>`<div class="guide-item"><b>${x[0]}</b><p>${x[1]}</p></div>`).join('')}</div>`);$('#xModal').onclick=closeModal}
-async function pinDialog(){let old=await setting('pin');openModal(`<div class="modal-head"><h3>${T('القفل السري (PIN)','Secret PIN lock')}</h3><button class="close-btn" id="xModal">×</button></div><p class="hint">${T('ضع رمزاً من 4 أرقام لقفل واجهة الموقع على هذا المتصفح. هذا إجراء تجريبي وليس تشفيراً للملفات.','Set a 4-digit PIN to lock the interface in this browser. This demo feature does not encrypt files.')}</p><div class="field"><label>${old?T('الرمز الحالي','Current PIN'):T('رمز جديد من 4 أرقام','New 4-digit PIN')}</label><input id="pinInput" type="password" inputmode="numeric" maxlength="4"></div><div class="btn-row"><button class="btn primary" id="savePin">${T('حفظ','Save')}</button><button class="btn danger" id="removePin">${T('إزالة القفل','Remove PIN')}</button></div>`);$('#xModal').onclick=closeModal;$('#savePin').onclick=async()=>{let v=$('#pinInput').value;if(old&&old!==v){toast(T('الرمز الحالي غير صحيح','Incorrect PIN'));return}let n=prompt(T('أدخل الرمز الجديد المكوّن من 4 أرقام','Enter a new 4-digit PIN'));if(!/^\d{4}$/.test(n||'')){toast(T('الرمز يجب أن يتكون من 4 أرقام','PIN must be 4 digits'));return}await save('settings',{key:'pin',value:n});$('#pinState').textContent='ON';closeModal();toast(T('تم إعداد القفل','PIN enabled'))};$('#removePin').onclick=async()=>{if(!old){toast(T('لا يوجد قفل مفعّل','No PIN is set'));return}if($('#pinInput').value!==old){toast(T('أدخل الرمز الحالي','Enter current PIN'));return}await remove('settings','pin');$('#pinState').textContent='OFF';closeModal();toast(T('تمت إزالة القفل','PIN removed'))}}
-let lockTimer=null;function resetAutoLock(){if(lockTimer)clearTimeout(lockTimer);setting('autoLockMinutes').then(async m=>{let pin=await setting('pin');if(m>0&&pin)lockTimer=setTimeout(()=>{$('#lockScreen').classList.add('show');$('#unlockPin').value=''},m*60000)})}['pointerdown','keydown','touchstart','scroll'].forEach(ev=>document.addEventListener(ev,resetAutoLock,{passive:true}));$('#unlockBtn').onclick=async()=>{let p=await setting('pin');if($('#unlockPin').value===p){$('#lockScreen').classList.remove('show');resetAutoLock()}else toast(T('رمز PIN غير صحيح','Incorrect PIN'))};
-$('#openDrawer').onclick=openDrawer;$('#closeDrawer').onclick=closeDrawer;$('#drawerBackdrop').onclick=e=>{if(e.target.id==='drawerBackdrop')closeDrawer()};
-$('#drawerAdd').onclick=()=>{closeDrawer();addDoc()};$('#fab').onclick=addDoc;$('#addFolderTop').onclick=newFolder;$('#openGuide').onclick=()=>{closeDrawer();guide()};$('#pinSettings').onclick=()=>{closeDrawer();pinDialog()};$('#advancedFeatures').onclick=()=>{closeDrawer();advancedFeatures()};
-$('#search').oninput=()=>{if($('#search').value.trim()){view='search';folderId=null} else if(view==='search')view='all';render()};
-$('#clearFilter').onclick=()=>{$('#search').value='';setView('all')};
-$('#renameFolder').onclick=()=>{let f=folders.find(x=>x.id===folderId);if(!f)return;let n=prompt(T('الاسم الجديد للمجلد','New folder name'),f.name);if(n?.trim()){f.name=n.trim();save('folders',f).then(refresh)}};
-$('#langBtn').onclick=()=>{lang=lang==='ar'?'en':'ar';document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';document.body.style.fontFamily=lang==='ar'?"'IBM Plex Sans Arabic','Cairo',sans-serif":"'DM Sans',sans-serif";$('#langBtn').textContent=lang==='ar'?'English ◎':'العربية ◎';document.querySelectorAll('[data-ar]').forEach(el=>el.textContent=el.dataset[lang]);$('#search').placeholder=T('ابحث باسم المستند، الملاحظات أو الوسوم...','Search documents, notes or tags...');render()};
-$('#modalBackdrop').onclick=e=>{if(e.target.id==='modalBackdrop')closeModal()};
-(async()=>{db=await openDB();await refresh();let seeded=await setting('demoSeeded');if(!seeded){let sampleText='مرحباً بك في خَزنتي!\\n\\nهذا مستند تجريبي للتعرّف على طريقة عرض الملفات وإضافة الملاحظات وتنزيل المستندات.\\n\\nيمكنك معاينته أو تنزيله أو إعادة تسميته أو نقله إلى مجلد أو حذفه في أي وقت.';let sampleBlob=new Blob([sampleText],{type:'text/plain;charset=utf-8'});await save('docs',{id:uid(),name:T('مستند تجريبي','Sample document')+'.txt',size:sampleBlob.size,type:sampleBlob.type,kind:'Sample document',blob:sampleBlob,note:T('هذا ملف تجريبي للتعرّف على خصائص خَزنتي. يمكنك حذفه متى أردت.','A sample file to explore Khaznati. You can delete it whenever you like.'),tags:[T('تجريبي','sample')],folder:null,favorite:false,deleted:false,isDemo:true,added:Date.now(),updated:Date.now()});await save('settings',{key:'demoSeeded',value:true});await refresh()}$('#pinState').textContent=await setting('pin')?'ON':'OFF';resetAutoLock();})();
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')) { window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {})); }
+
+$('#keypad').addEventListener('click', async e => {
+  let btn = e.target.closest('button');
+  if (!btn) return;
+  if (btn.id === 'pinClear') { pinEntry = ''; updateDots(); return; }
+  if (btn.id === 'pinBack') { pinEntry = pinEntry.slice(0, -1); updateDots(); return; }
+  if (btn.dataset.k && pinEntry.length < 4) {
+    pinEntry += btn.dataset.k;
+    updateDots();
+    if (pinEntry.length === 4) {
+      await handleAuthSubmit();
+    }
+  }
+});
+
+async function handleAuthSubmit() {
+  let rawName = $('#authUserInput').value.trim();
+  let errEl = $('#pinError');
+  if (!rawName) {
+    errEl.textContent = t('errEnterName');
+    errEl.style.display = 'block';
+    pinEntry = ''; updateDots();
+    return;
+  }
+  let keyName = rawName.toLowerCase();
+  let existing = await getOne('accounts', keyName);
+
+  if (authMode === 'register') {
+    if (existing) {
+      errEl.textContent = t('errUserExists');
+      errEl.style.display = 'block';
+      pinEntry = ''; updateDots();
+      return;
+    }
+    let acc = { username: keyName, displayName: rawName, pin: pinEntry, created: Date.now() };
+    await put('accounts', acc);
+    activeAccount = acc;
+    await put('settings', { key: 'lastUser', value: keyName });
+
+    // Seed welcome note for new user
+    let blob = new Blob([lang === 'ar'
+      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nهذه مساحتك المعزولة والخاصة. يمكنك قفل أي ملف حساس برمزك السري.`
+      : `Welcome ${rawName} to Khaznati!\n\nThis is your private isolated vault. You can lock any sensitive file with your PIN.`], { type: 'text/plain;charset=utf-8' });
+    await put('docs', {
+      id: uid(), owner: keyName,
+      name: lang === 'ar' ? 'رسالة ترحيب.txt' : 'Welcome.txt',
+      size: blob.size, type: blob.type, blob,
+      note: lang === 'ar' ? 'جرّب إضافة ملفاتك أو تفعيل قفل الملف الفردي لحماية خصوصيتك.' : 'Try adding files or enabling individual file lock for extra privacy.',
+      tags: [lang === 'ar' ? 'ترحيب' : 'Welcome'],
+      locked: false, added: Date.now(), updated: Date.now(),
+      folder: null, inbox: true, favorite: true, deleted: false
+    });
+
+    $('#lockScreen').classList.remove('show');
+    $('#activeUserLabel').textContent = rawName;
+    pinEntry = '';
+    await render();
+    toast(lang === 'ar' ? `تم إنشاء حساب ${rawName} بنجاح` : `Account ${rawName} created`);
+  } else {
+    if (!existing) {
+      errEl.textContent = t('errUserNotFound');
+      errEl.style.display = 'block';
+      pinEntry = ''; updateDots();
+      return;
+    }
+    if (existing.pin !== pinEntry) {
+      errEl.textContent = t('errWrongPin');
+      errEl.style.display = 'block';
+      setTimeout(() => { pinEntry = ''; updateDots(); }, 350);
+      return;
+    }
+    activeAccount = existing;
+    await put('settings', { key: 'lastUser', value: keyName });
+    $('#lockScreen').classList.remove('show');
+    $('#activeUserLabel').textContent = existing.displayName;
+    pinEntry = '';
+    await render();
+  }
+}
+
+/* File-level PIN verification helper */
+function verifyFileAccess(doc, onSuccess) {
+  if (!doc.locked) {
+    onSuccess();
+    return;
+  }
+  showModal(`
+    <div class="modal-head"><h2>🔒 ${t('confirmFileTitle')}</h2><button class="x" id="close">×</button></div>
+    <p class="hint">${t('confirmFileDesc')}</p>
+    <div class="field">
+      <input id="fileConfirmPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••" style="text-align:center;font-size:22px;letter-spacing:8px">
+    </div>
+    <div class="modal-actions">
+      <button class="primary" id="confirmPinBtn">${t('btnConfirm')}</button>
+    </div>`);
+  $('#close').onclick = closeModal;
+  setTimeout(() => $('#fileConfirmPin')?.focus(), 50);
+  const check = () => {
+    let val = $('#fileConfirmPin').value.trim();
+    if (val === activeAccount?.pin) {
+      closeModal();
+      onSuccess();
+    } else {
+      toast(t('errWrongPin'));
+      $('#fileConfirmPin').value = '';
+    }
+  };
+  $('#confirmPinBtn').onclick = check;
+  $('#fileConfirmPin').onkeydown = e => { if (e.key === 'Enter') check(); };
+}
+
+/* Navigation & Rendering */
+function setView(v) {
+  view = v;
+  document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  render();
+}
+
+function fileGlyph(d) {
+  if (d.locked) return '🔒';
+  if (d.isNoteOnly) return '✎';
+  let tp = (d.type || '').toLowerCase();
+  if (tp.includes('pdf')) return 'PDF';
+  if (tp.startsWith('image/')) return '▧';
+  if (tp.includes('word') || d.name.match(/\.docx?$/i)) return 'W';
+  if (tp.includes('sheet') || d.name.match(/\.xlsx?$/i)) return 'X';
+  if (tp.startsWith('text/')) return '≡';
+  return '▤';
+}
+
+function folderName(id) {
+  return folders.find(f => f.id === id)?.name || t('unfiled');
+}
+
+function docCard(d) {
+  let tagsHtml = (d.tags || []).length ? `<div class="tags">${d.tags.map(tg => `<span class="tag">#${esc(tg)}</span>`).join('')}</div>` : '';
+  let expiryHtml = d.expiry ? `<span class="chip" style="color:var(--gold);border-color:var(--gold)">◷ ${esc(d.expiry)}</span>` : '';
+  let lockTag = d.locked ? `<span class="lock-badge">🔒 ${t('lockedBadge')}</span>` : '';
+  let noteBlock = d.note
+    ? (d.locked ? `<div class="note blurred">${t('hiddenNote')}</div>` : `<div class="note">${esc(d.note)}</div>`)
+    : '';
+
+  return `
+  <article class="doc">
+    <div>
+      <div class="doc-head">
+        <div class="file-icon ${d.locked ? 'locked-type' : d.isNoteOnly ? 'note-type' : ''}">${fileGlyph(d)}</div>
+        <button class="star ${d.favorite ? 'on' : ''}" data-star="${d.id}">${d.favorite ? '★' : '☆'}</button>
+      </div>
+      <h3>${esc(d.name)} ${lockTag}</h3>
+      <div class="meta">
+        <span>${fmt(d.size)}</span>
+        <span>•</span>
+        <span>${dateStr(d.updated || d.added)}</span>
+        <span class="chip">▱ ${esc(folderName(d.folder))}</span>
+        ${expiryHtml}
+      </div>
+      ${noteBlock}
+      ${tagsHtml}
+    </div>
+    <div class="doc-actions">
+      <button class="smallbtn em" data-open="${d.id}">${t('btnDetails')}</button>
+      ${d.blob ? `<button class="smallbtn" data-preview="${d.id}">${t('btnPreview')}</button>` : ''}
+      ${d.blob ? `<button class="smallbtn" data-download="${d.id}">${t('btnDownload')}</button>` : ''}
+    </div>
+  </article>`;
+}
+
+function empty(title, desc, btn, label) {
+  return `<div class="empty"><div class="symbol">⌑</div><h3>${title}</h3><p>${desc}</p>${btn ? `<button class="primary" id="emptyAction">${label}</button>` : ''}</div>`;
+}
+
+async function render() {
+  if (!activeAccount) return;
+  let allDocs = await all('docs');
+  let allFolders = await all('folders');
+
+  // Strict account isolation filter
+  docs = allDocs.filter(d => d.owner === activeAccount.username);
+  folders = allFolders.filter(f => f.owner === activeAccount.username);
+
+  let active = docs.filter(d => !d.deleted);
+  let inbox = active.filter(d => d.inbox);
+  let fav = active.filter(d => d.favorite);
+  let trash = docs.filter(d => d.deleted);
+
+  $('#countFiles').textContent = active.length;
+  $('#countFolders').textContent = folders.length;
+  $('#countInbox').textContent = inbox.length;
+  $('#countFav').textContent = fav.length;
+  $('#countTrash').textContent = trash.length;
+
+  // Expiry Reminders (within 30 days)
+  let soon = active.filter(d => {
+    if (!d.expiry) return false;
+    let diff = (new Date(d.expiry) - new Date()) / 86400000;
+    return diff >= -1 && diff <= 30;
+  });
+  $('#expiryBanner').innerHTML = soon.length ? `
+    <div class="expiry-alert">
+      <span>◷ <b>${t('expiryAlert')}:</b> (${esc(soon[0].name)})</span>
+      <button class="smallbtn" data-open="${soon[0].id}">${t('btnReview')}</button>
+    </div>` : '';
+
+  let titles = {
+    home: [t('titleHome') + activeAccount.displayName, t('descHome')],
+    files: [t('titleFiles'), t('descFiles')],
+    folders: [t('titleFolders'), t('descFolders')],
+    inbox: [t('titleInbox'), t('descInbox')],
+    favorites: [t('titleFav'), t('descFav')],
+    trash: [t('titleTrash'), t('descTrash')],
+    search: [t('titleSearch'), t('descSearch')]
+  };
+  let hd = titles[view] || titles.home;
+  $('#pageTitle').textContent = hd[0];
+  $('#pageDesc').textContent = hd[1];
+  $('#eyebrow').textContent = view === 'home' ? t('eyebrowHome') : t('eyebrowDocs');
+
+  let c = '';
+  if (view === 'home') {
+    let recent = active.slice().sort((a, b) => (b.updated || b.added) - (a.updated || a.added)).slice(0, 4);
+    c = `
+    <section class="hero">
+      <div>
+        <h2>${t('heroTitle')}</h2>
+        <p>${t('heroDesc')}</p>
+      </div>
+      <div class="hero-mark">K.</div>
+    </section>
+    <div class="stats">
+      <div class="stat"><div><div class="num">${active.length}</div><small>${t('statItems')}</small></div><div class="bubble">▤</div></div>
+      <div class="stat"><div><div class="num">${folders.length}</div><small>${t('statFolders')}</small></div><div class="bubble">▱</div></div>
+      <div class="stat gold"><div><div class="num">${active.filter(d => d.note?.trim()).length}</div><small>${t('statNotes')}</small></div><div class="bubble">✎</div></div>
+    </div>
+    <section class="section">
+      <div class="section-title"><h2>${t('secFolders')}</h2><button class="textbtn" id="allFolders">${t('viewAll')}</button></div>
+      ${folders.length ? `<div class="folders">${folders.slice(0, 6).map(f => `
+        <button class="folder" data-folder="${f.id}">
+          <span class="folder-icon" style="--f-col:${f.color || '#0d9488'};--f-bg:${(f.color || '#0d9488')}1a">${esc(f.icon || '▱')}</span>
+          <span style="min-width:0"><b>${esc(f.name)}</b><small>${active.filter(d => d.folder === f.id).length} ${t('itemCount')}</small></span>
+        </button>`).join('')}</div>` : empty(t('emptyFolderTitle'), t('emptyFolderDesc'), true, t('btnCreateFolder'))}
+    </section>
+    <section class="section">
+      <div class="section-title"><h2>${t('secRecent')}</h2><button class="textbtn" id="allFiles">${t('viewAllFiles')}</button></div>
+      ${recent.length ? `<div class="doc-grid">${recent.map(docCard).join('')}</div>` : empty(t('emptyVaultTitle'), t('emptyVaultDesc'), true, t('btnAddFirst'))}
+    </section>`;
+  } else if (view === 'folders') {
+    c = `
+    <div class="toolbar"><span class="status">${folders.length} ${t('folderCount')}</span><button class="primary" id="newFolder">＋ ${t('btnCreateFolder')}</button></div>
+    ${folders.length ? `<div class="folders">${folders.map(f => `
+      <div class="folder">
+        <span class="folder-icon" style="--f-col:${f.color || '#0d9488'};--f-bg:${(f.color || '#0d9488')}1a">${esc(f.icon || '▱')}</span>
+        <span style="flex:1;min-width:0"><b>${esc(f.name)}</b><small>${active.filter(d => d.folder === f.id).length} ${t('itemCount')}</small></span>
+        <button class="smallbtn" data-folder="${f.id}">${t('btnOpen')}</button>
+        <button class="smallbtn" data-editfolder="${f.id}">⋯</button>
+      </div>`).join('')}</div>` : empty(t('emptyFolderTitle'), t('emptyFolderDesc'), true, t('btnCreateFolder'))}`;
+  } else {
+    let list = active;
+    if (view === 'inbox') list = inbox;
+    else if (view === 'favorites') list = fav;
+    else if (view === 'trash') list = trash;
+    else if (view === 'search') {
+      let q = $('#search').value.toLowerCase();
+      list = active.filter(d => (d.name + ' ' + (!d.locked ? (d.note || '') : '') + ' ' + (d.tags || []).join(' ')).toLowerCase().includes(q));
+    }
+    let sortVal = $('#sort')?.value || 'new';
+    list = list.slice().sort((a, b) => sortVal === 'name' ? a.name.localeCompare(b.name) : sortVal === 'old' ? (a.added - b.added) : (b.added - a.added));
+    c = `
+    <div class="toolbar">
+      <span class="status">${list.length} ${t('itemCount')}</span>
+      ${view !== 'trash' ? `<select id="sort"><option value="new" ${sortVal==='new'?'selected':''}>${t('sortNew')}</option><option value="old" ${sortVal==='old'?'selected':''}>${t('sortOld')}</option><option value="name" ${sortVal==='name'?'selected':''}>${t('sortName')}</option></select>` : ''}
+    </div>
+    ${list.length ? `<div class="doc-grid">${list.map(d => view === 'trash' ? `
+      <article class="doc">
+        <h3>${esc(d.name)}</h3>
+        <div class="meta">${dateStr(d.deletedAt || d.updated)}</div>
+        <div class="doc-actions">
+          <button class="smallbtn em" data-restore="${d.id}">${t('btnRestore')}</button>
+          <button class="smallbtn" data-purge="${d.id}">${t('btnPurge')}</button>
+        </div>
+      </article>` : docCard(d)).join('')}</div>`
+    : empty(view === 'trash' ? t('emptyTrashTitle') : t('emptyListTitle'), t('emptyListDesc'), view !== 'trash', t('btnAddFile'))}`;
+  }
+
+  $('#content').innerHTML = c;
+  applyStaticTranslations();
+  $('#emptyAction')?.addEventListener('click', () => view === 'folders' ? newFolder() : addFile());
+  $('#allFolders')?.addEventListener('click', () => setView('folders'));
+  $('#allFiles')?.addEventListener('click', () => setView('files'));
+  $('#newFolder')?.addEventListener('click', () => newFolder());
+  $('#sort')?.addEventListener('change', render);
+}
+
+/* Modals */
+function showModal(html) {
+  $('#modal').innerHTML = html;
+  $('#modalBg').classList.add('open');
+}
+function closeModal() {
+  $('#modalBg').classList.remove('open');
+  $('#modal').innerHTML = '';
+}
+$('#modalBg').addEventListener('click', e => { if (e.target === $('#modalBg')) closeModal(); });
+
+function newFolder(existing) {
+  let f = existing || {};
+  let isAr = lang === 'ar';
+  showModal(`
+    <div class="modal-head"><h2>${f.id ? (isAr ? 'تعديل المجلد' : 'Edit Folder') : (isAr ? 'إنشاء مجلد جديد' : 'Create New Folder')}</h2><button class="x" id="close">×</button></div>
+    <div class="field"><label>${isAr ? 'اسم المجلد' : 'Folder Name'}</label><input id="folderName" maxlength="60" placeholder="${isAr ? 'مثلاً: وثائق السفر' : 'e.g., Travel Docs'}" value="${esc(f.name || '')}"></div>
+    <div class="row">
+      <div class="field"><label>${isAr ? 'الأيقونة' : 'Icon'}</label><select id="folderIcon"><option>▱</option><option>▣</option><option>★</option><option>✎</option><option>⌂</option><option>♡</option></select></div>
+      <div class="field"><label>${isAr ? 'اللون' : 'Color'}</label><input type="color" id="folderColor" value="${f.color || '#0d9488'}" style="height:43px;padding:4px"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="primary" id="saveFolder">${isAr ? 'حفظ المجلد' : 'Save Folder'}</button>
+      ${f.id ? `<button class="secondary" id="deleteFolder">${isAr ? 'حذف المجلد' : 'Delete Folder'}</button>` : ''}
+    </div>`);
+  if (f.icon) $('#folderIcon').value = f.icon;
+  $('#close').onclick = closeModal;
+  $('#saveFolder').onclick = async () => {
+    let name = $('#folderName').value.trim();
+    if (!name) { toast(isAr ? 'اكتب اسم المجلد أولاً' : 'Enter folder name first'); return; }
+    await put('folders', { id: f.id || uid(), owner: activeAccount.username, name, icon: $('#folderIcon').value, color: $('#folderColor').value });
+    closeModal(); render(); toast(isAr ? 'تم حفظ المجلد' : 'Folder saved');
+  };
+  $('#deleteFolder')?.addEventListener('click', async () => {
+    for (let d of docs) if (d.folder === f.id) { d.folder = null; await put('docs', d); }
+    await del('folders', f.id);
+    closeModal(); render(); toast(isAr ? 'تم حذف المجلد' : 'Folder deleted');
+  });
+}
+
+function addFile(preselectedFile = null) {
+  let isAr = lang === 'ar';
+  showModal(`
+    <div class="modal-head"><h2>${isAr ? 'إضافة ملف جديد' : 'Add New File'}</h2><button class="x" id="close">×</button></div>
+    <div class="field"><label>${isAr ? 'اختر الملف من جهازك' : 'Choose file from device'}</label><input id="filePick" type="file"></div>
+    <div class="field"><label>${isAr ? 'اسم المستند' : 'Document Name'}</label><input id="docName" maxlength="140" placeholder="${isAr ? 'اكتب اسماً واضحاً للمستند' : 'Enter a clear name'}" value="${esc(preselectedFile?.name || '')}"></div>
+    <div class="row">
+      <div class="field"><label>${isAr ? 'المجلد' : 'Folder'}</label><select id="docFolder"><option value="">${isAr ? 'صندوق الوارد / بدون مجلد' : 'Inbox / Unfiled'}</option>${folders.map(f => `<option value="${f.id}">${esc(f.name)}</option>`).join('')}</select></div>
+      <div class="field"><label>${isAr ? 'تاريخ الانتهاء (اختياري)' : 'Expiry Date (optional)'}</label><input type="date" id="docExpiry"></div>
+    </div>
+    <div class="field"><label>${isAr ? 'الوسوم (افصل بينها بفاصلة)' : 'Tags (comma separated)'}</label><input id="docTags" placeholder="${isAr ? 'هوية، سفر، جامعة' : 'ID, Travel, Work'}"></div>
+    <div class="field"><label>${isAr ? 'ملاحظات' : 'Notes'}</label><textarea id="docNote" placeholder="${isAr ? 'أضف تفاصيل تريد تذكّرها لاحقاً...' : 'Add notes to remember later...'}"></textarea></div>
+    <div class="field">
+      <label class="check-box">
+        <input type="checkbox" id="docLockCheck">
+        <span>🔒 ${t('lockOptionLabel')}</span>
+      </label>
+    </div>
+    <div class="modal-actions"><button class="primary" id="saveDoc">${isAr ? 'حفظ المستند' : 'Save Document'}</button></div>`);
+  $('#close').onclick = closeModal;
+  $('#filePick').onchange = () => {
+    let f = $('#filePick').files[0];
+    if (f && !$('#docName').value.trim()) $('#docName').value = f.name;
+  };
+  $('#saveDoc').onclick = async () => {
+    let file = $('#filePick').files[0] || preselectedFile;
+    if (!file) { toast(isAr ? 'اختر ملفاً أولاً' : 'Please select a file'); return; }
+    let name = $('#docName').value.trim() || file.name;
+    let folder = $('#docFolder').value || null;
+    let tags = $('#docTags').value.split(',').map(x => x.trim()).filter(Boolean);
+    await put('docs', {
+      id: uid(), owner: activeAccount.username,
+      name, folder, tags,
+      note: $('#docNote').value,
+      expiry: $('#docExpiry').value || null,
+      locked: $('#docLockCheck').checked,
+      blob: file, size: file.size, type: file.type,
+      added: Date.now(), updated: Date.now(),
+      favorite: false, deleted: false, inbox: !folder
+    });
+    closeModal(); render(); toast(isAr ? 'تم حفظ المستند بنجاح' : 'Document saved');
+  };
+}
+
+function addQuickNote() {
+  let isAr = lang === 'ar';
+  showModal(`
+    <div class="modal-head"><h2>${isAr ? 'إضافة ملاحظة سريعة' : 'Add Quick Note'}</h2><button class="x" id="close">×</button></div>
+    <div class="field"><label>${isAr ? 'عنوان الملاحظة *' : 'Note Title *'}</label><input id="noteTitle" placeholder="${isAr ? 'مثلاً: رقم الحساب البنكي / كلمة مرور' : 'e.g., Bank IBAN / Password'}"></div>
+    <div class="field"><label>${isAr ? 'المجلد' : 'Folder'}</label><select id="noteFolder"><option value="">${isAr ? 'صندوق الوارد / بدون مجلد' : 'Inbox / Unfiled'}</option>${folders.map(f => `<option value="${f.id}">${esc(f.name)}</option>`).join('')}</select></div>
+    <div class="field"><label>${isAr ? 'محتوى الملاحظة *' : 'Note Content *'}</label><textarea id="noteBody" placeholder="${isAr ? 'اكتب ملاحظتك هنا...' : 'Write your note here...'}"></textarea></div>
+    <div class="field"><label>${isAr ? 'وسوم (اختياري)' : 'Tags (optional)'}</label><input id="noteTags" placeholder="${isAr ? 'مهم، سريع' : 'important, quick'}"></div>
+    <div class="field">
+      <label class="check-box">
+        <input type="checkbox" id="noteLockCheck">
+        <span>🔒 ${t('lockOptionLabel')}</span>
+      </label>
+    </div>
+    <div class="modal-actions"><button class="primary" id="saveQuickNote">${isAr ? 'حفظ الملاحظة' : 'Save Note'}</button></div>`);
+  $('#close').onclick = closeModal;
+  $('#saveQuickNote').onclick = async () => {
+    let name = $('#noteTitle').value.trim();
+    let note = $('#noteBody').value.trim();
+    if (!name || !note) { toast(isAr ? 'أدخل العنوان ومحتوى الملاحظة' : 'Enter title and content'); return; }
+    let folder = $('#noteFolder').value || null;
+    let tags = $('#noteTags').value.split(',').map(x => x.trim()).filter(Boolean);
+    await put('docs', {
+      id: uid(), owner: activeAccount.username,
+      name, folder, tags, note,
+      locked: $('#noteLockCheck').checked,
+      isNoteOnly: true, size: 0,
+      added: Date.now(), updated: Date.now(),
+      favorite: false, deleted: false, inbox: !folder
+    });
+    closeModal(); render(); toast(isAr ? 'تم حفظ الملاحظة في خزنتك' : 'Note saved');
+  };
+}
+
+function openDoc(id) {
+  let d = docs.find(x => x.id === id);
+  if (!d) return;
+  verifyFileAccess(d, () => {
+    let isAr = lang === 'ar';
+    showModal(`
+      <div class="modal-head"><h2>${esc(d.name)}</h2><button class="x" id="close">×</button></div>
+      <div class="meta" style="margin-bottom:12px"><span>${fmt(d.size)}</span><span>•</span><span>${dateStr(d.updated || d.added)}</span><span class="chip">▱ ${esc(folderName(d.folder))}</span></div>
+      <div class="field"><label>${isAr ? 'اسم العنصر' : 'Item Name'}</label><input id="editName" value="${esc(d.name)}"></div>
+      <div class="row">
+        <div class="field"><label>${isAr ? 'المجلد' : 'Folder'}</label><select id="editFolder"><option value="">${isAr ? 'صندوق الوارد / بدون مجلد' : 'Inbox / Unfiled'}</option>${folders.map(f => `<option value="${f.id}" ${f.id===d.folder?'selected':''}>${esc(f.name)}</option>`).join('')}</select></div>
+        <div class="field"><label>${isAr ? 'تاريخ الانتهاء' : 'Expiry Date'}</label><input type="date" id="editExpiry" value="${d.expiry || ''}"></div>
+      </div>
+      <div class="field"><label>${isAr ? 'الوسوم' : 'Tags'}</label><input id="editTags" value="${esc((d.tags || []).join(', '))}"></div>
+      <div class="field"><label>${isAr ? 'الملاحظات' : 'Notes'}</label><textarea id="quickNote">${esc(d.note || '')}</textarea></div>
+      <div class="field">
+        <label class="check-box">
+          <input type="checkbox" id="editLockCheck" ${d.locked ? 'checked' : ''}>
+          <span>🔒 ${t('lockOptionLabel')}</span>
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button class="primary" id="saveNote">${isAr ? 'حفظ التعديلات' : 'Save Changes'}</button>
+        ${d.blob ? `<button class="secondary" id="previewBtn">${t('btnPreview')}</button><button class="secondary" id="downloadBtn">${t('btnDownload')}</button>` : ''}
+        <button class="secondary" id="removeBtn" style="color:var(--danger)">${isAr ? 'نقل للمحذوفات' : 'Move to Trash'}</button>
+      </div>`);
+    $('#close').onclick = closeModal;
+    $('#saveNote').onclick = async () => {
+      d.name = $('#editName').value.trim() || d.name;
+      d.folder = $('#editFolder').value || null;
+      d.inbox = !d.folder;
+      d.expiry = $('#editExpiry').value || null;
+      d.tags = $('#editTags').value.split(',').map(x => x.trim()).filter(Boolean);
+      d.note = $('#quickNote').value;
+      d.locked = $('#editLockCheck').checked;
+      d.updated = Date.now();
+      await put('docs', d);
+      closeModal(); render(); toast(isAr ? 'تم حفظ التعديلات' : 'Changes saved');
+    };
+    $('#previewBtn')?.addEventListener('click', () => previewDirect(d));
+    $('#downloadBtn')?.addEventListener('click', () => downloadDirect(d));
+    $('#removeBtn').onclick = async () => {
+      d.deleted = true; d.deletedAt = Date.now();
+      await put('docs', d);
+      closeModal(); render(); toast(isAr ? 'نُقل إلى المحذوفات' : 'Moved to trash');
+    };
+  });
+}
+
+function downloadDirect(d) {
+  if (!d?.blob) return;
+  let u = URL.createObjectURL(d.blob), a = document.createElement('a');
+  a.href = u; a.download = d.name; a.click();
+  setTimeout(() => URL.revokeObjectURL(u), 1500);
+}
+
+function download(id) {
+  let d = docs.find(x => x.id === id);
+  if (!d?.blob) return;
+  verifyFileAccess(d, () => downloadDirect(d));
+}
+
+function previewDirect(d) {
+  if (!d?.blob) return;
+  let isAr = lang === 'ar';
+  let u = URL.createObjectURL(d.blob), type = d.type || '';
+  let body = type.startsWith('image/') ? `<img class="preview" src="${u}">`
+    : type === 'application/pdf' ? `<iframe class="preview-frame" src="${u}"></iframe>`
+    : type.startsWith('text/') ? `<pre style="white-space:pre-wrap;max-height:55vh;overflow:auto;background:var(--surface-soft);padding:15px;border-radius:12px">${isAr ? 'جارٍ تحميل النص...' : 'Loading text...'}</pre>`
+    : `<div class="empty"><div class="symbol">▤</div><h3>${isAr ? 'لا تتوفر معاينة لهذا النوع' : 'Preview unavailable for this file type'}</h3><p>${isAr ? 'يمكنك تنزيل الملف وفتحه بالتطبيق المناسب.' : 'Download the file to open it in an external app.'}</p></div>`;
+  showModal(`<div class="modal-head"><h2>${t('btnPreview')}: ${esc(d.name)}</h2><button class="x" id="close">×</button></div>${body}<div class="modal-actions"><button class="primary" id="dl">${t('btnDownload')}</button></div>`);
+  $('#close').onclick = () => { closeModal(); URL.revokeObjectURL(u); };
+  $('#dl').onclick = () => downloadDirect(d);
+  if (type.startsWith('text/')) d.blob.text().then(txt => { let pre = $('#modal pre'); if (pre) pre.textContent = txt; });
+}
+
+function preview(id) {
+  let d = docs.find(x => x.id === id);
+  if (!d?.blob) return;
+  verifyFileAccess(d, () => previewDirect(d));
+}
+
+/* Change PIN for active account */
+function openPinModal() {
+  let isAr = lang === 'ar';
+  showModal(`
+    <div class="modal-head"><h2>${isAr ? 'تغيير الرمز السري للحساب' : 'Change Account PIN'}</h2><button class="x" id="close">×</button></div>
+    <p class="hint">${isAr ? 'سيتم تحديث الرمز السري الخاص بحسابك (' + esc(activeAccount.displayName) + ').' : 'Update the 4-digit PIN for (' + esc(activeAccount.displayName) + ').'}</p>
+    <div class="field"><label>${isAr ? 'الرمز السري الجديد (4 أرقام)' : 'New 4-digit PIN'}</label><input id="newPinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••"></div>
+    <div class="modal-actions"><button class="primary" id="savePinBtn">${isAr ? 'حفظ الرمز الجديد' : 'Save New PIN'}</button></div>`);
+  $('#close').onclick = closeModal;
+  $('#savePinBtn').onclick = async () => {
+    let val = $('#newPinInput').value.trim();
+    if (!/^\d{4}$/.test(val)) { toast(isAr ? 'يجب أن يتكون الرمز من 4 أرقام' : 'PIN must be 4 digits'); return; }
+    activeAccount.pin = val;
+    await put('accounts', activeAccount);
+    closeModal(); toast(isAr ? 'تم تحديث الرمز السري بنجاح' : 'PIN updated successfully');
+  };
+}
+
+/* Backup & Restore (Scoped to active account) */
+async function exportBackup() {
+  let isAr = lang === 'ar';
+  let out = [];
+  for (let d of docs) {
+    let x = { ...d };
+    if (d.blob) {
+      x.blobData = await new Promise(ok => { let r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(d.blob); });
+      delete x.blob;
+    }
+    out.push(x);
+  }
+  let blob = new Blob([JSON.stringify({ format: 'khaznati-account-backup', owner: activeAccount.username, docs: out, folders })], { type: 'application/json' });
+  let u = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = u; a.download = `khaznati-${activeAccount.username}.json`; a.click();
+  setTimeout(() => URL.revokeObjectURL(u), 1500);
+  toast(isAr ? 'تم تنزيل النسخة الاحتياطية لحسابك' : 'Account backup downloaded');
+}
+
+function importBackup() {
+  let isAr = lang === 'ar';
+  let i = document.createElement('input');
+  i.type = 'file'; i.accept = '.json,application/json';
+  i.onchange = async () => {
+    try {
+      let p = JSON.parse(await i.files[0].text());
+      for (let d of (p.docs || [])) {
+        if (d.blobData) { d.blob = await fetch(d.blobData).then(r => r.blob()); delete d.blobData; }
+        d.owner = activeAccount.username; // Bind strictly to current account
+        await put('docs', d);
+      }
+      for (let f of (p.folders || [])) {
+        f.owner = activeAccount.username;
+        await put('folders', f);
+      }
+      render(); toast(isAr ? 'تم استيراد البيانات إلى حسابك' : 'Backup imported to your account');
+    } catch { toast(isAr ? 'ملف النسخة الاحتياطية غير صالح' : 'Invalid backup file'); }
+  };
+  i.click();
+}
+
+/* Guide Modal */
+function guide() {
+  showModal(`
+    <div class="modal-head"><h2>${t('guideHead')}</h2><button class="x" id="close">×</button></div>
+    <div class="guide-step"><b>${t('g1Title')}</b><p>${t('g1Desc')}</p></div>
+    <div class="guide-step"><b>${t('g2Title')}</b><p>${t('g2Desc')}</p></div>
+    <div class="guide-step"><b>${t('g3Title')}</b><p>${t('g3Desc')}</p></div>
+    <div class="guide-step"><b>${t('g4Title')}</b><p>${t('g4Desc')}</p></div>
+    <div class="guide-step"><b>${t('g5Title')}</b><p>${t('g5Desc')}</p></div>`);
+  $('#close').onclick = closeModal;
+}
+
+/* Events & Initialization */
+$('#addFile').onclick = () => addFile();
+$('#mainAdd').onclick = () => addFile();
+$('#quickNoteBtn').onclick = addQuickNote;
+$('#mainQuickNote').onclick = addQuickNote;
+$('#pinMenuBtn').onclick = openPinModal;
+$('#lockNowBtn').onclick = lockVault;
+$('#switchAccBtn').onclick = lockVault;
+$('#guide').onclick = guide;
+$('#guideTopBtn').onclick = guide;
+$('#mobGuideBtn').onclick = guide;
+
+$('#backup').onclick = () => {
+  let isAr = lang === 'ar';
+  showModal(`
+    <div class="modal-head"><h2>${t('navBackup')}</h2><button class="x" id="close">×</button></div>
+    <p class="hint">${isAr ? 'نزّل نسخة احتياطية كاملة لحسابك أو استعد نسخة سابقة لنقلها بين أجهزتك.' : 'Download a full backup of your account or restore a previous one across devices.'}</p>
+    <div class="modal-actions">
+      <button class="primary" id="exp">${isAr ? 'تنزيل نسخة احتياطية' : 'Download Backup'}</button>
+      <button class="secondary" id="imp">${isAr ? 'استيراد نسخة' : 'Import Backup'}</button>
+    </div>`);
+  $('#close').onclick = closeModal;
+  $('#exp').onclick = () => { closeModal(); exportBackup(); };
+  $('#imp').onclick = () => { closeModal(); importBackup(); };
+};
+
+async function toggleTheme() {
+  let isDark = document.body.classList.toggle('dark');
+  $('#themeBtn').textContent = isDark ? '☀' : '☾';
+  $('#lockThemeBtn').textContent = isDark ? '☀' : '☾';
+  await put('settings', { key: 'dark', value: isDark });
+}
+$('#themeBtn').onclick = toggleTheme;
+$('#lockThemeBtn').onclick = toggleTheme;
+
+function toggleLanguage() {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  applyStaticTranslations();
+  if (activeAccount) render();
+}
+$('#lang').onclick = toggleLanguage;
+$('#lockLangBtn').onclick = toggleLanguage;
+
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+$('#search').addEventListener('input', () => setView($('#search').value.trim() ? 'search' : 'home'));
+
+document.body.addEventListener('click', async e => {
+  let b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.open) openDoc(b.dataset.open);
+  if (b.dataset.preview) preview(b.dataset.preview);
+  if (b.dataset.download) download(b.dataset.download);
+  if (b.dataset.star) {
+    let d = docs.find(x => x.id === b.dataset.star);
+    d.favorite = !d.favorite;
+    await put('docs', d); render();
+  }
+  if (b.dataset.folder) {
+    let id = b.dataset.folder;
+    let q = docs.filter(d => !d.deleted && d.folder === id);
+    $('#content').innerHTML = `<div class="toolbar"><span class="status">${q.length} ${t('itemCount')}</span><button class="secondary" id="backFolders">${t('btnBackFolders')}</button></div>${q.length ? `<div class="doc-grid">${q.map(docCard).join('')}</div>` : empty(t('emptyListTitle'), t('emptyListDesc'))}`;
+    $('#backFolders').onclick = () => setView('folders');
+  }
+  if (b.dataset.editfolder) newFolder(folders.find(x => x.id === b.dataset.editfolder));
+  if (b.dataset.restore) {
+    let d = docs.find(x => x.id === b.dataset.restore);
+    d.deleted = false; d.inbox = !d.folder;
+    await put('docs', d); render(); toast(lang === 'ar' ? 'تمت الاستعادة' : 'Restored');
+  }
+  if (b.dataset.purge) {
+    await del('docs', b.dataset.purge); render(); toast(lang === 'ar' ? 'تم الحذف نهائياً' : 'Deleted permanently');
+  }
+});
+
+/* Drag & Drop support */
+window.addEventListener('dragover', e => {
+  if (!activeAccount || $('#lockScreen').classList.contains('show')) return;
+  e.preventDefault();
+  $('#dropOverlay').classList.add('active');
+});
+window.addEventListener('dragleave', e => { if (!e.relatedTarget) $('#dropOverlay').classList.remove('active'); });
+window.addEventListener('drop', e => {
+  if (!activeAccount || $('#lockScreen').classList.contains('show')) return;
+  e.preventDefault();
+  $('#dropOverlay').classList.remove('active');
+  if (e.dataTransfer.files?.[0]) addFile(e.dataTransfer.files[0]);
+});
+
+(async () => {
+  db = await openDB();
+  if (await getSet('dark')) {
+    document.body.classList.add('dark');
+    $('#themeBtn').textContent = '☀';
+    $('#lockThemeBtn').textContent = '☀';
+  }
+  applyStaticTranslations();
+
+  let allAccs = await all('accounts');
+  let lastUser = await getSet('lastUser');
+  if (allAccs.length === 0) {
+    setAuthMode('register');
+  } else {
+    setAuthMode('login');
+    if (lastUser) {
+      let found = allAccs.find(a => a.username === lastUser);
+      if (found) $('#authUserInput').value = found.displayName;
+    }
+  }
+})();
 </script>
-</body></html>
+</body>
+</html>

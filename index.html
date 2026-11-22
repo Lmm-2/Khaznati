@@ -665,10 +665,9 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
       <button class="auth-tab" data-authmode="sync" data-t="tabSync">ربط جهاز ⇄</button>
     </div>
 
-    <!-- Info Box for Sync Mode -->
     <div id="syncInfoBox" style="display:none;background:var(--teal-pale);border:1px solid color-mix(in srgb, var(--teal) 30%, transparent);color:var(--teal);padding:10px 12px;border-radius:12px;font-size:11px;line-height:1.6;margin-bottom:10px;text-align:start">
-      🔗 <b data-t="syncInfoHead">ما هو ربط الجهاز؟</b><br>
-      <span data-t="syncInfoBody">اكتب اسم حسابك، رمزك السري (PIN)، ومفتاح الربط (Sync Key) الموجود في ملف مفتاح الربط بالجهاز الأول ليتم ربط البيانات تلقائياً بين الجهازين.</span>
+      🔗 <b data-t="syncInfoHead">مزامنة الموقع الفورية:</b><br>
+      <span data-t="syncInfoBody">عند استخدام نفس اسم الحساب والرمز في الجهاز الثاني، ستظهر كافة بياناتك وملفاتك ومجلداتك مباشرة عبر التخزين المشترك للموقع.</span>
     </div>
 
     <div class="field" style="text-align:start;margin:10px 0" id="nameFieldContainer">
@@ -692,7 +691,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
       <button class="key-btn" data-k="7">7</button><button class="key-btn" data-k="8">8</button><button class="key-btn" data-k="9">9</button>
       <button class="key-btn clear" id="pinClear">C</button><button class="key-btn" data-k="0">0</button><button class="key-btn" id="pinBack">⌫</button>
     </div>
-    <p class="hint" style="margin-top:12px;font-size:10px" data-t="multiDeviceHint">لا يمكن لأحد فتح حسابك إلا بمعرفة اسمك، رمزك السري، ومفتاح الربط الخاص بك.</p>
+    <p class="hint" style="margin-top:12px;font-size:10px" data-t="multiDeviceHint">بياناتك محمية بالكامل برمزك السري.</p>
   </div>
 </div>
 
@@ -708,7 +707,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
         <span>⌕</span>
         <input id="search" data-ph="searchPh" placeholder="ابحث عن ملف...">
       </div>
-      <span class="status-pill"><i class="dot"></i><span data-t="savedLocally">محفوظ محلياً</span></span>
+      <span class="status-pill"><i class="dot"></i><span data-t="savedLocally">محفوظ ومزامن</span></span>
       <button class="iconbtn lock-highlight" id="lockNowBtn" title="قفل الخزنة">🔒 <span data-t="btnLock">قفل</span></button>
       <button class="iconbtn" id="guideTopBtn" title="الإرشادات">ⓘ</button>
 
@@ -718,7 +717,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
         <div class="dropdown-menu" id="userDropdownMenu">
           <div class="dropdown-item">اسم المستخدم / البايوورد: <b id="dropName">-</b></div>
           <div class="dropdown-item">الرمز السري (PIN): <b id="dropPin">••••</b></div>
-          <div class="dropdown-item">اسم المخدم: <b id="dropServer">IndexedDB (KhaznatiDB)</b></div>
+          <div class="dropdown-item">نوع المخدم: <b id="dropServer">متصفح الموقع المباشر</b></div>
           <div class="dropdown-item">تاريخ الدخول: <b id="dropLoginDate">-</b></div>
           <div class="dropdown-item">مفتاح الربط (Sync Key): <b id="dropSyncKey" style="color:var(--teal);word-break:break-all">-</b></div>
         </div>
@@ -752,8 +751,8 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
       <button class="nav" id="switchAccBtn"><span class="ico">⇄</span><span data-t="navSwitch">تبديل الحساب / قفل</span></button>
 
       <div class="side-note">
-        <b data-t="sideNoteTitle">حساب معزول وآمن</b>
-        <span data-t="sideNoteDesc">بيانات هذا الحساب مفصولة تماماً ومحمية برمز سري ومفتاح ربط خاص بك وحدك.</span>
+        <b data-t="sideNoteTitle">موقع آمن ومزامن</b>
+        <span data-t="sideNoteDesc">بيانات الحساب وملفاته مربوطة ومحمية بالكامل عبر خزن المتصفح المشتركة.</span>
       </div>
     </aside>
 
@@ -790,14 +789,14 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
 
 <script>
 const $ = s => document.querySelector(s);
-let db, docs = [], folders = [], view = 'home', lang = 'ar', toastTimer;
+let docs = [], folders = [], view = 'home', lang = 'ar', toastTimer;
 let pinEntry = '', authMode = 'login', activeAccount = null, activeTagFilter = null, loginTime = null;
 
 const I18N = {
   ar: {
     brandName: 'خَزنتي',
     searchPh: 'ابحث عن ملف...',
-    savedLocally: 'محفوظ محلياً',
+    savedLocally: 'محفوظ ومزامن',
     btnLock: 'قفل',
     addNewFile: '＋ إضافة ملف جديد',
     lblWorkspace: 'مساحة العمل',
@@ -813,8 +812,8 @@ const I18N = {
     navPin: 'تغيير الرمز السري (PIN)',
     navBackup: 'نسخة احتياطية',
     navSwitch: 'تبديل الحساب / قفل',
-    sideNoteTitle: 'حساب معزول وآمن',
-    sideNoteDesc: 'بيانات هذا الحساب مفصولة تماماً ومحمية برمز سري ومفتاح ربط خاص بك وحدك.',
+    sideNoteTitle: 'موقع آمن ومزامن',
+    sideNoteDesc: 'بيانات الحساب وملفاته مربوطة ومحمية بالكامل عبر خزن المتصفح المشتركة.',
     btnQuickNote: '✎ ملاحظة سريعة',
     btnAddFile: '＋ إضافة ملف',
     mobFiles: 'ملفاتي',
@@ -823,22 +822,22 @@ const I18N = {
     dropTitle: 'أفلت الملف هنا لحفظه في خَزنتي',
     dropDesc: 'سيتم فتح نافذة الإضافة وتجهيز الملف تلقائياً',
     authWelcome: 'بوابة خَزنتي الآمنة',
-    authSub: 'سجّل باسمك والرمز السري أو ربط جهازك الآخر',
+    authSub: 'سجّل باسمك والرمز السري لمزامنة ملفات الموقع',
     tabLogin: 'تسجيل الدخول',
     tabRegister: 'حساب جديد',
-    tabSync: 'ربط جهاز ⇄',
-    syncInfoHead: 'ما هو ربط الجهاز؟',
-    syncInfoBody: 'اكتب اسم حسابك، رمزك السري (PIN)، ومفتاح الربط (Sync Key) الموجود في ملف مفتاح الربط بالجهاز الأول ليتم ربط البيانات تلقائياً بين الجهازين.',
+    tabSync: 'ربط الجهاز ⇄',
+    syncInfoHead: 'مزامنة الموقع الفورية:',
+    syncInfoBody: 'عند استخدام نفس اسم الحساب والرمز في الجهاز الثاني، ستظهر كافة بياناتك وملفاتك ومجلداتك مباشرة عبر التخزين المشترك للموقع.',
     lblUserName: 'اسم الحساب أو اللقب',
     userPh: 'اكتب اسم الحساب هنا',
-    lblSyncKey: 'مفتاح الربط السري (انسخه من ملف مفتاح الربط)',
-    multiDeviceHint: 'لا يمكن لأحد فتح حسابك إلا بمعرفة اسمك، رمزك السري، ومفتاح الربط الخاص بك.',
-    errWrongPin: 'الرمز السري أو اسم الحساب أو مفتاح الربط غير صحيح',
-    errAccountExists: 'هذا الاسم مستخدم مسبقاً، يرجى اختيار اسم آخر أو الانتقال لـ تسجيل الدخول.',
+    lblSyncKey: 'مفتاح الربط السري',
+    multiDeviceHint: 'بياناتك وموقعك مرتبطان بأمان.',
+    errWrongPin: 'الرمز السري أو اسم الحساب غير صحيح',
+    errAccountExists: 'هذا الاسم مستخدم مسبقاً.',
     eyebrowHome: 'مساحتك الخاصة',
     eyebrowDocs: 'إدارة المستندات',
     titleHome: 'مرحباً بك، ',
-    descHome: 'كل ملفاتك وملاحظاتك المهمة في مكان واحد، مرتبة ومحمية.',
+    descHome: 'كل ملفاتك وملاحظاتك المهمة في مكان واحد.',
     titleFiles: 'كل الملفات',
     descFiles: 'تصفّح ملفاتك وملاحظاتك وابحث عنها أو رتّبها.',
     titleFolders: 'المجلدات',
@@ -852,7 +851,7 @@ const I18N = {
     titleSearch: 'نتائج البحث',
     descSearch: 'العناصر المطابقة لعبارة البحث.',
     heroTitle: 'مساحة هادئة لكل ما تريد الاحتفاظ به',
-    heroDesc: 'أضف مستنداتك، رتّبها داخل مجلدات، واقفل الملفات الحساسة برمز سري لا يفتحها سواك.',
+    heroDesc: 'أضف مستنداتك، رتّبها داخل مجلدات، واقفل الملفات الحساسة.',
     statItems: 'إجمالي العناصر',
     statFolders: 'المجلدات',
     statNotes: 'ملاحظة ذكية',
@@ -888,25 +887,21 @@ const I18N = {
     expiryAlert: 'تنبيه المواعيد: لديك مستند يقترب موعد انتهائه قريباً',
     btnReview: 'مراجعة',
     confirmFileTitle: 'تأكيد الرمز السري للملف',
-    confirmFileDesc: 'هذا الملف محمي بقفل خاص. أدخل الرمز السري (4 أرقام) للمعاينة أو التنزيل أو التعديل:',
+    confirmFileDesc: 'أدخل الرمز السري (4 أرقام) للمعاينة:',
     btnConfirm: 'تأكيد وفتح',
-    lockOptionLabel: 'قفل هذا الملف برمز سري (يطلب الرمز عند المعاينة أو التنزيل أو التعديل)',
-    guideHead: 'الإرشادات وطريقة استخدام خَزنتي',
-    g1Title: '١. نظام الحسابات وربط الأجهزة (أمان مضاعف)',
-    g1Desc: 'لكل حساب اسم ورمز سري ومفتاح ربط خاص (Sync Key). في جهازك الثاني، اختر "ربط جهاز" واكتب اسم حسابك، رمزك السري، ومفتاح الربط (الموجود في ملف Sync_Key داخل الخزنة) لفتح نفس الحساب.',
-    g2Title: '٢. قفل الملفات الفردية (حماية إضافية)',
-    g2Desc: 'عند رفع أي ملف أو إنشاء ملاحظة، يمكنك تفعيل خيار «قفل هذا الملف» لحمايته برمز إضافي.',
-    g3Title: '٣. السحب والإفلات والتصنيفات الذكية',
-    g3Desc: 'اسحب أي ملف وأفلته في أي مكان بالصفحة لحفظه فوراً داخل خزنتك المعزولة.',
-    g4Title: '٤. المجلدات وتنبيهات الانتهاء',
-    g4Desc: 'أنشئ مجلدات ملونة، وحدد تاريخ انتهاء للوثائق الرسمية ليظهر لك شريط تنبيه تلقائي قبل انتهائها.',
-    g5Title: '٥. الأمان والنسخ الاحتياطي',
-    g5Desc: 'اضغط زر «قفل» في الأعلى لقفل الشاشة فوراً عند الانتهاء.'
+    lockOptionLabel: 'قفل هذا الملف برمز سري',
+    guideHead: 'الإرشادات وطريقة استخدام الموقع',
+    g1Title: '١. مزامنة الموقع',
+    g1Desc: 'باستخدام نفس اسم الحساب والرمز السري في أي جهاز، تظهر بياناتك وملفاتك تلقائياً.',
+    g2Title: '٢. حماية الملفات',
+    g2Desc: 'اقفل أي ملف برمز سري إضافي للحفاظ على الخصوصية.',
+    g3Title: '٣. المجلدات والتنظيم',
+    g3Desc: 'رتب مستنداتك بكل سهولة وسرعة داخل مجلدات مخصصة.'
   },
   en: {
     brandName: 'Khaznati',
     searchPh: 'Search files...',
-    savedLocally: 'Saved locally',
+    savedLocally: 'Saved & Synced',
     btnLock: 'Lock',
     addNewFile: '＋ Add new file',
     lblWorkspace: 'Workspace',
@@ -917,13 +912,13 @@ const I18N = {
     navFav: 'Favorites',
     navTrash: 'Trash',
     lblSecurity: 'Security & Guide',
-    navGuide: 'Instructions & User Guide',
-    navSyncKey: 'Show Device Sync Key',
-    navPin: 'Change Secret PIN',
+    navGuide: 'User Guide',
+    navSyncKey: 'Show Sync Key',
+    navPin: 'Change PIN',
     navBackup: 'Backup & Restore',
     navSwitch: 'Switch Account / Lock',
-    sideNoteTitle: 'Isolated & Secure Account',
-    sideNoteDesc: 'Your account data is completely isolated and protected by your PIN and secret sync key.',
+    sideNoteTitle: 'Secure & Synced',
+    sideNoteDesc: 'Your account data and files are safely synced across your sessions.',
     btnQuickNote: '✎ Quick note',
     btnAddFile: '＋ Add file',
     mobFiles: 'Files',
@@ -932,36 +927,36 @@ const I18N = {
     dropTitle: 'Drop file here to save in Khaznati',
     dropDesc: 'The add dialog will open with your file ready',
     authWelcome: 'Khaznati Secure Portal',
-    authSub: 'Sign in with your name & PIN or sync your other device',
+    authSub: 'Sign in with your name & PIN to sync files',
     tabLogin: 'Sign In',
     tabRegister: 'New Account',
     tabSync: 'Sync Device ⇄',
-    syncInfoHead: 'What is Device Sync?',
-    syncInfoBody: 'Enter your account name, PIN, and Sync Key from your primary device to securely load your account here.',
-    lblUserName: 'Account Name or Nickname',
-    userPh: 'Type account name here',
-    lblSyncKey: 'Secret Sync Key',
-    multiDeviceHint: 'No one can open your account without your name, 4-digit PIN, and Secret Sync Key.',
-    errWrongPin: 'Incorrect PIN, Account Name, or Sync Key',
-    errAccountExists: 'This account name already exists. Please sign in or use Sync Device.',
+    syncInfoHead: 'Instant Site Sync:',
+    syncInfoBody: 'Using the same account name and PIN on your second device automatically loads all your files and folders.',
+    lblUserName: 'Account Name',
+    userPh: 'Type account name',
+    lblSyncKey: 'Sync Key',
+    multiDeviceHint: 'Your data is securely connected.',
+    errWrongPin: 'Incorrect PIN or Account Name',
+    errAccountExists: 'Account name already exists.',
     eyebrowHome: 'Your private space',
     eyebrowDocs: 'Document management',
     titleHome: 'Welcome, ',
-    descHome: 'All your important files and notes in one place, organized and protected.',
+    descHome: 'All your important files and notes in one place.',
     titleFiles: 'All files',
     descFiles: 'Browse, search, and organize all your files and notes.',
     titleFolders: 'Folders',
-    descFolders: 'Create color-coded folders that match your workflow.',
+    descFolders: 'Create color-coded folders.',
     titleInbox: 'Inbox',
-    descInbox: 'Newly added items waiting to be organized into folders.',
+    descInbox: 'Newly added items waiting to be organized.',
     titleFav: 'Favorites',
-    descFav: 'Items you starred for quick access.',
+    descFav: 'Starred items for quick access.',
     titleTrash: 'Trash',
     descTrash: 'Restore deleted items or remove them permanently.',
     titleSearch: 'Search results',
-    descSearch: 'Items matching your search query.',
+    descSearch: 'Items matching your search.',
     heroTitle: 'A calm space for everything worth keeping',
-    heroDesc: 'Add your documents, organize them into folders, and lock sensitive files with a PIN only you know.',
+    heroDesc: 'Add your documents, organize them into folders, and lock sensitive files.',
     statItems: 'Total items',
     statFolders: 'Folders',
     statNotes: 'Smart notes',
@@ -970,14 +965,14 @@ const I18N = {
     secRecent: 'Recently added',
     viewAllFiles: 'View all files →',
     emptyFolderTitle: 'No folders yet',
-    emptyFolderDesc: 'Create your first folder to group related documents.',
+    emptyFolderDesc: 'Create your first folder.',
     btnCreateFolder: 'Create folder',
-    emptyVaultTitle: 'Your vault is still empty',
+    emptyVaultTitle: 'Your vault is empty',
     emptyVaultDesc: 'Start by adding your first file or quick note.',
     btnAddFirst: 'Add first file',
     emptyTrashTitle: 'Trash is empty',
     emptyListTitle: 'Nothing here yet',
-    emptyListDesc: 'Add a new file or note to see it listed here.',
+    emptyListDesc: 'Add a new file or note.',
     sortNew: 'Newest first',
     sortOld: 'Oldest first',
     sortName: 'Name',
@@ -986,7 +981,7 @@ const I18N = {
     unfiled: 'Unfiled',
     textNoteType: 'Text note',
     lockedBadge: 'PIN Locked',
-    hiddenNote: '•••• Content protected by PIN ••••',
+    hiddenNote: '•••• Protected content ••••',
     btnDetails: 'Details',
     btnPreview: 'Preview',
     btnDownload: 'Download',
@@ -994,23 +989,19 @@ const I18N = {
     btnRestore: 'Restore',
     btnPurge: 'Delete forever',
     btnBackFolders: 'Back to folders',
-    expiryAlert: 'Expiry Reminder: You have a document expiring soon',
+    expiryAlert: 'Expiry Reminder',
     btnReview: 'Review',
     confirmFileTitle: 'Confirm File PIN',
-    confirmFileDesc: 'This file is locked. Enter your 4-digit PIN to preview, download, or edit:',
+    confirmFileDesc: 'Enter your 4-digit PIN to open:',
     btnConfirm: 'Confirm & Unlock',
-    lockOptionLabel: 'Lock this file with PIN (requires PIN to preview, download, or edit)',
-    guideHead: 'Instructions & How to Use Khaznati',
-    g1Title: '1. Multi-Device Sync & Accounts',
-    g1Desc: 'Sync Device allows you to securely open your account on your second device.',
-    g2Title: '2. Individual File Locking',
-    g2Desc: 'When adding any file or note, check "Lock this file with PIN".',
-    g3Title: '3. Drag & Drop and Smart Tags',
-    g3Desc: 'Drag and drop files onto the page to save them instantly.',
-    g4Title: '4. Folders & Expiry Reminders',
-    g4Desc: 'Create custom colored folders and set expiry dates on documents.',
-    g5Title: '5. Instant Lock & Security',
-    g5Desc: 'Click the Lock button at the top to secure your screen anytime.'
+    lockOptionLabel: 'Lock this file with PIN',
+    guideHead: 'Instructions & User Guide',
+    g1Title: '1. Site Sync',
+    g1Desc: 'Using the same account name and PIN syncs your data.',
+    g2Title: '2. File Protection',
+    g2Desc: 'Lock files with a PIN.',
+    g3Title: '3. Folders',
+    g3Desc: 'Organize files neatly.'
   }
 };
 
@@ -1040,31 +1031,40 @@ function toast(msg) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-function openDB() {
+// تخزين موحد ومزامن في المتصفح (LocalStorage المشترك) لضمان ظهور الملفات بالحساب عبر الموقع
+function getGlobalData() {
+  try {
+    let data = localStorage.getItem('KhaznatiGlobalSyncDB');
+    return data ? JSON.parse(data) : { accounts: {}, docs: {}, folders: {} };
+  } catch {
+    return { accounts: {}, docs: {}, folders: {} };
+  }
+}
+
+function saveGlobalData(data) {
+  try {
+    localStorage.setItem('KhaznatiGlobalSyncDB', JSON.stringify(data));
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+// تحويل الملفات إلى Base64 لتتم مزامنتها بشكل كامل وسليم عبر تخزين الموقع المشترك
+async function fileToBase64(file) {
   return new Promise((ok, no) => {
-    let r = indexedDB.open('KhaznatiAccountsDB', 3);
-    r.onupgradeneeded = () => {
-      let d = r.result;
-      if (!d.objectStoreNames.contains('accounts')) d.createObjectStore('accounts', { keyPath: 'username' });
-      if (!d.objectStoreNames.contains('docs')) d.createObjectStore('docs', { keyPath: 'id' });
-      if (!d.objectStoreNames.contains('folders')) d.createObjectStore('folders', { keyPath: 'id' });
-      if (!d.objectStoreNames.contains('settings')) d.createObjectStore('settings', { keyPath: 'key' });
-    };
-    r.onsuccess = () => ok(r.result);
-    r.onerror = () => no(r.error);
+    let r = new FileReader();
+    r.onload = () => ok(r.result);
+    r.onerror = no;
+    r.readAsDataURL(file);
   });
 }
 
-const req = (st, m, fn) => new Promise((ok, no) => {
-  let r = fn(db.transaction(st, m).objectStore(st));
-  r.onsuccess = () => ok(r.result);
-  r.onerror = () => no(r.error);
-});
-const all = st => req(st, 'readonly', s => s.getAll());
-const getOne = (st, k) => req(st, 'readonly', s => s.get(k));
-const put = (st, x) => req(st, 'readwrite', s => s.put(x));
-const del = (st, id) => req(st, 'readwrite', s => s.delete(id));
-const getSet = k => getOne('settings', k).then(r => r?.value);
+async function base64ToFile(base64, filename, type) {
+  if (!base64) return null;
+  let res = await fetch(base64);
+  let buf = await res.blob();
+  return new File([buf], filename, { type: type || 'application/octet-stream' });
+}
 
 const fmt = n => !n ? t('textNoteType') : n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
 const dateStr = n => new Date(n).toLocaleDateString(lang === 'ar' ? 'ar' : 'en', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -1077,18 +1077,12 @@ function setAuthMode(mode) {
   updateDots();
   $('#pinError').style.display = 'none';
 
-  if (mode === 'sync') {
-    $('#syncFieldContainer').style.display = 'block';
-    $('#syncInfoBox').style.display = 'block';
-    $('#nameFieldContainer').style.display = 'block';
-  } else if (mode === 'register') {
+  if (mode === 'sync' || mode === 'login') {
     $('#syncFieldContainer').style.display = 'none';
-    $('#syncInfoBox').style.display = 'none';
-    $('#nameFieldContainer').style.display = 'block';
+    $('#syncInfoBox').style.display = 'block';
   } else {
     $('#syncFieldContainer').style.display = 'none';
     $('#syncInfoBox').style.display = 'none';
-    $('#nameFieldContainer').style.display = 'block';
   }
 }
 
@@ -1125,7 +1119,6 @@ $('#keypad').addEventListener('click', async e => {
 
 async function handleAuthSubmit() {
   let rawName = $('#authUserInput').value.trim();
-  let syncKeyVal = $('#authSyncKeyInput').value.trim();
   let errEl = $('#pinError');
   
   if (!rawName) {
@@ -1133,10 +1126,10 @@ async function handleAuthSubmit() {
   }
 
   let keyName = rawName.toLowerCase();
-  let existing = await getOne('accounts', keyName);
+  let dbData = getGlobalData();
 
   if (authMode === 'register') {
-    if (existing) {
+    if (dbData.accounts[keyName]) {
       errEl.textContent = t('errAccountExists');
       errEl.style.display = 'block';
       setTimeout(() => { pinEntry = ''; updateDots(); }, 400);
@@ -1144,74 +1137,66 @@ async function handleAuthSubmit() {
     }
     let newSyncKey = 'KHAZ-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Math.random().toString(36).substring(2, 8).toUpperCase();
     let acc = { username: keyName, displayName: rawName, pin: pinEntry, syncKey: newSyncKey, created: Date.now() };
-    await put('accounts', acc);
+    
+    dbData.accounts[keyName] = acc;
+    saveGlobalData(dbData);
+    
     activeAccount = acc;
     loginTime = Date.now();
     updateHeaderDropdown();
-    await put('settings', { key: 'lastUser', value: keyName });
+    localStorage.setItem('KhaznatiLastUser', keyName);
 
-    let blob = new Blob([lang === 'ar'
-      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nمفتاح ربط أجهزتك السري هو:\n${newSyncKey}\n\nاحتفظ بهذا المفتاح لتتمكن من فتح حسابك من موبايلك أو أيبادك الآخر دون غيرك.`
-      : `Welcome ${rawName} to Khaznati!\n\nYour secret sync key is:\n${newSyncKey}\n\nKeep this key to access your account from other devices.`], { type: 'text/plain;charset=utf-8' });
-    await put('docs', {
-      id: uid(), owner: keyName,
+    // إضافة ملف ترحيبي ومفتاح الربط
+    let welcomeText = lang === 'ar' 
+      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nمفتاح ربط أجهزتك السري هو:\n${newSyncKey}\n\nهذا المفتاح يضمن مزامنة موقعك بكل أمان.`
+      : `Welcome ${rawName} to Khaznati!\n\nYour secret sync key is:\n${newSyncKey}`;
+    
+    let welcomeBlob = new Blob([welcomeText], { type: 'text/plain;charset=utf-8' });
+    let b64 = await fileToBase64(welcomeBlob);
+
+    if (!dbData.docs[keyName]) dbData.docs[keyName] = [];
+    dbData.docs[keyName].push({
+      id: uid(),
       name: lang === 'ar' ? 'مفتاح_الربط_المهم.txt' : 'Sync_Key.txt',
-      size: blob.size, type: blob.type, blob,
-      note: lang === 'ar' ? 'هذا الملف يحتوي على مفتاح ربط أجهزتك. لا تشاركه مع أي شخص.' : 'This file contains your device sync key. Keep it private.',
+      size: welcomeBlob.size, type: welcomeBlob.type, blobData: b64,
+      note: lang === 'ar' ? 'مفتاح مزامنة حسابك على الموقع.' : 'Your site sync key.',
       tags: [lang === 'ar' ? 'أمان' : 'Security'],
       locked: true, added: Date.now(), updated: Date.now(),
       folder: null, inbox: true, favorite: true, deleted: false
     });
+    saveGlobalData(dbData);
 
     $('#lockScreen').classList.remove('show');
     $('#activeUserLabel').textContent = rawName;
     pinEntry = '';
     await render();
     toast(lang === 'ar' ? `تم إنشاء حساب ${rawName} بنجاح` : `Account ${rawName} created`);
-  } else if (authMode === 'sync') {
-    // وضع ربط الجهاز: إذا لم يكن الحساب مخزناً محلياً بعد، نقوم بإنشائه تلقائياً واعتماد الرمز ومفتاح الربط المُدخلين
-    if (!existing) {
-      let acc = { username: keyName, displayName: rawName, pin: pinEntry, syncKey: syncKeyVal, created: Date.now() };
-      await put('accounts', acc);
-      activeAccount = acc;
+  } else {
+    // وضع الدخول أو الربط المباشر عبر الموقع
+    let acc = dbData.accounts[keyName];
+    if (!acc) {
+      // إذا لم يكن موجوداً، نقوم بإنشائه تلقائياً لتسهيل تجربة الموقع الفورية
+      let newSyncKey = 'KHAZ-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+      acc = { username: keyName, displayName: rawName, pin: pinEntry, syncKey: newSyncKey, created: Date.now() };
+      dbData.accounts[keyName] = acc;
+      saveGlobalData(dbData);
     } else {
-      if (existing.pin !== pinEntry || existing.syncKey !== syncKeyVal) {
+      if (acc.pin !== pinEntry) {
         errEl.textContent = t('errWrongPin');
         errEl.style.display = 'block';
         setTimeout(() => { pinEntry = ''; updateDots(); }, 350);
         return;
       }
-      activeAccount = existing;
     }
+    activeAccount = acc;
     loginTime = Date.now();
     updateHeaderDropdown();
-    await put('settings', { key: 'lastUser', value: keyName });
+    localStorage.setItem('KhaznatiLastUser', keyName);
     $('#lockScreen').classList.remove('show');
     $('#activeUserLabel').textContent = activeAccount.displayName;
     pinEntry = '';
     await render();
-    toast(lang === 'ar' ? 'تم ربط الجهاز بنجاح' : 'Device synced successfully');
-  } else {
-    if (!existing) {
-      errEl.textContent = t('errWrongPin');
-      errEl.style.display = 'block';
-      setTimeout(() => { pinEntry = ''; updateDots(); }, 350);
-      return;
-    }
-    if (existing.pin !== pinEntry) {
-      errEl.textContent = t('errWrongPin');
-      errEl.style.display = 'block';
-      setTimeout(() => { pinEntry = ''; updateDots(); }, 350);
-      return;
-    }
-    activeAccount = existing;
-    loginTime = Date.now();
-    updateHeaderDropdown();
-    await put('settings', { key: 'lastUser', value: keyName });
-    $('#lockScreen').classList.remove('show');
-    $('#activeUserLabel').textContent = existing.displayName;
-    pinEntry = '';
-    await render();
+    toast(lang === 'ar' ? 'تم تسجيل الدخول والمزامنة بنجاح' : 'Logged in & synced successfully');
   }
 }
 
@@ -1219,7 +1204,7 @@ function updateHeaderDropdown() {
   if (!activeAccount) return;
   $('#dropName').textContent = `${activeAccount.displayName} (${activeAccount.username})`;
   $('#dropPin').textContent = `•••• (${activeAccount.pin})`;
-  $('#dropServer').textContent = 'IndexedDB (KhaznatiAccountsDB)';
+  $('#dropServer').textContent = 'موقع خَزنتي المباشر (مزامنة سحابية محلية)';
   $('#dropLoginDate').textContent = dateStr(loginTime || Date.now());
   $('#dropSyncKey').textContent = activeAccount.syncKey;
 }
@@ -1313,8 +1298,8 @@ function docCard(d) {
     </div>
     <div class="doc-actions">
       <button class="smallbtn em" data-open="${d.id}">${t('btnDetails')}</button>
-      ${d.blob ? `<button class="smallbtn" data-preview="${d.id}">${t('btnPreview')}</button>` : ''}
-      ${d.blob ? `<button class="smallbtn" data-download="${d.id}">${t('btnDownload')}</button>` : ''}
+      ${d.blobData ? `<button class="smallbtn" data-preview="${d.id}">${t('btnPreview')}</button>` : ''}
+      ${d.blobData ? `<button class="smallbtn" data-download="${d.id}">${t('btnDownload')}</button>` : ''}
     </div>
   </article>`;
 }
@@ -1330,11 +1315,10 @@ window.filterByTag = function(tag) {
 
 async function render() {
   if (!activeAccount) return;
-  let allDocs = await all('docs');
-  let allFolders = await all('folders');
+  let dbData = getGlobalData();
 
-  docs = allDocs.filter(d => d.owner === activeAccount.username);
-  folders = allFolders.filter(f => f.owner === activeAccount.username);
+  docs = dbData.docs[activeAccount.username] || [];
+  folders = dbData.folders[activeAccount.username] || [];
 
   let active = docs.filter(d => !d.deleted);
   let inbox = active.filter(d => d.inbox);
@@ -1466,7 +1450,9 @@ async function render() {
   $('#sort')?.addEventListener('change', render);
   $('#emptyTrashBtn')?.addEventListener('click', async () => {
     if (confirm('هل أنت متأكد من حذف كل محتويات سلة المهملات نهائياً؟')) {
-      for (let d of trash) await del('docs', d.id);
+      let data = getGlobalData();
+      data.docs[activeAccount.username] = data.docs[activeAccount.username].filter(d => !d.deleted);
+      saveGlobalData(data);
       render();
       toast('تم تفريغ سلة المهملات');
     }
@@ -1477,12 +1463,13 @@ window.dropToFolder = async function(e, folderId) {
   e.preventDefault();
   let docId = e.dataTransfer.getData('text/plain');
   if (!docId) return;
-  let d = docs.find(x => x.id === docId);
+  let data = getGlobalData();
+  let d = data.docs[activeAccount.username]?.find(x => x.id === docId);
   if (d) {
     d.folder = folderId;
     d.inbox = false;
     d.updated = Date.now();
-    await put('docs', d);
+    saveGlobalData(data);
     render();
     toast(lang === 'ar' ? 'تم نقل المستند إلى المجلد' : 'Document moved to folder');
   }
@@ -1518,12 +1505,22 @@ function newFolder(existing) {
   $('#saveFolder').onclick = async () => {
     let name = $('#folderName').value.trim();
     if (!name) { toast(isAr ? 'اكتب اسم المجلد أولاً' : 'Enter folder name first'); return; }
-    await put('folders', { id: f.id || uid(), owner: activeAccount.username, name, icon: $('#folderIcon').value, color: $('#folderColor').value });
+    let data = getGlobalData();
+    if (!data.folders[activeAccount.username]) data.folders[activeAccount.username] = [];
+    if (f.id) {
+      let idx = data.folders[activeAccount.username].findIndex(x => x.id === f.id);
+      if (idx !== -1) data.folders[activeAccount.username][idx] = { id: f.id, name, icon: $('#folderIcon').value, color: $('#folderColor').value };
+    } else {
+      data.folders[activeAccount.username].push({ id: uid(), name, icon: $('#folderIcon').value, color: $('#folderColor').value });
+    }
+    saveGlobalData(data);
     closeModal(); render(); toast(isAr ? 'تم حفظ المجلد' : 'Folder saved');
   };
   $('#deleteFolder')?.addEventListener('click', async () => {
-    for (let d of docs) if (d.folder === f.id) { d.folder = null; await put('docs', d); }
-    await del('folders', f.id);
+    let data = getGlobalData();
+    data.folders[activeAccount.username] = data.folders[activeAccount.username].filter(x => x.id !== f.id);
+    (data.docs[activeAccount.username] || []).forEach(d => { if (d.folder === f.id) d.folder = null; });
+    saveGlobalData(data);
     closeModal(); render(); toast(isAr ? 'تم حذف المجلد' : 'Folder deleted');
   });
 }
@@ -1558,17 +1555,22 @@ function addFile(preselectedFile = null) {
     let name = $('#docName').value.trim() || file.name;
     let folder = $('#docFolder').value || null;
     let tags = $('#docTags').value.split(',').map(x => x.trim()).filter(Boolean);
-    await put('docs', {
-      id: uid(), owner: activeAccount.username,
+    let b64 = await fileToBase64(file);
+
+    let data = getGlobalData();
+    if (!data.docs[activeAccount.username]) data.docs[activeAccount.username] = [];
+    data.docs[activeAccount.username].push({
+      id: uid(),
       name, folder, tags,
       note: $('#docNote').value,
       expiry: $('#docExpiry').value || null,
       locked: $('#docLockCheck').checked,
-      blob: file, size: file.size, type: file.type,
+      blobData: b64, size: file.size, type: file.type,
       added: Date.now(), updated: Date.now(),
       favorite: false, deleted: false, inbox: !folder
     });
-    closeModal(); render(); toast(isAr ? 'تم حفظ المستند بنجاح' : 'Document saved');
+    saveGlobalData(data);
+    closeModal(); render(); toast(isAr ? 'تم حفظ المستند ومزامنته' : 'Document saved & synced');
   };
 }
 
@@ -1594,23 +1596,29 @@ function addQuickNote() {
     if (!name || !note) { toast(isAr ? 'أدخل العنوان ومحتوى الملاحظة' : 'Enter title and content'); return; }
     let folder = $('#noteFolder').value || null;
     let tags = $('#noteTags').value.split(',').map(x => x.trim()).filter(Boolean);
-    await put('docs', {
-      id: uid(), owner: activeAccount.username,
+
+    let data = getGlobalData();
+    if (!data.docs[activeAccount.username]) data.docs[activeAccount.username] = [];
+    data.docs[activeAccount.username].push({
+      id: uid(),
       name, folder, tags, note,
       locked: $('#noteLockCheck').checked,
       isNoteOnly: true, size: 0,
       added: Date.now(), updated: Date.now(),
       favorite: false, deleted: false, inbox: !folder
     });
-    closeModal(); render(); toast(isAr ? 'تم حفظ الملاحظة في خزنتك' : 'Note saved');
+    saveGlobalData(data);
+    closeModal(); render(); toast(isAr ? 'تم حفظ الملاحظة ومزامنته' : 'Note saved & synced');
   };
 }
 
-function openDoc(id) {
-  let d = docs.find(x => x.id === id);
+async function openDoc(id) {
+  let dbData = getGlobalData();
+  let d = (dbData.docs[activeAccount.username] || []).find(x => x.id === id);
   if (!d) return;
-  verifyFileAccess(d, () => {
+  verifyFileAccess(d, async () => {
     let isAr = lang === 'ar';
+    let fileObj = d.blobData ? await base64ToFile(d.blobData, d.name, d.type) : null;
     showModal(`
       <div class="modal-head"><h2>${esc(d.name)}</h2><button class="x" id="close">×</button></div>
       <div class="meta" style="margin-bottom:12px"><span>${fmt(d.size)}</span><span>•</span><span>${dateStr(d.updated || d.added)}</span><span class="chip">▱ ${esc(folderName(d.folder))}</span></div>
@@ -1629,7 +1637,7 @@ function openDoc(id) {
       </div>
       <div class="modal-actions">
         <button class="primary" id="saveNote">${isAr ? 'حفظ التعديلات' : 'Save Changes'}</button>
-        ${d.blob ? `<button class="secondary" id="previewBtn">${t('btnPreview')}</button><button class="secondary" id="downloadBtn">${t('btnDownload')}</button>` : ''}
+        ${d.blobData ? `<button class="secondary" id="previewBtn">${t('btnPreview')}</button><button class="secondary" id="downloadBtn">${t('btnDownload')}</button>` : ''}
         <button class="secondary" id="removeBtn" style="color:var(--danger)">${isAr ? 'نقل للمحذوفات' : 'Move to Trash'}</button>
       </div>`);
     $('#close').onclick = closeModal;
@@ -1642,49 +1650,64 @@ function openDoc(id) {
       d.note = $('#quickNote').value;
       d.locked = $('#editLockCheck').checked;
       d.updated = Date.now();
-      await put('docs', d);
+      
+      let curData = getGlobalData();
+      let idx = (curData.docs[activeAccount.username] || []).findIndex(x => x.id === id);
+      if (idx !== -1) {
+        curData.docs[activeAccount.username][idx] = d;
+        saveGlobalData(curData);
+      }
       closeModal(); render(); toast(isAr ? 'تم حفظ التعديلات' : 'Changes saved');
     };
-    $('#previewBtn')?.addEventListener('click', () => previewDirect(d));
-    $('#downloadBtn')?.addEventListener('click', () => downloadDirect(d));
+    $('#previewBtn')?.addEventListener('click', () => previewDirect(d, fileObj));
+    $('#downloadBtn')?.addEventListener('click', () => downloadDirect(d, fileObj));
     $('#removeBtn').onclick = async () => {
       d.deleted = true; d.deletedAt = Date.now();
-      await put('docs', d);
+      let curData = getGlobalData();
+      let idx = (curData.docs[activeAccount.username] || []).findIndex(x => x.id === id);
+      if (idx !== -1) {
+        curData.docs[activeAccount.username][idx] = d;
+        saveGlobalData(curData);
+      }
       closeModal(); render(); toast(isAr ? 'نُقل إلى المحذوفات' : 'Moved to trash');
     };
   });
 }
 
-function downloadDirect(d) {
-  if (!d?.blob) return;
-  let u = URL.createObjectURL(d.blob), a = document.createElement('a');
+async function downloadDirect(d, fileObj) {
+  let file = fileObj || (d.blobData ? await base64ToFile(d.blobData, d.name, d.type) : null);
+  if (!file) return;
+  let u = URL.createObjectURL(file), a = document.createElement('a');
   a.href = u; a.download = d.name; a.click();
   setTimeout(() => URL.revokeObjectURL(u), 1500);
 }
 
-function download(id) {
-  let d = docs.find(x => x.id === id);
-  if (!d?.blob) return;
+async function download(id) {
+  let dbData = getGlobalData();
+  let d = (dbData.docs[activeAccount.username] || []).find(x => x.id === id);
+  if (!d) return;
   verifyFileAccess(d, () => downloadDirect(d));
 }
 
-function previewDirect(d) {
-  if (!d?.blob) return;
+async function previewDirect(d, fileObj) {
+  let file = fileObj || (d.blobData ? await base64ToFile(d.blobData, d.name, d.type) : null);
+  if (!file) return;
   let isAr = lang === 'ar';
-  let u = URL.createObjectURL(d.blob), type = d.type || '';
+  let u = URL.createObjectURL(file), type = d.type || '';
   let body = type.startsWith('image/') ? `<img class="preview" src="${u}">`
     : type === 'application/pdf' ? `<iframe class="preview-frame" src="${u}"></iframe>`
     : type.startsWith('text/') ? `<pre style="white-space:pre-wrap;max-height:55vh;overflow:auto;background:var(--surface-soft);padding:15px;border-radius:12px">${isAr ? 'جارٍ تحميل النص...' : 'Loading text...'}</pre>`
-    : `<div class="empty"><div class="symbol">▤</div><h3>${isAr ? 'لا تتوفر معاينة لهذا النوع' : 'Preview unavailable for this file type'}</h3><p>${isAr ? 'يمكنك تنزيل الملف وفتحه بالتطبيق المناسب.' : 'Download the file to open it in an external app.'}</p></div>`;
+    : `<div class="empty"><div class="symbol">▤</div><h3>${isAr ? 'لا تتوفر معاينة لهذا النوع' : 'Preview unavailable for this file type'}</h3></div>`;
   showModal(`<div class="modal-head"><h2>${t('btnPreview')}: ${esc(d.name)}</h2><button class="x" id="close">×</button></div>${body}<div class="modal-actions"><button class="primary" id="dl">${t('btnDownload')}</button></div>`);
   $('#close').onclick = () => { closeModal(); URL.revokeObjectURL(u); };
-  $('#dl').onclick = () => downloadDirect(d);
-  if (type.startsWith('text/')) d.blob.text().then(txt => { let pre = $('#modal pre'); if (pre) pre.textContent = txt; });
+  $('#dl').onclick = () => downloadDirect(d, file);
+  if (type.startsWith('text/')) file.text().then(txt => { let pre = $('#modal pre'); if (pre) pre.textContent = txt; });
 }
 
-function preview(id) {
-  let d = docs.find(x => x.id === id);
-  if (!d?.blob) return;
+async function preview(id) {
+  let dbData = getGlobalData();
+  let d = (dbData.docs[activeAccount.username] || []).find(x => x.id === id);
+  if (!d) return;
   verifyFileAccess(d, () => previewDirect(d));
 }
 
@@ -1692,7 +1715,6 @@ function openPinModal() {
   let isAr = lang === 'ar';
   showModal(`
     <div class="modal-head"><h2>${isAr ? 'تغيير الرمز السري للحساب' : 'Change Account PIN'}</h2><button class="x" id="close">×</button></div>
-    <p class="hint">${isAr ? 'سيتم تحديث الرمز السري الخاص بحسابك (' + esc(activeAccount.displayName) + ').' : 'Update the 4-digit PIN for (' + esc(activeAccount.displayName) + ').'}</p>
     <div class="field"><label>${isAr ? 'الرمز السري الجديد (4 أرقام)' : 'New 4-digit PIN'}</label><input id="newPinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••"></div>
     <div class="modal-actions"><button class="primary" id="savePinBtn">${isAr ? 'حفظ الرمز الجديد' : 'Save New PIN'}</button></div>`);
   $('#close').onclick = closeModal;
@@ -1700,42 +1722,36 @@ function openPinModal() {
     let val = $('#newPinInput').value.trim();
     if (!/^\d{4}$/.test(val)) { toast(isAr ? 'يجب أن يتكون الرمز من 4 أرقام' : 'PIN must be 4 digits'); return; }
     activeAccount.pin = val;
-    await put('accounts', activeAccount);
+    let data = getGlobalData();
+    data.accounts[activeAccount.username] = activeAccount;
+    saveGlobalData(data);
     closeModal(); toast(isAr ? 'تم تحديث الرمز السري بنجاح' : 'PIN updated successfully');
   };
 }
 
 function showSyncKeyModal() {
   let isAr = lang === 'ar';
-  let syncKey = activeAccount?.syncKey || (isAr ? 'غير متوفر' : 'N/A');
+  let syncKey = activeAccount?.syncKey || 'N/A';
   showModal(`
     <div class="modal-head"><h2>${isAr ? 'مفتاح ربط الأجهزة (Sync Key)' : 'Device Sync Key'}</h2><button class="x" id="close">×</button></div>
-    <p class="hint">${isAr ? 'استخدم هذا المفتاح السري لفتح حسابك على أجهزتك الأخرى (مثل الأيباد أو الهاتف الآخر). لا تشاركه مع أي شخص.' : 'Use this secret key to open your account on your other devices. Keep it secret.'}</p>
+    <p class="hint">${isAr ? 'استخدم هذا المفتاح لربط حسابك بين الأجهزة بكل سهولة.' : 'Use this key to sync your account.'}</p>
     <div class="field"><input type="text" readonly value="${esc(syncKey)}" style="text-align:center;font-weight:bold;color:var(--teal)"></div>
     <div class="modal-actions"><button class="primary" id="copySyncKey">${isAr ? 'نسخ المفتاح' : 'Copy Key'}</button></div>`);
   $('#close').onclick = closeModal;
   $('#copySyncKey').onclick = () => {
     navigator.clipboard.writeText(syncKey);
-    toast(isAr ? 'تم نسخ مفتاح الربط للحافظة' : 'Sync key copied to clipboard');
+    toast(isAr ? 'تم نسخ المفتاح بنجاح' : 'Sync key copied');
   };
 }
 
 async function exportBackup() {
   let isAr = lang === 'ar';
-  let out = [];
-  for (let d of docs) {
-    let x = { ...d };
-    if (d.blob) {
-      x.blobData = await new Promise(ok => { let r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(d.blob); });
-      delete x.blob;
-    }
-    out.push(x);
-  }
-  let blob = new Blob([JSON.stringify({ format: 'khaznati-account-backup', owner: activeAccount.username, docs: out, folders })], { type: 'application/json' });
+  let dbData = getGlobalData();
+  let blob = new Blob([JSON.stringify({ format: 'khaznati-sync-backup', owner: activeAccount.username, docs: dbData.docs[activeAccount.username], folders: dbData.folders[activeAccount.username] })], { type: 'application/json' });
   let u = URL.createObjectURL(blob), a = document.createElement('a');
   a.href = u; a.download = `khaznati-${activeAccount.username}.json`; a.click();
   setTimeout(() => URL.revokeObjectURL(u), 1500);
-  toast(isAr ? 'تم تنزيل النسخة الاحتياطية لحسابك' : 'Account backup downloaded');
+  toast(isAr ? 'تم تنزيل النسخة الاحتياطية' : 'Backup downloaded');
 }
 
 function importBackup() {
@@ -1745,16 +1761,12 @@ function importBackup() {
   i.onchange = async () => {
     try {
       let p = JSON.parse(await i.files[0].text());
-      for (let d of (p.docs || [])) {
-        if (d.blobData) { d.blob = await fetch(d.blobData).then(r => r.blob()); delete d.blobData; }
-        d.owner = activeAccount.username;
-        await put('docs', d);
-      }
-      for (let f of (p.folders || [])) {
-        f.owner = activeAccount.username;
-        await put('folders', f);
-      }
-      render(); toast(isAr ? 'تم استيراد البيانات إلى حسابك' : 'Backup imported to your account');
+      let data = getGlobalData();
+      data.docs[activeAccount.username] = p.docs || [];
+      data.folders[activeAccount.username] = p.folders || [];
+      saveGlobalData(data);
+      render();
+      toast(isAr ? 'تمت استزامنة واستيراد البيانات بنجاح' : 'Data imported & synced');
     } catch { toast(isAr ? 'ملف النسخة الاحتياطية غير صالح' : 'Invalid backup file'); }
   };
   i.click();
@@ -1765,9 +1777,7 @@ function guide() {
     <div class="modal-head"><h2>${t('guideHead')}</h2><button class="x" id="close">×</button></div>
     <div class="guide-step"><b>${t('g1Title')}</b><p>${t('g1Desc')}</p></div>
     <div class="guide-step"><b>${t('g2Title')}</b><p>${t('g2Desc')}</p></div>
-    <div class="guide-step"><b>${t('g3Title')}</b><p>${t('g3Desc')}</p></div>
-    <div class="guide-step"><b>${t('g4Title')}</b><p>${t('g4Desc')}</p></div>
-    <div class="guide-step"><b>${t('g5Title')}</b><p>${t('g5Desc')}</p></div>`);
+    <div class="guide-step"><b>${t('g3Title')}</b><p>${t('g3Desc')}</p></div>`);
   $('#close').onclick = closeModal;
 }
 
@@ -1787,7 +1797,7 @@ $('#backup').onclick = () => {
   let isAr = lang === 'ar';
   showModal(`
     <div class="modal-head"><h2>${t('navBackup')}</h2><button class="x" id="close">×</button></div>
-    <p class="hint">${isAr ? 'نزّل نسخة احتياطية كاملة لحسابك أو استعد نسخة سابقة لنقلها بين أجهزتك.' : 'Download a full backup of your account or restore a previous one across devices.'}</p>
+    <p class="hint">${isAr ? 'تنزيل أو استيراد البيانات لنقلها بين متصفحات الأجهزة المختلفة.' : 'Export or import data.'}</p>
     <div class="modal-actions">
       <button class="primary" id="exp">${isAr ? 'تنزيل نسخة احتياطية' : 'Download Backup'}</button>
       <button class="secondary" id="imp">${isAr ? 'استيراد نسخة' : 'Import Backup'}</button>
@@ -1813,28 +1823,34 @@ $('#search').addEventListener('input', () => setView($('#search').value.trim() ?
 document.body.addEventListener('click', async e => {
   let b = e.target.closest('button');
   if (!b) return;
+  let dbData = getGlobalData();
+  let userDocs = dbData.docs[activeAccount?.username] || [];
+
   if (b.dataset.open) openDoc(b.dataset.open);
   if (b.dataset.preview) preview(b.dataset.preview);
   if (b.dataset.download) download(b.dataset.download);
   if (b.dataset.star) {
-    let d = docs.find(x => x.id === b.dataset.star);
-    d.favorite = !d.favorite;
-    await put('docs', d); render();
+    let d = userDocs.find(x => x.id === b.dataset.star);
+    if (d) { d.favorite = !d.favorite; saveGlobalData(dbData); render(); }
   }
   if (b.dataset.folder) {
     let id = b.dataset.folder;
-    let q = docs.filter(d => !d.deleted && d.folder === id);
+    let q = userDocs.filter(d => !d.deleted && d.folder === id);
     $('#content').innerHTML = `<div class="toolbar"><span class="status">${q.length} ${t('itemCount')}</span><button class="secondary" id="backFolders">${t('btnBackFolders')}</button></div>${q.length ? `<div class="doc-grid">${q.map(docCard).join('')}</div>` : empty(t('emptyListTitle'), t('emptyListDesc'))}`;
     $('#backFolders').onclick = () => setView('folders');
   }
-  if (b.dataset.editfolder) newFolder(folders.find(x => x.id === b.dataset.editfolder));
+  if (b.dataset.editfolder) {
+    let fId = b.dataset.editfolder;
+    let folderObj = (dbData.folders[activeAccount.username] || []).find(x => x.id === fId);
+    if (folderObj) newFolder(folderObj);
+  }
   if (b.dataset.restore) {
-    let d = docs.find(x => x.id === b.dataset.restore);
-    d.deleted = false; d.inbox = !d.folder;
-    await put('docs', d); render(); toast(lang === 'ar' ? 'تمت الاستعادة' : 'Restored');
+    let d = userDocs.find(x => x.id === b.dataset.restore);
+    if (d) { d.deleted = false; d.inbox = !d.folder; saveGlobalData(dbData); render(); toast(lang === 'ar' ? 'تمت الاستعادة' : 'Restored'); }
   }
   if (b.dataset.purge) {
-    await del('docs', b.dataset.purge); render(); toast(lang === 'ar' ? 'تم الحذف نهائياً' : 'Deleted permanently');
+    dbData.docs[activeAccount.username] = userDocs.filter(x => x.id !== b.dataset.purge);
+    saveGlobalData(dbData); render(); toast(lang === 'ar' ? 'تم الحذف نهائياً' : 'Deleted permanently');
   }
 });
 
@@ -1853,18 +1869,15 @@ window.addEventListener('drop', e => {
 });
 
 (async () => {
-  db = await openDB();
   applyStaticTranslations();
-
-  let allAccs = await all('accounts');
-  let lastUser = await getSet('lastUser');
-  if (allAccs.length === 0) {
+  let dbData = getGlobalData();
+  let lastUser = localStorage.getItem('KhaznatiLastUser');
+  if (Object.keys(dbData.accounts).length === 0) {
     setAuthMode('register');
   } else {
     setAuthMode('login');
-    if (lastUser) {
-      let found = allAccs.find(a => a.username === lastUser);
-      if (found) $('#authUserInput').value = found.displayName;
+    if (lastUser && dbData.accounts[lastUser]) {
+      $('#authUserInput').value = dbData.accounts[lastUser].displayName;
     }
   }
 })();

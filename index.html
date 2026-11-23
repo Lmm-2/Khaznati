@@ -8,6 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<!-- مكتبات توليد وقراءة رمز QR Code -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <style>
 :root {
   --bg: #f5f8f7;
@@ -151,7 +154,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
   border: 1px solid var(--line);
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  width: 290px;
+  width: 260px;
   padding: 14px;
   display: none;
   z-index: 100;
@@ -167,6 +170,54 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
 }
 .dropdown-item:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
 .dropdown-item b { display: block; color: var(--ink); font-size: 12px; margin-top: 2px; }
+
+/* QR Code Container Styling */
+.qr-box {
+  background: #ffffff;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+}
+.qr-box img, .qr-box canvas {
+  display: block;
+  border-radius: 8px;
+}
+.qr-scanner-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  height: 210px;
+  margin: 10px auto;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0f172a;
+  border: 2px solid var(--teal);
+  display: none;
+}
+.qr-scanner-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.qr-scan-line {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: scanAnim 2s infinite alternate ease-in-out;
+}
+@keyframes scanAnim {
+  0% { top: 15%; }
+  100% { top: 85%; }
+}
 
 /* Main Grid Layout */
 .layout {
@@ -532,7 +583,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
 .lock-screen.show { display: flex; }
 .lock-box {
   width: 100%;
-  max-width: 385px;
+  max-width: 395px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 26px;
@@ -647,7 +698,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
   </div>
 </div>
 
-<!-- Account Login / Register / Lock Screen -->
+<!-- Account Login / Register / QR Sync Screen -->
 <div class="lock-screen show" id="lockScreen">
   <div class="lock-box">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
@@ -657,41 +708,58 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
     </div>
 
     <h2 style="margin:6px 0 4px;font-size:20px" data-t="authWelcome">بوابة خَزنتي الآمنة</h2>
-    <p class="hint" style="margin:0" data-t="authSub">سجّل باسمك والرمز السري أو اربط جهازك الآخر</p>
+    <p class="hint" style="margin:0" data-t="authSub">سجّل باسمك والرمز السري أو امسح QR لربط جهازك</p>
 
     <div class="auth-tabs" id="authTabs">
       <button class="auth-tab active" data-authmode="login" data-t="tabLogin">تسجيل الدخول</button>
       <button class="auth-tab" data-authmode="register" data-t="tabRegister">حساب جديد</button>
-      <button class="auth-tab" data-authmode="sync" data-t="tabSync">ربط جهاز ⇄</button>
+      <button class="auth-tab" data-authmode="sync" data-t="tabSync">ربط بـ QR ▣</button>
     </div>
 
-    <div id="syncInfoBox" style="display:none;background:var(--teal-pale);border:1px solid color-mix(in srgb, var(--teal) 30%, transparent);color:var(--teal);padding:10px 12px;border-radius:12px;font-size:11px;line-height:1.6;margin-bottom:10px;text-align:start">
-      🔗 <b data-t="syncInfoHead">مزامنة الموقع الفورية:</b><br>
-      <span data-t="syncInfoBody">عند استخدام نفس اسم الحساب والرمز في الجهاز الثاني، ستظهر كافة بياناتك وملفاتك ومجلداتك مباشرة عبر التخزين المشترك للموقع.</span>
+    <!-- قسم ربط الجهاز عبر QR Code -->
+    <div id="qrSyncContainer" style="display:none;margin:12px 0">
+      <div style="background:var(--teal-pale);border:1px solid color-mix(in srgb, var(--teal) 30%, transparent);color:var(--teal);padding:10px 12px;border-radius:12px;font-size:11px;line-height:1.6;margin-bottom:10px;text-align:start">
+        ▣ <b data-t="syncInfoHead">الربط السريع عبر QR Code:</b><br>
+        <span data-t="syncInfoBody">افتح حسابك في جهازك الأساسي واختر "عرض QR ربط الأجهزة"، ثم امسحه بالكاميرا هنا أو ارفع صورته للدخول فوراً.</span>
+      </div>
+
+      <div class="qr-scanner-wrap" id="qrScannerWrap">
+        <video id="qrVideo" playsinline></video>
+        <div class="qr-scan-line"></div>
+      </div>
+
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px">
+        <button class="primary" id="startQrCamBtn" type="button">📷 <span data-t="btnScanCam">مسح بالكاميرا</span></button>
+        <button class="secondary" id="stopQrCamBtn" type="button" style="display:none;color:var(--danger)">⏹ <span data-t="btnStopCam">إيقاف الكاميرا</span></button>
+        <label class="secondary" style="cursor:pointer;display:inline-flex;align-items:center;gap:5px">
+          🖼 <span data-t="btnUploadQr">رفع صورة QR</span>
+          <input type="file" id="qrImageInput" accept="image/*" style="display:none">
+        </label>
+      </div>
+      <canvas id="qrCanvas" style="display:none"></canvas>
     </div>
 
-    <div class="field" style="text-align:start;margin:10px 0" id="nameFieldContainer">
-      <label data-t="lblUserName">اسم الحساب أو اللقب</label>
-      <input id="authUserInput" placeholder="اكتب اسم الحساب هنا">
+    <!-- حقول الدخول العادي / التسجيل -->
+    <div id="standardAuthContainer">
+      <div class="field" style="text-align:start;margin:10px 0" id="nameFieldContainer">
+        <label data-t="lblUserName">اسم الحساب أو اللقب</label>
+        <input id="authUserInput" placeholder="اكتب اسم الحساب هنا">
+      </div>
+
+      <div class="pin-dots" id="pinDots">
+        <span class="pin-dot"></span><span class="pin-dot"></span><span class="pin-dot"></span><span class="pin-dot"></span>
+      </div>
+      <p id="pinError" style="color:var(--danger);font-size:12px;font-weight:700;display:none;margin:0 0 6px"></p>
+
+      <div class="keypad" id="keypad">
+        <button class="key-btn" data-k="1">1</button><button class="key-btn" data-k="2">2</button><button class="key-btn" data-k="3">3</button>
+        <button class="key-btn" data-k="4">4</button><button class="key-btn" data-k="5">5</button><button class="key-btn" data-k="6">6</button>
+        <button class="key-btn" data-k="7">7</button><button class="key-btn" data-k="8">8</button><button class="key-btn" data-k="9">9</button>
+        <button class="key-btn clear" id="pinClear">C</button><button class="key-btn" data-k="0">0</button><button class="key-btn" id="pinBack">⌫</button>
+      </div>
     </div>
 
-    <div class="field" style="text-align:start;margin:10px 0;display:none" id="syncFieldContainer">
-      <label data-t="lblSyncKey">مفتاح الربط السري لجهازك الآخر</label>
-      <input id="authSyncKeyInput" placeholder="KHAZ-XXXX-XXXX">
-    </div>
-
-    <div class="pin-dots" id="pinDots">
-      <span class="pin-dot"></span><span class="pin-dot"></span><span class="pin-dot"></span><span class="pin-dot"></span>
-    </div>
-    <p id="pinError" style="color:var(--danger);font-size:12px;font-weight:700;display:none;margin:0 0 6px"></p>
-
-    <div class="keypad" id="keypad">
-      <button class="key-btn" data-k="1">1</button><button class="key-btn" data-k="2">2</button><button class="key-btn" data-k="3">3</button>
-      <button class="key-btn" data-k="4">4</button><button class="key-btn" data-k="5">5</button><button class="key-btn" data-k="6">6</button>
-      <button class="key-btn" data-k="7">7</button><button class="key-btn" data-k="8">8</button><button class="key-btn" data-k="9">9</button>
-      <button class="key-btn clear" id="pinClear">C</button><button class="key-btn" data-k="0">0</button><button class="key-btn" id="pinBack">⌫</button>
-    </div>
-    <p class="hint" style="margin-top:12px;font-size:10px" data-t="multiDeviceHint">بياناتك محمية بالكامل برمزك السري.</p>
+    <p class="hint" style="margin-top:12px;font-size:10px" data-t="multiDeviceHint">بياناتك محمية بالكامل برمزك السري ورمز QR المشفر.</p>
   </div>
 </div>
 
@@ -715,11 +783,14 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
       <div class="dropdown-container">
         <button class="iconbtn" id="userMenuToggleBtn" title="معلومات المستخدم">🪪 ▼</button>
         <div class="dropdown-menu" id="userDropdownMenu">
-          <div class="dropdown-item">اسم المستخدم / البايوورد: <b id="dropName">-</b></div>
+          <div class="dropdown-item">اسم المستخدم: <b id="dropName">-</b></div>
           <div class="dropdown-item">الرمز السري (PIN): <b id="dropPin">••••</b></div>
-          <div class="dropdown-item">نوع المخدم: <b id="dropServer">متصفح الموقع المباشر</b></div>
           <div class="dropdown-item">تاريخ الدخول: <b id="dropLoginDate">-</b></div>
-          <div class="dropdown-item">مفتاح الربط (Sync Key): <b id="dropSyncKey" style="color:var(--teal);word-break:break-all">-</b></div>
+          <div class="dropdown-item" style="text-align:center;padding-top:8px">
+            <span style="display:block;margin-bottom:6px">رمز QR لربط أجهزتك:</span>
+            <div id="miniHeaderQr" style="display:inline-block;padding:6px;background:#fff;border:1px solid var(--line);border-radius:10px"></div>
+            <button class="smallbtn em" id="openFullQrBtn" style="width:100%;margin-top:6px">تكبير / تنزيل QR Code</button>
+          </div>
         </div>
       </div>
 
@@ -745,14 +816,14 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
 
       <div class="side-label" data-t="lblSecurity">الأمان والإرشادات</div>
       <button class="nav" id="guide"><span class="ico">ⓘ</span><span data-t="navGuide">الإرشادات وطريقة الاستخدام</span></button>
-      <button class="nav" id="syncMenuBtn"><span class="ico">⇄</span><span data-t="navSyncKey">إظهار مفتاح ربط الأجهزة</span></button>
+      <button class="nav" id="syncMenuBtn"><span class="ico">▣</span><span data-t="navSyncKey">عرض QR ربط الأجهزة</span></button>
       <button class="nav" id="pinMenuBtn"><span class="ico">⚿</span><span data-t="navPin">تغيير الرمز السري (PIN)</span></button>
       <button class="nav" id="backup"><span class="ico">⇧</span><span data-t="navBackup">نسخة احتياطية</span></button>
       <button class="nav" id="switchAccBtn"><span class="ico">⇄</span><span data-t="navSwitch">تبديل الحساب / قفل</span></button>
 
       <div class="side-note">
-        <b data-t="sideNoteTitle">موقع آمن ومزامن</b>
-        <span data-t="sideNoteDesc">بيانات الحساب وملفاته مربوطة ومحمية بالكامل عبر خزن المتصفح المشتركة.</span>
+        <b data-t="sideNoteTitle">ربط سريع وآمن بـ QR</b>
+        <span data-t="sideNoteDesc">استخدم رمز QR الخاص بحسابك لفتح خزنتك على أي جهاز آخر بسهولة دون كتابة رموز معقدة.</span>
       </div>
     </aside>
 
@@ -781,7 +852,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
   <button data-view="files"><span>▤</span><span data-t="mobFiles">ملفاتي</span></button>
   <button data-view="folders"><span>▱</span><span data-t="mobFolders">مجلداتي</span></button>
   <button data-view="favorites"><span>☆</span><span data-t="navFav">المفضلة</span></button>
-  <button id="mobGuideBtn"><span>ⓘ</span><span data-t="mobGuide">الإرشادات</span></button>
+  <button id="mobQrBtn"><span>▣</span><span>QR</span></button>
 </nav>
 
 <div class="backdrop" id="modalBg"><section class="modal" id="modal"></section></div>
@@ -791,6 +862,7 @@ html[dir="ltr"] .search span { left: 12px; right: auto; }
 const $ = s => document.querySelector(s);
 let docs = [], folders = [], view = 'home', lang = 'ar', toastTimer;
 let pinEntry = '', authMode = 'login', activeAccount = null, activeTagFilter = null, loginTime = null;
+let qrCamStream = null, qrScanLoopId = null;
 
 const I18N = {
   ar: {
@@ -808,12 +880,12 @@ const I18N = {
     navTrash: 'المحذوفات',
     lblSecurity: 'الأمان والإرشادات',
     navGuide: 'الإرشادات وطريقة الاستخدام',
-    navSyncKey: 'إظهار مفتاح ربط الأجهزة',
+    navSyncKey: 'عرض QR ربط الأجهزة',
     navPin: 'تغيير الرمز السري (PIN)',
     navBackup: 'نسخة احتياطية',
     navSwitch: 'تبديل الحساب / قفل',
-    sideNoteTitle: 'موقع آمن ومزامن',
-    sideNoteDesc: 'بيانات الحساب وملفاته مربوطة ومحمية بالكامل عبر خزن المتصفح المشتركة.',
+    sideNoteTitle: 'ربط سريع وآمن بـ QR',
+    sideNoteDesc: 'استخدم رمز QR الخاص بحسابك لفتح خزنتك على أي جهاز آخر بسهولة دون كتابة رموز معقدة.',
     btnQuickNote: '✎ ملاحظة سريعة',
     btnAddFile: '＋ إضافة ملف',
     mobFiles: 'ملفاتي',
@@ -822,16 +894,18 @@ const I18N = {
     dropTitle: 'أفلت الملف هنا لحفظه في خَزنتي',
     dropDesc: 'سيتم فتح نافذة الإضافة وتجهيز الملف تلقائياً',
     authWelcome: 'بوابة خَزنتي الآمنة',
-    authSub: 'سجّل باسمك والرمز السري لمزامنة ملفات الموقع',
+    authSub: 'سجّل باسمك والرمز السري أو امسح QR لربط جهازك',
     tabLogin: 'تسجيل الدخول',
     tabRegister: 'حساب جديد',
-    tabSync: 'ربط الجهاز ⇄',
-    syncInfoHead: 'مزامنة الموقع الفورية:',
-    syncInfoBody: 'عند استخدام نفس اسم الحساب والرمز في الجهاز الثاني، ستظهر كافة بياناتك وملفاتك ومجلداتك مباشرة عبر التخزين المشترك للموقع.',
+    tabSync: 'ربط بـ QR ▣',
+    syncInfoHead: 'الربط السريع عبر QR Code:',
+    syncInfoBody: 'افتح حسابك في جهازك الأساسي واختر "عرض QR ربط الأجهزة"، ثم امسحه بالكاميرا هنا أو ارفع صورته للدخول فوراً.',
+    btnScanCam: 'مسح بالكاميرا',
+    btnStopCam: 'إيقاف الكاميرا',
+    btnUploadQr: 'رفع صورة QR',
     lblUserName: 'اسم الحساب أو اللقب',
     userPh: 'اكتب اسم الحساب هنا',
-    lblSyncKey: 'مفتاح الربط السري',
-    multiDeviceHint: 'بياناتك وموقعك مرتبطان بأمان.',
+    multiDeviceHint: 'بياناتك محمية بالكامل برمزك السري ورمز QR المشفر.',
     errWrongPin: 'الرمز السري أو اسم الحساب غير صحيح',
     errAccountExists: 'هذا الاسم مستخدم مسبقاً.',
     eyebrowHome: 'مساحتك الخاصة',
@@ -891,8 +965,8 @@ const I18N = {
     btnConfirm: 'تأكيد وفتح',
     lockOptionLabel: 'قفل هذا الملف برمز سري',
     guideHead: 'الإرشادات وطريقة استخدام الموقع',
-    g1Title: '١. مزامنة الموقع',
-    g1Desc: 'باستخدام نفس اسم الحساب والرمز السري في أي جهاز، تظهر بياناتك وملفاتك تلقائياً.',
+    g1Title: '١. ربط الأجهزة عبر QR Code',
+    g1Desc: 'افتح قائمة QR ربط الأجهزة، وامسح الرمز من أي جهاز آخر للوصول لحسابك فوراً.',
     g2Title: '٢. حماية الملفات',
     g2Desc: 'اقفل أي ملف برمز سري إضافي للحفاظ على الخصوصية.',
     g3Title: '٣. المجلدات والتنظيم',
@@ -913,12 +987,12 @@ const I18N = {
     navTrash: 'Trash',
     lblSecurity: 'Security & Guide',
     navGuide: 'User Guide',
-    navSyncKey: 'Show Sync Key',
+    navSyncKey: 'Show Device Sync QR',
     navPin: 'Change PIN',
     navBackup: 'Backup & Restore',
     navSwitch: 'Switch Account / Lock',
-    sideNoteTitle: 'Secure & Synced',
-    sideNoteDesc: 'Your account data and files are safely synced across your sessions.',
+    sideNoteTitle: 'Fast & Safe QR Sync',
+    sideNoteDesc: 'Use your account QR code to open your vault on any other device easily.',
     btnQuickNote: '✎ Quick note',
     btnAddFile: '＋ Add file',
     mobFiles: 'Files',
@@ -927,16 +1001,18 @@ const I18N = {
     dropTitle: 'Drop file here to save in Khaznati',
     dropDesc: 'The add dialog will open with your file ready',
     authWelcome: 'Khaznati Secure Portal',
-    authSub: 'Sign in with your name & PIN to sync files',
+    authSub: 'Sign in with your name & PIN or scan QR to link device',
     tabLogin: 'Sign In',
     tabRegister: 'New Account',
-    tabSync: 'Sync Device ⇄',
-    syncInfoHead: 'Instant Site Sync:',
-    syncInfoBody: 'Using the same account name and PIN on your second device automatically loads all your files and folders.',
+    tabSync: 'QR Link ▣',
+    syncInfoHead: 'Instant QR Code Pairing:',
+    syncInfoBody: 'Open your account on your main device, click "Show Device Sync QR", and scan or upload it here.',
+    btnScanCam: 'Scan with Camera',
+    btnStopCam: 'Stop Camera',
+    btnUploadQr: 'Upload QR Image',
     lblUserName: 'Account Name',
     userPh: 'Type account name',
-    lblSyncKey: 'Sync Key',
-    multiDeviceHint: 'Your data is securely connected.',
+    multiDeviceHint: 'Your data is protected by your PIN & encrypted QR.',
     errWrongPin: 'Incorrect PIN or Account Name',
     errAccountExists: 'Account name already exists.',
     eyebrowHome: 'Your private space',
@@ -996,8 +1072,8 @@ const I18N = {
     btnConfirm: 'Confirm & Unlock',
     lockOptionLabel: 'Lock this file with PIN',
     guideHead: 'Instructions & User Guide',
-    g1Title: '1. Site Sync',
-    g1Desc: 'Using the same account name and PIN syncs your data.',
+    g1Title: '1. QR Code Device Sync',
+    g1Desc: 'Open Show Device Sync QR and scan it from any device to log in instantly.',
     g2Title: '2. File Protection',
     g2Desc: 'Lock files with a PIN.',
     g3Title: '3. Folders',
@@ -1017,7 +1093,6 @@ function applyStaticTranslations() {
     if (I18N[lang][k]) el.placeholder = I18N[lang][k];
   });
   $('#authUserInput').placeholder = t('userPh');
-  $('#authSyncKeyInput').placeholder = t('lblSyncKey');
   $('#lang').textContent = lang === 'ar' ? 'EN' : 'عربي';
   $('#lockLangBtn').textContent = lang === 'ar' ? 'EN' : 'عربي';
 }
@@ -1031,7 +1106,6 @@ function toast(msg) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-// تخزين موحد ومزامن في المتصفح (LocalStorage المشترك) لضمان ظهور الملفات بالحساب عبر الموقع
 function getGlobalData() {
   try {
     let data = localStorage.getItem('KhaznatiGlobalSyncDB');
@@ -1049,7 +1123,6 @@ function saveGlobalData(data) {
   }
 }
 
-// تحويل الملفات إلى Base64 لتتم مزامنتها بشكل كامل وسليم عبر تخزين الموقع المشترك
 async function fileToBase64(file) {
   return new Promise((ok, no) => {
     let r = new FileReader();
@@ -1070,25 +1143,163 @@ const fmt = n => !n ? t('textNoteType') : n < 1024 ? n + ' B' : n < 1048576 ? (n
 const dateStr = n => new Date(n).toLocaleDateString(lang === 'ar' ? 'ar' : 'en', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+/* توليد حمولة QR Code المشفرة للحساب */
+function buildAccountQrPayload(acc) {
+  return JSON.stringify({
+    app: 'KHAZNATI_SYNC',
+    u: acc.username,
+    d: acc.displayName,
+    p: acc.pin,
+    k: acc.syncKey
+  });
+}
+
+/* معالجة بيانات QR المقروءة سواء من الكاميرا أو من صورة */
+async function processScannedQrData(rawText) {
+  try {
+    let parsed = JSON.parse(rawText);
+    if (parsed.app !== 'KHAZNATI_SYNC' || !parsed.u || !parsed.p) {
+      toast(lang === 'ar' ? 'رمز QR غير تابع لتطبيق خَزنتي!' : 'Invalid Khaznati QR Code!');
+      return false;
+    }
+
+    stopQrCamera();
+    let dbData = getGlobalData();
+    let keyName = parsed.u.toLowerCase();
+    let acc = dbData.accounts[keyName];
+
+    if (!acc) {
+      acc = {
+        username: keyName,
+        displayName: parsed.d || parsed.u,
+        pin: parsed.p,
+        syncKey: parsed.k || ('KHAZ-' + Math.random().toString(36).substring(2, 8).toUpperCase()),
+        created: Date.now()
+      };
+      dbData.accounts[keyName] = acc;
+      saveGlobalData(dbData);
+    }
+
+    activeAccount = acc;
+    loginTime = Date.now();
+    updateHeaderDropdown();
+    localStorage.setItem('KhaznatiLastUser', keyName);
+
+    $('#lockScreen').classList.remove('show');
+    $('#activeUserLabel').textContent = activeAccount.displayName;
+    pinEntry = '';
+    await render();
+    toast(lang === 'ar' ? `تم ربط الحساب (${activeAccount.displayName}) بنجاح عبر QR!` : `Synced (${activeAccount.displayName}) via QR!`);
+    return true;
+  } catch {
+    toast(lang === 'ar' ? 'تعذّر قراءة بيانات الرمز، تأكد من وضوح الـ QR' : 'Could not read QR data');
+    return false;
+  }
+}
+
+/* تشغيل وإيقاف كاميرا مسح الـ QR */
+async function startQrCamera() {
+  let video = $('#qrVideo');
+  let wrap = $('#qrScannerWrap');
+  let canvas = $('#qrCanvas');
+  let ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+  try {
+    qrCamStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    video.srcObject = qrCamStream;
+    await video.play();
+    wrap.style.display = 'block';
+    $('#startQrCamBtn').style.display = 'none';
+    $('#stopQrCamBtn').style.display = 'inline-flex';
+
+    const scanTick = async () => {
+      if (!qrCamStream) return;
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        if (window.jsQR) {
+          let code = jsQR(imgData.data, imgData.width, imgData.height, { inversionAttempts: 'dontInvert' });
+          if (code && code.data) {
+            let ok = await processScannedQrData(code.data);
+            if (ok) return;
+          }
+        }
+      }
+      qrScanLoopId = requestAnimationFrame(scanTick);
+    };
+    qrScanLoopId = requestAnimationFrame(scanTick);
+  } catch (err) {
+    toast(lang === 'ar' ? 'تعذّر الوصول للكاميرا. يمكنك رفع صورة QR بدلاً من ذلك.' : 'Camera access denied. Try uploading QR image.');
+  }
+}
+
+function stopQrCamera() {
+  if (qrScanLoopId) cancelAnimationFrame(qrScanLoopId);
+  qrScanLoopId = null;
+  if (qrCamStream) {
+    qrCamStream.getTracks().forEach(tr => tr.stop());
+    qrCamStream = null;
+  }
+  $('#qrScannerWrap').style.display = 'none';
+  $('#startQrCamBtn').style.display = 'inline-flex';
+  $('#stopQrCamBtn').style.display = 'none';
+}
+
+$('#startQrCamBtn').onclick = startQrCamera;
+$('#stopQrCamBtn').onclick = stopQrCamera;
+
+/* قراءة QR من صورة مرفوعة */
+$('#qrImageInput').onchange = function(e) {
+  let file = e.target.files[0];
+  if (!file) return;
+  let reader = new FileReader();
+  reader.onload = function(ev) {
+    let img = new Image();
+    img.onload = async function() {
+      let canvas = $('#qrCanvas');
+      let ctx = canvas.getContext('2d');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      if (window.jsQR) {
+        let code = jsQR(imgData.data, imgData.width, imgData.height);
+        if (code && code.data) {
+          await processScannedQrData(code.data);
+        } else {
+          toast(lang === 'ar' ? 'لم يتم العثور على رمز QR واضح في هذه الصورة' : 'No clear QR code found in image');
+        }
+      }
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+};
+
 function setAuthMode(mode) {
   authMode = mode;
   document.querySelectorAll('.auth-tab').forEach(b => b.classList.toggle('active', b.dataset.authmode === mode));
   pinEntry = '';
   updateDots();
   $('#pinError').style.display = 'none';
+  stopQrCamera();
 
-  if (mode === 'sync' || mode === 'login') {
-    $('#syncFieldContainer').style.display = 'none';
-    $('#syncInfoBox').style.display = 'block';
+  if (mode === 'sync') {
+    $('#qrSyncContainer').style.display = 'block';
+    $('#standardAuthContainer').style.display = 'none';
   } else {
-    $('#syncFieldContainer').style.display = 'none';
-    $('#syncInfoBox').style.display = 'none';
+    $('#qrSyncContainer').style.display = 'none';
+    $('#standardAuthContainer').style.display = 'block';
   }
 }
 
 document.querySelectorAll('.auth-tab').forEach(b => b.onclick = () => setAuthMode(b.dataset.authmode));
 
 function lockVault() {
+  stopQrCamera();
   pinEntry = '';
   updateDots();
   $('#pinError').style.display = 'none';
@@ -1146,10 +1357,9 @@ async function handleAuthSubmit() {
     updateHeaderDropdown();
     localStorage.setItem('KhaznatiLastUser', keyName);
 
-    // إضافة ملف ترحيبي ومفتاح الربط
     let welcomeText = lang === 'ar' 
-      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nمفتاح ربط أجهزتك السري هو:\n${newSyncKey}\n\nهذا المفتاح يضمن مزامنة موقعك بكل أمان.`
-      : `Welcome ${rawName} to Khaznati!\n\nYour secret sync key is:\n${newSyncKey}`;
+      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nيمكنك ربط أجهزتك الأخرى بسهولة عبر مسح رمز الـ QR من القائمة الجانبية.`
+      : `Welcome ${rawName} to Khaznati!\n\nLink your other devices easily by scanning your account QR Code.`;
     
     let welcomeBlob = new Blob([welcomeText], { type: 'text/plain;charset=utf-8' });
     let b64 = await fileToBase64(welcomeBlob);
@@ -1157,11 +1367,11 @@ async function handleAuthSubmit() {
     if (!dbData.docs[keyName]) dbData.docs[keyName] = [];
     dbData.docs[keyName].push({
       id: uid(),
-      name: lang === 'ar' ? 'مفتاح_الربط_المهم.txt' : 'Sync_Key.txt',
+      name: lang === 'ar' ? 'دليل_الربط_السريع.txt' : 'Quick_Sync_Guide.txt',
       size: welcomeBlob.size, type: welcomeBlob.type, blobData: b64,
-      note: lang === 'ar' ? 'مفتاح مزامنة حسابك على الموقع.' : 'Your site sync key.',
+      note: lang === 'ar' ? 'افتح QR ربط الأجهزة لربط هاتفك أو حاسوبك الآخر.' : 'Open Device Sync QR to link another device.',
       tags: [lang === 'ar' ? 'أمان' : 'Security'],
-      locked: true, added: Date.now(), updated: Date.now(),
+      locked: false, added: Date.now(), updated: Date.now(),
       folder: null, inbox: true, favorite: true, deleted: false
     });
     saveGlobalData(dbData);
@@ -1172,10 +1382,8 @@ async function handleAuthSubmit() {
     await render();
     toast(lang === 'ar' ? `تم إنشاء حساب ${rawName} بنجاح` : `Account ${rawName} created`);
   } else {
-    // وضع الدخول أو الربط المباشر عبر الموقع
     let acc = dbData.accounts[keyName];
     if (!acc) {
-      // إذا لم يكن موجوداً، نقوم بإنشائه تلقائياً لتسهيل تجربة الموقع الفورية
       let newSyncKey = 'KHAZ-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Math.random().toString(36).substring(2, 8).toUpperCase();
       acc = { username: keyName, displayName: rawName, pin: pinEntry, syncKey: newSyncKey, created: Date.now() };
       dbData.accounts[keyName] = acc;
@@ -1196,21 +1404,38 @@ async function handleAuthSubmit() {
     $('#activeUserLabel').textContent = activeAccount.displayName;
     pinEntry = '';
     await render();
-    toast(lang === 'ar' ? 'تم تسجيل الدخول والمزامنة بنجاح' : 'Logged in & synced successfully');
+    toast(lang === 'ar' ? 'تم تسجيل الدخول بنجاح' : 'Logged in successfully');
   }
 }
 
 function updateHeaderDropdown() {
   if (!activeAccount) return;
-  $('#dropName').textContent = `${activeAccount.displayName} (${activeAccount.username})`;
+  $('#dropName').textContent = `${activeAccount.displayName}`;
   $('#dropPin').textContent = `•••• (${activeAccount.pin})`;
-  $('#dropServer').textContent = 'موقع خَزنتي المباشر (مزامنة سحابية محلية)';
   $('#dropLoginDate').textContent = dateStr(loginTime || Date.now());
-  $('#dropSyncKey').textContent = activeAccount.syncKey;
+
+  let miniBox = $('#miniHeaderQr');
+  miniBox.innerHTML = '';
+  if (window.QRCode) {
+    new QRCode(miniBox, {
+      text: buildAccountQrPayload(activeAccount),
+      width: 110,
+      height: 110,
+      colorDark: '#0f766e',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
 }
+
+$('#openFullQrBtn').onclick = () => {
+  $('#userDropdownMenu').classList.remove('show');
+  showSyncQrModal();
+};
 
 $('#userMenuToggleBtn').onclick = e => {
   e.stopPropagation();
+  updateHeaderDropdown();
   $('#userDropdownMenu').classList.toggle('show');
 };
 window.onclick = () => {
@@ -1608,7 +1833,7 @@ function addQuickNote() {
       favorite: false, deleted: false, inbox: !folder
     });
     saveGlobalData(data);
-    closeModal(); render(); toast(isAr ? 'تم حفظ الملاحظة ومزامنته' : 'Note saved & synced');
+    closeModal(); render(); toast(isAr ? 'تم حفظ الملاحظة ومزامنتها' : 'Note saved & synced');
   };
 }
 
@@ -1725,22 +1950,48 @@ function openPinModal() {
     let data = getGlobalData();
     data.accounts[activeAccount.username] = activeAccount;
     saveGlobalData(data);
-    closeModal(); toast(isAr ? 'تم تحديث الرمز السري بنجاح' : 'PIN updated successfully');
+    updateHeaderDropdown();
+    closeModal(); toast(isAr ? 'تم تحديث الرمز السري وتحديث QR Code' : 'PIN & QR Code updated');
   };
 }
 
-function showSyncKeyModal() {
+/* نافذة عرض وتنزيل QR Code لربط الأجهزة */
+function showSyncQrModal() {
   let isAr = lang === 'ar';
-  let syncKey = activeAccount?.syncKey || 'N/A';
   showModal(`
-    <div class="modal-head"><h2>${isAr ? 'مفتاح ربط الأجهزة (Sync Key)' : 'Device Sync Key'}</h2><button class="x" id="close">×</button></div>
-    <p class="hint">${isAr ? 'استخدم هذا المفتاح لربط حسابك بين الأجهزة بكل سهولة.' : 'Use this key to sync your account.'}</p>
-    <div class="field"><input type="text" readonly value="${esc(syncKey)}" style="text-align:center;font-weight:bold;color:var(--teal)"></div>
-    <div class="modal-actions"><button class="primary" id="copySyncKey">${isAr ? 'نسخ المفتاح' : 'Copy Key'}</button></div>`);
+    <div class="modal-head"><h2>▣ ${isAr ? 'رمز QR لربط أجهزتك' : 'Device Sync QR Code'}</h2><button class="x" id="close">×</button></div>
+    <div style="text-align:center">
+      <p class="hint">${isAr ? 'امسح هذا الرمز بالكاميرا من جهازك الآخر (أو احفظه كصورة) لفتح حسابك ومزامنة ملفاتك فوراً بدون كتابة كلمة مرور:' : 'Scan this QR code from your other device (or save it as an image) to log in & sync immediately:'}</p>
+      <div class="qr-box" id="fullModalQrContainer"></div>
+      <div style="font-size:12px;font-weight:700;color:var(--teal);margin-top:6px">${esc(activeAccount?.displayName || '')}</div>
+      <div class="modal-actions" style="justify-content:center">
+        <button class="primary" id="downloadQrImgBtn">⬇ ${isAr ? 'حفظ QR كصورة' : 'Download QR Image'}</button>
+      </div>
+    </div>`);
   $('#close').onclick = closeModal;
-  $('#copySyncKey').onclick = () => {
-    navigator.clipboard.writeText(syncKey);
-    toast(isAr ? 'تم نسخ المفتاح بنجاح' : 'Sync key copied');
+
+  let container = $('#fullModalQrContainer');
+  if (window.QRCode && activeAccount) {
+    new QRCode(container, {
+      text: buildAccountQrPayload(activeAccount),
+      width: 210,
+      height: 210,
+      colorDark: '#0f766e',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }
+
+  $('#downloadQrImgBtn').onclick = () => {
+    let canvas = container.querySelector('canvas');
+    let img = container.querySelector('img');
+    let dataUrl = canvas ? canvas.toDataURL('image/png') : (img ? img.src : null);
+    if (!dataUrl) return;
+    let a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = `Khaznati-QR-${activeAccount.username}.png`;
+    a.click();
+    toast(isAr ? 'تم حفظ صورة QR Code بنجاح' : 'QR Code image saved');
   };
 }
 
@@ -1786,12 +2037,12 @@ $('#mainAdd').onclick = () => addFile();
 $('#quickNoteBtn').onclick = addQuickNote;
 $('#mainQuickNote').onclick = addQuickNote;
 $('#pinMenuBtn').onclick = openPinModal;
-$('#syncMenuBtn').onclick = showSyncKeyModal;
+$('#syncMenuBtn').onclick = showSyncQrModal;
+$('#mobQrBtn').onclick = showSyncQrModal;
 $('#lockNowBtn').onclick = lockVault;
 $('#switchAccBtn').onclick = lockVault;
 $('#guide').onclick = guide;
 $('#guideTopBtn').onclick = guide;
-$('#mobGuideBtn').onclick = guide;
 
 $('#backup').onclick = () => {
   let isAr = lang === 'ar';

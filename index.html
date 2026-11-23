@@ -863,12 +863,65 @@ const $ = s => document.querySelector(s);
 let docs = [], folders = [], view = 'home', lang = 'ar', toastTimer;
 let pinEntry = '', authMode = 'login', activeAccount = null, activeTagFilter = null, loginTime = null;
 let qrCamStream = null, qrScanLoopId = null;
+let dbPromise = null;
+
+// تهيئة قاعدة بيانات IndexedDB لحفظ الملفات بأمان وبدون قيود الحجم
+function initIndexedDB() {
+  return new Promise((resolve, reject) => {
+    if (dbPromise) return resolve(dbPromise);
+    let request = indexedDB.open('KhaznatiFilesDB', 1);
+    request.onupgradeneeded = e => {
+      let db = e.target.result;
+      if (!db.objectStoreNames.contains('blobs')) {
+        db.createObjectStore('blobs');
+      }
+    };
+    request.onsuccess = e => {
+      dbPromise = e.target.result;
+      resolve(dbPromise);
+    };
+    request.onerror = e => reject(e.target.error);
+  });
+}
+
+async function saveFileBlob(id, fileData) {
+  let db = await initIndexedDB();
+  return new Promise((resolve, reject) => {
+    let tx = db.transaction('blobs', 'readwrite');
+    let store = tx.objectStore('blobs');
+    store.put(fileData, id);
+    tx.oncomplete = () => resolve(true);
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function getFileBlob(id) {
+  let db = await initIndexedDB();
+  return new Promise((resolve, reject) => {
+    let tx = db.transaction('blobs', 'readonly');
+    let store = tx.objectStore('blobs');
+    let req = store.get(id);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function deleteFileBlob(id) {
+  let db = await initIndexedDB();
+  return new Promise((resolve, reject) => {
+    let tx = db.transaction('blobs', 'readwrite');
+    let store = tx.objectStore('blobs');
+    store.delete(id);
+    tx.oncomplete = () => resolve(true);
+    tx.onerror = () => reject(tx.error);
+  });
+}
 
 const I18N = {
   ar: {
     brandName: 'خَزنتي',
     searchPh: 'ابحث عن ملف...',
-    savedLocally: 'محفوظ ومزامن',
+    savedLocally: 'محفوظ ومزامن محلياً',
     btnLock: 'قفل',
     addNewFile: '＋ إضافة ملف جديد',
     lblWorkspace: 'مساحة العمل',
@@ -884,8 +937,8 @@ const I18N = {
     navPin: 'تغيير الرمز السري (PIN)',
     navBackup: 'نسخة احتياطية',
     navSwitch: 'تبديل الحساب / قفل',
-    sideNoteTitle: 'ربط سريع وآمن بـ QR',
-    sideNoteDesc: 'استخدم رمز QR الخاص بحسابك لفتح خزنتك على أي جهاز آخر بسهولة دون كتابة رموز معقدة.',
+    sideNoteTitle: 'حفظ آمن بلا قيود',
+    sideNoteDesc: 'يتم حفظ الملفات والصور مباشرة في ذاكرة المتصفح الداخلية (IndexedDB) لدعم الأجزاء الكبيرة والملفات المتعددة.',
     btnQuickNote: '✎ ملاحظة سريعة',
     btnAddFile: '＋ إضافة ملف',
     mobFiles: 'ملفاتي',
@@ -975,7 +1028,7 @@ const I18N = {
   en: {
     brandName: 'Khaznati',
     searchPh: 'Search files...',
-    savedLocally: 'Saved & Synced',
+    savedLocally: 'Saved Locally',
     btnLock: 'Lock',
     addNewFile: '＋ Add new file',
     lblWorkspace: 'Workspace',
@@ -991,8 +1044,8 @@ const I18N = {
     navPin: 'Change PIN',
     navBackup: 'Backup & Restore',
     navSwitch: 'Switch Account / Lock',
-    sideNoteTitle: 'Fast & Safe QR Sync',
-    sideNoteDesc: 'Use your account QR code to open your vault on any other device easily.',
+    sideNoteTitle: 'Secure Unlimited Storage',
+    sideNoteDesc: 'Files and images are stored locally using IndexedDB to support any file size.',
     btnQuickNote: '✎ Quick note',
     btnAddFile: '＋ Add file',
     mobFiles: 'Files',
@@ -1123,27 +1176,10 @@ function saveGlobalData(data) {
   }
 }
 
-async function fileToBase64(file) {
-  return new Promise((ok, no) => {
-    let r = new FileReader();
-    r.onload = () => ok(r.result);
-    r.onerror = no;
-    r.readAsDataURL(file);
-  });
-}
-
-async function base64ToFile(base64, filename, type) {
-  if (!base64) return null;
-  let res = await fetch(base64);
-  let buf = await res.blob();
-  return new File([buf], filename, { type: type || 'application/octet-stream' });
-}
-
 const fmt = n => !n ? t('textNoteType') : n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
 const dateStr = n => new Date(n).toLocaleDateString(lang === 'ar' ? 'ar' : 'en', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-/* توليد حمولة QR Code المشفرة للحساب */
 function buildAccountQrPayload(acc) {
   return JSON.stringify({
     app: 'KHAZNATI_SYNC',
@@ -1154,7 +1190,6 @@ function buildAccountQrPayload(acc) {
   });
 }
 
-/* معالجة بيانات QR المقروءة سواء من الكاميرا أو من صورة */
 async function processScannedQrData(rawText) {
   try {
     let parsed = JSON.parse(rawText);
@@ -1197,7 +1232,6 @@ async function processScannedQrData(rawText) {
   }
 }
 
-/* تشغيل وإيقاف كاميرا مسح الـ QR */
 async function startQrCamera() {
   let video = $('#qrVideo');
   let wrap = $('#qrScannerWrap');
@@ -1250,7 +1284,6 @@ function stopQrCamera() {
 $('#startQrCamBtn').onclick = startQrCamera;
 $('#stopQrCamBtn').onclick = stopQrCamera;
 
-/* قراءة QR من صورة مرفوعة */
 $('#qrImageInput').onchange = function(e) {
   let file = e.target.files[0];
   if (!file) return;
@@ -1358,18 +1391,19 @@ async function handleAuthSubmit() {
     localStorage.setItem('KhaznatiLastUser', keyName);
 
     let welcomeText = lang === 'ar' 
-      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nيمكنك ربط أجهزتك الأخرى بسهولة عبر مسح رمز الـ QR من القائمة الجانبية.`
-      : `Welcome ${rawName} to Khaznati!\n\nLink your other devices easily by scanning your account QR Code.`;
+      ? `مرحباً بك يا ${rawName} في خَزنتي!\n\nيمكنك حفظ أي ملفات بحجم كبير دون قيود.`
+      : `Welcome ${rawName} to Khaznati!\n\nStore large files without limits.`;
     
     let welcomeBlob = new Blob([welcomeText], { type: 'text/plain;charset=utf-8' });
-    let b64 = await fileToBase64(welcomeBlob);
+    let fileId = uid();
+    await saveFileBlob(fileId, welcomeBlob);
 
     if (!dbData.docs[keyName]) dbData.docs[keyName] = [];
     dbData.docs[keyName].push({
-      id: uid(),
-      name: lang === 'ar' ? 'دليل_الربط_السريع.txt' : 'Quick_Sync_Guide.txt',
-      size: welcomeBlob.size, type: welcomeBlob.type, blobData: b64,
-      note: lang === 'ar' ? 'افتح QR ربط الأجهزة لربط هاتفك أو حاسوبك الآخر.' : 'Open Device Sync QR to link another device.',
+      id: fileId,
+      name: lang === 'ar' ? 'دليل_الاستخدام.txt' : 'Welcome_Guide.txt',
+      size: welcomeBlob.size, type: welcomeBlob.type, hasBlob: true,
+      note: lang === 'ar' ? 'ملف ترحيبي تم حفظه في ذاكرة المتصفح الداخلي.' : 'Welcome file saved in IndexedDB.',
       tags: [lang === 'ar' ? 'أمان' : 'Security'],
       locked: false, added: Date.now(), updated: Date.now(),
       folder: null, inbox: true, favorite: true, deleted: false
@@ -1523,8 +1557,8 @@ function docCard(d) {
     </div>
     <div class="doc-actions">
       <button class="smallbtn em" data-open="${d.id}">${t('btnDetails')}</button>
-      ${d.blobData ? `<button class="smallbtn" data-preview="${d.id}">${t('btnPreview')}</button>` : ''}
-      ${d.blobData ? `<button class="smallbtn" data-download="${d.id}">${t('btnDownload')}</button>` : ''}
+      ${d.hasBlob ? `<button class="smallbtn" data-preview="${d.id}">${t('btnPreview')}</button>` : ''}
+      ${d.hasBlob ? `<button class="smallbtn" data-download="${d.id}">${t('btnDownload')}</button>` : ''}
     </div>
   </article>`;
 }
@@ -1700,7 +1734,6 @@ window.dropToFolder = async function(e, folderId) {
   }
 };
 
-/* Modals */
 function showModal(html) {
   $('#modal').innerHTML = html;
   $('#modalBg').classList.add('open');
@@ -1780,22 +1813,24 @@ function addFile(preselectedFile = null) {
     let name = $('#docName').value.trim() || file.name;
     let folder = $('#docFolder').value || null;
     let tags = $('#docTags').value.split(',').map(x => x.trim()).filter(Boolean);
-    let b64 = await fileToBase64(file);
+    let fileId = uid();
+
+    await saveFileBlob(fileId, file);
 
     let data = getGlobalData();
     if (!data.docs[activeAccount.username]) data.docs[activeAccount.username] = [];
     data.docs[activeAccount.username].push({
-      id: uid(),
+      id: fileId,
       name, folder, tags,
       note: $('#docNote').value,
       expiry: $('#docExpiry').value || null,
       locked: $('#docLockCheck').checked,
-      blobData: b64, size: file.size, type: file.type,
+      hasBlob: true, size: file.size, type: file.type,
       added: Date.now(), updated: Date.now(),
       favorite: false, deleted: false, inbox: !folder
     });
     saveGlobalData(data);
-    closeModal(); render(); toast(isAr ? 'تم حفظ المستند ومزامنته' : 'Document saved & synced');
+    closeModal(); render(); toast(isAr ? 'تم حفظ الملف بنجاح في الخزنة' : 'File saved successfully');
   };
 }
 
@@ -1828,12 +1863,12 @@ function addQuickNote() {
       id: uid(),
       name, folder, tags, note,
       locked: $('#noteLockCheck').checked,
-      isNoteOnly: true, size: 0,
+      isNoteOnly: true, size: 0, hasBlob: false,
       added: Date.now(), updated: Date.now(),
       favorite: false, deleted: false, inbox: !folder
     });
     saveGlobalData(data);
-    closeModal(); render(); toast(isAr ? 'تم حفظ الملاحظة ومزامنتها' : 'Note saved & synced');
+    closeModal(); render(); toast(isAr ? 'تم حفظ الملاحظة بنجاح' : 'Note saved');
   };
 }
 
@@ -1843,7 +1878,7 @@ async function openDoc(id) {
   if (!d) return;
   verifyFileAccess(d, async () => {
     let isAr = lang === 'ar';
-    let fileObj = d.blobData ? await base64ToFile(d.blobData, d.name, d.type) : null;
+    let fileObj = d.hasBlob ? await getFileBlob(d.id) : null;
     showModal(`
       <div class="modal-head"><h2>${esc(d.name)}</h2><button class="x" id="close">×</button></div>
       <div class="meta" style="margin-bottom:12px"><span>${fmt(d.size)}</span><span>•</span><span>${dateStr(d.updated || d.added)}</span><span class="chip">▱ ${esc(folderName(d.folder))}</span></div>
@@ -1862,7 +1897,7 @@ async function openDoc(id) {
       </div>
       <div class="modal-actions">
         <button class="primary" id="saveNote">${isAr ? 'حفظ التعديلات' : 'Save Changes'}</button>
-        ${d.blobData ? `<button class="secondary" id="previewBtn">${t('btnPreview')}</button><button class="secondary" id="downloadBtn">${t('btnDownload')}</button>` : ''}
+        ${d.hasBlob ? `<button class="secondary" id="previewBtn">${t('btnPreview')}</button><button class="secondary" id="downloadBtn">${t('btnDownload')}</button>` : ''}
         <button class="secondary" id="removeBtn" style="color:var(--danger)">${isAr ? 'نقل للمحذوفات' : 'Move to Trash'}</button>
       </div>`);
     $('#close').onclick = closeModal;
@@ -1900,7 +1935,7 @@ async function openDoc(id) {
 }
 
 async function downloadDirect(d, fileObj) {
-  let file = fileObj || (d.blobData ? await base64ToFile(d.blobData, d.name, d.type) : null);
+  let file = fileObj || (d.hasBlob ? await getFileBlob(d.id) : null);
   if (!file) return;
   let u = URL.createObjectURL(file), a = document.createElement('a');
   a.href = u; a.download = d.name; a.click();
@@ -1915,7 +1950,7 @@ async function download(id) {
 }
 
 async function previewDirect(d, fileObj) {
-  let file = fileObj || (d.blobData ? await base64ToFile(d.blobData, d.name, d.type) : null);
+  let file = fileObj || (d.hasBlob ? await getFileBlob(d.id) : null);
   if (!file) return;
   let isAr = lang === 'ar';
   let u = URL.createObjectURL(file), type = d.type || '';
@@ -1955,7 +1990,6 @@ function openPinModal() {
   };
 }
 
-/* نافذة عرض وتنزيل QR Code لربط الأجهزة */
 function showSyncQrModal() {
   let isAr = lang === 'ar';
   showModal(`
@@ -2101,7 +2135,9 @@ document.body.addEventListener('click', async e => {
   }
   if (b.dataset.purge) {
     dbData.docs[activeAccount.username] = userDocs.filter(x => x.id !== b.dataset.purge);
-    saveGlobalData(dbData); render(); toast(lang === 'ar' ? 'تم الحذف نهائياً' : 'Deleted permanently');
+    saveGlobalData(dbData);
+    deleteFileBlob(b.dataset.purge);
+    render(); toast(lang === 'ar' ? 'تم الحذف نهائياً' : 'Deleted permanently');
   }
 });
 
@@ -2120,6 +2156,7 @@ window.addEventListener('drop', e => {
 });
 
 (async () => {
+  await initIndexedDB();
   applyStaticTranslations();
   let dbData = getGlobalData();
   let lastUser = localStorage.getItem('KhaznatiLastUser');
